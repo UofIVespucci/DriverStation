@@ -10,4 +10,9 @@ public class Junit_test {
     public void testWillAlwaysFail() {
         assertEquals(0,1);
     }
+
+    @Test
+    public void testWillAlwaysPass() {
+        assertEquals(42,42);
+    }
 }

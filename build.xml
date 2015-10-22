@@ -6,11 +6,13 @@
         <mkdir dir="${outputDir}"/>
         <mkdir dir="${libDir}"/>
         <mkdir dir="${resourceDir}"/>
+        <mkdir dir="${reportsDir}"/>
     </target>
 
 
     <target name="clean" depends="init">
         <delete dir="${outputDir}"/>
+        <delete dir="${reportsDir}"/>
     </target>
 
     <target name="compile" depends="init">
