@@ -6,26 +6,42 @@ import java.util.*;
 import javax.swing.*;
 
 public class Main implements Runnable{
-    public Main(){
 
+    SerialPort sp;
+    SerialPortEventListener spel;
+    SerialConnectListener scl;
+    SerialConnectPanel scp;
+    JTextArea jtf;
+
+    public Main(){
+        sp = null;
+        spel = new SerialPortEventListener(){
+            public void serialEvent(SerialPortEvent serialEvent){
+                try{
+                    jtf.setText(jtf.getText() + new String(sp.readBytes()));
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        };
+        scl = new SerialConnectListener(){
+            public void connectionEstablished(SerialPort newConnection){
+                System.out.println("received a serial port");
+                sp = newConnection;
+                try{
+                    sp.addEventListener(spel);
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+            public void disconnectRequest(){
+                System.out.println("received a disconnect request");
+                sp = null;
+            }
+        };
+        scp = new SerialConnectPanel(scl);
+        jtf = new JTextArea(20,80);
     }
 
     public void run(){
         JFrame test = new JFrame("Go Vespucci");
-        JTextArea jtf = new JTextArea(20,80);
         jtf.setEditable(false);
-        SerialPort sp = null;
-        SerialConnectListener scl = new SerialConnectListener(){
-            public void connectionEstablished(SerialPort newConnection){
-                System.out.println("received a serial port");
-                jtf.setText(jtf.getText() + "Connected\n");
-            }
-            public void disconnectRequest(){
-                System.out.println("received a disconnect request");
-                jtf.setText(jtf.getText() + "Disconnected\n");
-            }
-        };
-        SerialConnectPanel scp = new SerialConnectPanel(scl);
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
