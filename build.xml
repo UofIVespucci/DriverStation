@@ -1,0 +1,61 @@
+<project>
+    <property file="build.properties" />
+
+    <target name="init">
+        <mkdir dir="${sourceDir}"/>
+        <mkdir dir="${outputDir}"/>
+        <mkdir dir="${libDir}"/>
+        <mkdir dir="${resourceDir}"/>
+    </target>
+
+
+    <target name="clean" depends="init">
+        <delete dir="${outputDir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}"
+                includeantruntime="false" >
+            <classpath path="${classpath}"/>
+            <compilerarg value="-XDignore.symbol.file"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${outputJar}" basedir="${outputDir}">
+            <fileset dir="${resourceDir}" />
+            <zipfileset src="lib/jssc.jar" />
+            <manifest>
+                <attribute name="Main-Class" value="com.Main"/>
+            </manifest>
+        </jar>
+        <delete dir="${outputDir}" />
+    </target>
+
+    <target name="build" depends="jar">
+        <java jar="${outputJar}" fork="true">
+            <classpath path="${classpath}"/>
+        </java>
+    </target>
+
+    <target name="test" depends="compile">
+
+        <javac srcdir="${testDir}" destdir="${outputDir}" extdirs="${libDir}:${outputDir}"
+                includeantruntime="false" >
+            <classpath path="${classpath}:${junit}:${hamcrest}"/>
+            <compilerarg value="-XDignore.symbol.file"/>
+        </javac>
+
+        <junit printsummary="yes" haltonfailure="yes">
+          <classpath path="${classpath}:${junit}:${hamcrest}"/>
+          <formatter type="plain"/>
+
+          <batchtest fork="yes" todir="${reportsDir}">
+            <fileset dir="${testDir}">
+              <include name="**/*_test.java"/>
+            </fileset>
+          </batchtest>
+
+        </junit>
+    </target>
+</project>
