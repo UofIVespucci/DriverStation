@@ -6,19 +6,18 @@ import java.util.*;
 import javax.swing.*;
 
 public class Main implements Runnable{
-
-    SerialPort sp;
-    SerialPortEventListener spel;
-    SerialConnectListener scl;
-    SerialConnectPanel scp;
-    JTextArea jtf;
+    private final SerialPortEventListener spel;
+    private final SerialConnectListener scl;
+    private final SerialConnectPanel scp;
+    private final JTextArea jtf;
+    private SerialPort sp;
 
     public Main(){
         sp = null;
         spel = new SerialPortEventListener(){
             public void serialEvent(SerialPortEvent serialEvent){
                 try{
-                    jtf.setText(jtf.getText() + new String(sp.readBytes()));
+                    updateText(new String(sp.readBytes()));
                 } catch (Exception e) { e.printStackTrace(); }
             }
         };
@@ -39,14 +38,19 @@ public class Main implements Runnable{
         jtf = new JTextArea(20,80);
     }
 
+    private void updateText(String newText){
+        jtf.setText(jtf.getText() + newText);
+    }
+
     public void run(){
         JFrame test = new JFrame("Go Vespucci");
         jtf.setEditable(false);
 
         JPanel container = new JPanel();
+        JScrollPane scrollBox = new JScrollPane(jtf);
         container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
         container.add(scp);
-        container.add(jtf);
+        container.add(scrollBox);
         test.add(container);
 
         test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
