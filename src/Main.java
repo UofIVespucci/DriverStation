@@ -1,23 +1,71 @@
 package com;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.embed.swing.SwingNode;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import com.serial.*;
+import javafx.stage.Stage;
 import jssc.*;
 import java.util.*;
 import javax.swing.*;
+import javafx.application.*;
+import javafx.scene.*;
 
-public class Main implements Runnable{
-    private final SerialPortEventListener spel;
-    private final SerialConnectListener scl;
-    private final SerialConnectPanel scp;
-    private final JTextArea jtf;
+
+public class Main {
+    private SerialPortEventListener spel;
+    private SerialConnectListener scl;
+    private SerialConnectPanel scp;
+    private JTextArea jtf;
+    private SwingNode scpNode;
     private SerialPort sp;
 
-    public Main(){
+    private void initAndShowGUI() {
+        // This method is invoked on the EDT thread
+        JFrame frame = new JFrame("Vespucci");
+        final JFXPanel fxPanel = new JFXPanel();
+        frame.add(fxPanel);
+        frame.setSize(300, 200);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                initFX(fxPanel);
+            }
+        });
+    }
+
+    private void initFX(JFXPanel fxPanel) {
+        // This method is invoked on the JavaFX thread
+        Scene scene = createScene();
+        fxPanel.setScene(scene);
+    }
+
+    private Scene createScene() {
+        scpNode = new SwingNode();
+
+        BorderPane border = new BorderPane();
+        Scene  scene  =  new  Scene(border, Color.ALICEBLUE);
+        Text  text  =  new  Text();
+
         sp = null;
+        jtf = new JTextArea(20,80);
         spel = new SerialPortEventListener(){
             public void serialEvent(SerialPortEvent serialEvent){
                 try{
-                    updateText(new String(sp.readBytes()));
+                    jtf.setText(jtf.getText() + new String(sp.readBytes()));
                 } catch (Exception e) { e.printStackTrace(); }
             }
         };
@@ -35,30 +83,30 @@ public class Main implements Runnable{
             }
         };
         scp = new SerialConnectPanel(scl);
-        jtf = new JTextArea(20,80);
+        scpNode.setContent(scp);
+
+        text.setX(40);
+        text.setY(100);
+        text.setFont(new Font(25));
+        text.setText("Welcome JavaFX!");
+
+        border.setTop(scpNode);
+        border.setAlignment(scpNode, Pos.TOP_CENTER);
+
+        return (scene);
+    }
+
+    public static void main(String[] args) {
+        final Main initMain = new Main();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initMain.initAndShowGUI();
+            }
+        });
     }
 
     private void updateText(String newText){
         jtf.setText(jtf.getText() + newText);
-    }
-
-    public void run(){
-        JFrame test = new JFrame("Go Vespucci");
-        jtf.setEditable(false);
-
-        JPanel container = new JPanel();
-        JScrollPane scrollBox = new JScrollPane(jtf);
-        container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-        container.add(scp);
-        container.add(scrollBox);
-        test.add(container);
-
-        test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        test.pack();
-        test.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Main());
     }
 }
