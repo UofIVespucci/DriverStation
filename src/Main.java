@@ -8,6 +8,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -27,7 +29,6 @@ public class Main {
     private SerialConnectListener scl;
     private SerialConnectPanel scp;
     private JTextArea jtf;
-    private SwingNode scpNode;
     private SerialPort sp;
 
     private void initAndShowGUI() {
@@ -54,8 +55,6 @@ public class Main {
     }
 
     private Scene createScene() {
-        scpNode = new SwingNode();
-
         BorderPane border = new BorderPane();
         Scene  scene  =  new  Scene(border, Color.ALICEBLUE);
         Text  text  =  new  Text();
@@ -83,15 +82,15 @@ public class Main {
             }
         };
         scp = new SerialConnectPanel(scl);
-        scpNode.setContent(scp);
 
         text.setX(40);
         text.setY(100);
         text.setFont(new Font(25));
         text.setText("Welcome JavaFX!");
 
-        border.setTop(scpNode);
-        border.setAlignment(scpNode, Pos.TOP_CENTER);
+        ((HBox)scp).setAlignment(Pos.CENTER);
+        border.setTop(scp);
+        border.setAlignment(scp, Pos.TOP_CENTER);
 
         return (scene);
     }

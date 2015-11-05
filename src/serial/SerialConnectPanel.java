@@ -1,13 +1,24 @@
 package com.serial;
 
 import com.serial.SerialConnectListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.*;
+import javafx.geometry.*;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import jssc.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class SerialConnectPanel extends JPanel {
+public class SerialConnectPanel extends HBox {
     private static class BaudRate{
         public String name;
         public int id;
@@ -37,31 +48,53 @@ public class SerialConnectPanel extends JPanel {
     private boolean showBaudPanel = false;
     private SerialConnectListener listener;
     private SerialPort connectedPort = null;
-    private JButton refreshButton;
-    private JButton connectButton;
-    private JComboBox dropDown;
-    private JComboBox<BaudRate> baudSelect;
+    private javafx.scene.control.Button refreshButton;
+    private javafx.scene.control.Button connectButton;
+    private ComboBox dropDown;
+    private ComboBox<BaudRate> baudSelect;
 
     public SerialConnectPanel(SerialConnectListener listener){
         this.listener = listener;
-        refreshButton = new JButton(refreshAction);
-        connectButton = new JButton(connectAction);
-        dropDown = new JComboBox();
+        refreshButton = new Button();
+        refreshButton.setText("Refresh");
+        refreshButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent event) {
+                if(inProgress) return;
+                dropDown.getItems().clear();
+                addSerialList(dropDown);
+            }
+        });
+        connectButton = new Button();
+        connectButton.setText("Connect");
+        connectButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(javafx.event.ActionEvent event) {
+                if (connectedPort == null) connect();
+                else disconnect();
+            }
+        });
+
+        dropDown = new ComboBox();
         addSerialList(dropDown);
-        baudSelect = new JComboBox<BaudRate>(rates);
+        baudSelect = new ComboBox<BaudRate>();
+        baudSelect.getItems().addAll(rates);
         //if the default baud rate is in the list, choose it
         for(int i=0; i<rates.length; i++){
             if(rates[i].id == baudRate){
-                baudSelect.setSelectedIndex(i);
+                baudSelect.getSelectionModel().select(i);
                 break;
             }
         }
         baudSelect.setVisible(false);
-        add(refreshButton);
-        add(dropDown);
-        add(baudSelect);
-        add(connectButton);
-        setOpaque(false);
+        baudSelect.managedProperty().bind(baudSelect.visibleProperty());
+        getChildren().add(refreshButton);
+        getChildren().add(dropDown);
+        getChildren().add(connectButton);
+        getChildren().add(baudSelect);
+        setPadding(new Insets(5, 5, 5, 5));
+        setSpacing(5);
+        setStyle("-fx-background-color: #336699;");
     }
 
     public void setBaudRate(int baudRate){
@@ -87,17 +120,17 @@ public class SerialConnectPanel extends JPanel {
             System.err.println("Connect command issued while a change was in Progress");
             return;
         }
-        refreshButton.setEnabled(false);
-        dropDown.setEnabled(false);
-        connectButton.setEnabled(false);
+        refreshButton.setDisable(true);
+        dropDown.setDisable(true);
+        connectButton.setDisable(true);
         connectButton.setText(BUTTON_CONNECTING);
         inProgress = true;
         (new Thread(connectSerial)).start();
     }
     private void connectDone(){
-        refreshButton.setEnabled(false);
-        dropDown.setEnabled(false);
-        connectButton.setEnabled(true);
+        refreshButton.setDisable(true);
+        dropDown.setDisable(true);
+        connectButton.setDisable(true);
         connectButton.setText(BUTTON_CONNECTED);
         inProgress = false;
     }
@@ -106,65 +139,37 @@ public class SerialConnectPanel extends JPanel {
             System.err.println("Connect command issued while a change was in Progress");
             return;
         }
-        refreshButton.setEnabled(false);
-        dropDown.setEnabled(false);
-        connectButton.setEnabled(false);
+        refreshButton.setDisable(true);
+        dropDown.setDisable(true);
+        connectButton.setDisable(true);
         connectButton.setText(BUTTON_DISCONNECTING);
         inProgress = true;
         (new Thread(disconnectSerial)).start();
     }
     private void disconnectDone(){
-        refreshButton.setEnabled(true);
-        dropDown.setEnabled(true);
-        connectButton.setEnabled(true);
+        refreshButton.setDisable(false);
+        dropDown.setDisable(false);
+        connectButton.setDisable(false);
         connectButton.setText(BUTTON_DISCONNECTED);
         inProgress = false;
     }
 
-    Action refreshAction = new AbstractAction(){
-        {
-            String text = "Refresh";
-            putValue(Action.NAME, text);
-            putValue(Action.SHORT_DESCRIPTION, text);
-        }
-        public void actionPerformed(ActionEvent e) {
-            if(inProgress) return;
-            dropDown.removeAllItems();
-            addSerialList(dropDown);
-            SerialConnectPanel.this.updateUI();
-        }
-    };
-
-    private void addSerialList(JComboBox box){
+    private void addSerialList(ComboBox box){
         String[] portNames = SerialPortList.getPortNames();
-        for(int i = 0; i < portNames.length; i++){
-            box.addItem(portNames[i]);
-        }
+        box.setItems(FXCollections.observableArrayList(portNames));
     }
-
-    Action connectAction = new AbstractAction(){
-        {
-        String text = BUTTON_DISCONNECTED;
-        putValue(Action.NAME, text);
-        putValue(Action.SHORT_DESCRIPTION, text);
-        }
-        public void actionPerformed(ActionEvent e){
-            if (connectedPort == null) connect();
-            else disconnect();
-        }
-    };
 
     private Runnable connectSerial = new Runnable(){
         public void run(){
-            if(dropDown.getSelectedItem() == null) return;
+            if(dropDown.getSelectionModel().getSelectedItem() == null) return;
 
-            SerialPort serialPort = new SerialPort((String)dropDown.getSelectedItem());
+            SerialPort serialPort = new SerialPort((String)dropDown.getSelectionModel().getSelectedItem());
 
             try{
                 serialPort.openPort();
 
                 if(baudSelect.isVisible()){
-                    baudRate = ((BaudRate)baudSelect.getSelectedItem()).id;
+                    baudRate = ((BaudRate)baudSelect.getSelectionModel().getSelectedItem()).id;
                 }
 
                 serialPort.setParams(baudRate,              SerialPort.DATABITS_8,
