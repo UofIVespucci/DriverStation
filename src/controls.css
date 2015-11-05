@@ -1,0 +1,4 @@
+.carbon-button {
+    -fx-background-insets: 50,0,80,0;
+    -fx-background-image: url("carbon.png");
+}

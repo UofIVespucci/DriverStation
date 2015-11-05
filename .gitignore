@@ -8,6 +8,7 @@
 *.war
 *.ear
 *.ini
+*.iml
 
 # Library jars should be included
 !lib/*.jar
@@ -18,3 +19,5 @@ hs_err_pid*
 reports/*
 bin/*
 .idea/*
+out/*
+*.iml

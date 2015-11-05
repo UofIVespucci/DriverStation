@@ -1,4 +1,4 @@
-package com.serial;
+package serial;
 
 import com.serial.SerialConnectListener;
 import javafx.collections.FXCollections;
@@ -95,6 +95,7 @@ public class SerialConnectPanel extends HBox {
         setPadding(new Insets(5, 5, 5, 5));
         setSpacing(5);
         setStyle("-fx-background-color: #336699;");
+        refreshButton.getStyleClass().add("carbon-button");
     }
 
     public void setBaudRate(int baudRate){

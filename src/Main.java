@@ -1,4 +1,4 @@
-package com;
+//package com;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -20,14 +20,16 @@ import javafx.stage.Stage;
 import jssc.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 import javafx.application.*;
 import javafx.scene.*;
 
 
 public class Main {
     private SerialPortEventListener spel;
-    private SerialConnectListener scl;
-    private SerialConnectPanel scp;
+    private com.serial.SerialConnectListener scl;
+    private serial.SerialConnectPanel scp;
     private JTextArea jtf;
     private SerialPort sp;
 
@@ -51,12 +53,17 @@ public class Main {
     private void initFX(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
         Scene scene = createScene();
+//        scene.getStylesheets().add(Main.class.getResource("/controls.css").toExternalForm());
+        scene.getStylesheets().add("controls.css");
         fxPanel.setScene(scene);
     }
 
     private Scene createScene() {
         BorderPane border = new BorderPane();
         Scene  scene  =  new  Scene(border, Color.ALICEBLUE);
+//        scene.getStylesheets().add(getClass().getResource("../css/controls.css").toExternalForm());
+//        scene.getStylesheets().add(getClass().getResource("/controls.css").toExternalForm());
+//        System.out.println(getClass().getResource("/controls.css").toExternalForm());
         Text  text  =  new  Text();
 
         sp = null;
@@ -81,7 +88,7 @@ public class Main {
                 sp = null;
             }
         };
-        scp = new SerialConnectPanel(scl);
+        scp = new serial.SerialConnectPanel(scl);
 
         text.setX(40);
         text.setY(100);
