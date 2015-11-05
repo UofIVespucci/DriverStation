@@ -1,4 +1,4 @@
-//package com;
+package com;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
