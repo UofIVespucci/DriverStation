@@ -1,25 +1,36 @@
 <project name="DriverStation" default="default" basedir="."
-         xmlns:fx="javafx:com.sun.javafx.tools.ant">
+        xmlns:ivy="antlib:org.apache.ivy.ant"
+        xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <property file="build.properties" />
 
     <target name="init">
+        <mkdir dir="${resourceDir}"/>
         <mkdir dir="${sourceDir}"/>
+        <mkdir dir="${testDir}"/>
         <mkdir dir="${outputDir}"/>
         <mkdir dir="${libDir}"/>
-        <mkdir dir="${resourceDir}"/>
         <mkdir dir="${reportsDir}"/>
+        <mkdir dir="${testLibDir}"/>
     </target>
 
+    <target name="retrieve" depends="init">
+        <ivy:retrieve conf="testing" pattern="${testLibDir}/[artifact].[ext]"/>
+        <ivy:retrieve conf="application" pattern="${libDir}/[artifact].[ext]"/>
+    </target>
 
     <target name="clean" depends="init">
         <delete dir="${outputDir}"/>
+        <delete dir="${libDir}"/>
         <delete dir="${reportsDir}"/>
+        <ivy:cleancache />
     </target>
 
     <target name="compile" depends="init">
         <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}"
                 includeantruntime="false" >
-            <classpath path="${classpath}"/>
+            <classpath path="${classpath}">
+                <file name="${java.home}\lib\ext\jfxrt.jar"/>
+            </classpath>
             <compilerarg value="-XDignore.symbol.file"/>
         </javac>
     </target>
@@ -27,7 +38,9 @@
     <target name="jar" depends="compile">
         <jar destfile="${outputJar}" basedir="${outputDir}">
             <fileset dir="${resourceDir}" />
-            <zipfileset src="lib/jssc.jar" />
+            <zipgroupfileset dir="${libDir}">
+                <include name="*.jar"/>
+            </zipgroupfileset>
             <manifest>
                 <attribute name="Main-Class" value="com.Main"/>
             </manifest>
@@ -42,23 +55,33 @@
     </target>
 
     <target name="test" depends="compile">
-
         <javac srcdir="${testDir}" destdir="${outputDir}" extdirs="${libDir}:${outputDir}"
                 includeantruntime="false" >
-            <classpath path="${classpath}:${junit}:${hamcrest}"/>
+            <classpath path="${classpath}">
+                <fileset dir="${testLibDir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
             <compilerarg value="-XDignore.symbol.file"/>
         </javac>
 
-        <junit printsummary="yes" haltonfailure="yes">
-          <classpath path="${classpath}:${junit}:${hamcrest}"/>
-          <formatter type="plain"/>
+        <junit>
+            <classpath>
+                <pathelement path="${classpath}"/>
+                <fileset dir="${testLibDir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${libDir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <formatter type="plain" usefile="false" />
 
-          <batchtest fork="yes" todir="${reportsDir}">
-            <fileset dir="${testDir}">
-              <include name="**/*_test.java"/>
-            </fileset>
-          </batchtest>
-
+            <batchtest fork="yes" todir="${reportsDir}">
+                <fileset dir="${testDir}">
+                    <include name="**/*_test.java"/>
+                </fileset>
+            </batchtest>
         </junit>
     </target>
 </project>
