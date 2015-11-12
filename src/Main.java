@@ -3,13 +3,16 @@ package com;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingNode;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -24,6 +27,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
 import javafx.application.*;
 import javafx.scene.*;
+import ui.ButtonSelector;
 
 
 public class Main {
@@ -32,6 +36,7 @@ public class Main {
     private serial.SerialConnectPanel scp;
     private JTextArea jtf;
     private SerialPort sp;
+    private ButtonSelector tabSelector;
 
     private void initAndShowGUI() {
         // This method is invoked on the EDT thread
@@ -53,18 +58,16 @@ public class Main {
     private void initFX(JFXPanel fxPanel) {
         // This method is invoked on the JavaFX thread
         Scene scene = createScene();
-//        scene.getStylesheets().add(Main.class.getResource("/controls.css").toExternalForm());
         scene.getStylesheets().add("controls.css");
         fxPanel.setScene(scene);
     }
 
     private Scene createScene() {
-        BorderPane border = new BorderPane();
-        Scene  scene  =  new  Scene(border, Color.ALICEBLUE);
-//        scene.getStylesheets().add(getClass().getResource("../css/controls.css").toExternalForm());
-//        scene.getStylesheets().add(getClass().getResource("/controls.css").toExternalForm());
-//        System.out.println(getClass().getResource("/controls.css").toExternalForm());
+        SplitPane split = new SplitPane();
+        Scene  scene  =  new  Scene(split, Color.ALICEBLUE);
+        StackPane stack = new StackPane();
         Text  text  =  new  Text();
+        tabSelector = new ButtonSelector();
 
         sp = null;
         jtf = new JTextArea(20,80);
@@ -96,8 +99,14 @@ public class Main {
         text.setText("Welcome JavaFX!");
 
         ((HBox)scp).setAlignment(Pos.CENTER);
-        border.setTop(scp);
-        border.setAlignment(scp, Pos.TOP_CENTER);
+        split.getItems().addAll(tabSelector, scp);
+        split.setOrientation(Orientation.VERTICAL);
+        tabSelector.maxHeightProperty().bind(split.heightProperty().multiply(0.01));
+        split.setDividerPositions(0.01);
+//        split.setStyle("-fx-background-color: transparent;");
+
+//        split.setAlignment(scp, Pos.TOP_CENTER);
+//        tabSelector.showText(tabSelector.isHover());
 
         return (scene);
     }

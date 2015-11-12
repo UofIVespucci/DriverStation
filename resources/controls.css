@@ -1,4 +1,90 @@
+/*@font-face {
+    src: url("/cur/c.ttf");
+    -fx-font-family: "Chancery Cursive";
+    -fx-font-size: 14;
+}*/
+
 .carbon-button {
     -fx-background-insets: 50,0,80,0;
     -fx-background-image: url("carbon.png");
+}
+
+.toggle-camera {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSDark.png");
+    -fx-graphic: url("Documentary-32.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-camera:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSLight.png");
+    -fx-graphic: url("Documentary-32i.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.toggle-map {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSDark.png");
+    -fx-graphic: url("Adventures-32.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-map:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSLight.png");
+    -fx-graphic: url("Adventures-32i.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.toggle-debug {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSDark.png");
+    -fx-graphic: url("Bug-32.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-debug:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("footer_lodyasSLight.png");
+    -fx-graphic: url("Bug-32i.png");
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.split-pane *.split-pane-divider {
+   -fx-padding: 0 1 0 1;
+   -fx-border-color:  transparent;
+   -fx-background-color: transparent;
+   -fx-background-insets: 0;
+   -fx-shape: " ";
 }
