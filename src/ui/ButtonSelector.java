@@ -1,22 +1,16 @@
 package ui;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 
 public class ButtonSelector extends HBox{
     private static ToggleButton cameraButton;
     private static ToggleButton debugButton;
     private static ToggleButton mapButton;
     private static ToggleGroup toggleGroup;
-//    private final Region rect = new Region();
-//    private static StackPane infoStack;
 
     public ButtonSelector()
     {
@@ -35,8 +29,9 @@ public class ButtonSelector extends HBox{
         setHgrow(debugButton, Priority.ALWAYS);
 
         setMaxWidth(Double.MAX_VALUE);
-        setAlignment(Pos.TOP_CENTER);
+        setAlignment(Pos.CENTER);
 
+        setPadding(new Insets(0, 0, 0, 0));
 
         cameraButton.setMaxWidth(Double.MAX_VALUE);
         mapButton.setMaxWidth(Double.MAX_VALUE);
@@ -53,18 +48,6 @@ public class ButtonSelector extends HBox{
 
 
         setPadding(new Insets(0, 0, 0, 0));
-//        addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                showText(true);
-//            }
-//        });
-//        addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                showText(false);
-//            }
-//        });
     }
 
     public void showText(boolean show){
