@@ -28,6 +28,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javafx.application.*;
 import javafx.scene.*;
 import ui.ButtonSelector;
+import ui.VideoOverlay;
 
 
 public class Main {
@@ -37,6 +38,7 @@ public class Main {
     private JTextArea jtf;
     private SerialPort sp;
     private ButtonSelector tabSelector;
+    private VideoOverlay vo;
 
     private void initAndShowGUI() {
         // This method is invoked on the EDT thread
@@ -65,8 +67,7 @@ public class Main {
     private Scene createScene() {
         SplitPane split = new SplitPane();
         Scene  scene  =  new  Scene(split, Color.ALICEBLUE);
-        StackPane stack = new StackPane();
-        Text  text  =  new  Text();
+        vo = new VideoOverlay();
         tabSelector = new ButtonSelector();
 
         sp = null;
@@ -93,20 +94,13 @@ public class Main {
         };
         scp = new serial.SerialConnectPanel(scl);
 
-        text.setX(40);
-        text.setY(100);
-        text.setFont(new Font(25));
-        text.setText("Welcome JavaFX!");
-
         ((HBox)scp).setAlignment(Pos.CENTER);
-        split.getItems().addAll(tabSelector, scp);
+        split.getItems().addAll(tabSelector, vo);
+        vo.maxWidthProperty().bind(split.widthProperty());
+//        split.
         split.setOrientation(Orientation.VERTICAL);
         tabSelector.maxHeightProperty().bind(split.heightProperty().multiply(0.01));
         split.setDividerPositions(0.01);
-//        split.setStyle("-fx-background-color: transparent;");
-
-//        split.setAlignment(scp, Pos.TOP_CENTER);
-//        tabSelector.showText(tabSelector.isHover());
 
         return (scene);
     }

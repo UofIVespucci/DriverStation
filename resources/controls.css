@@ -1,8 +1,10 @@
-/*@font-face {
+/*
+@font-face {
     src: url("/cur/c.ttf");
     -fx-font-family: "Chancery Cursive";
     -fx-font-size: 14;
-}*/
+}
+*/
 
 .carbon-button {
     -fx-background-insets: 50,0,80,0;
@@ -79,6 +81,25 @@
         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
     -fx-text-fill: black;
     -fx-font-weight: bold;
+}
+
+.toggle-switch {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("Refresh-50.png");
+    -fx-background-color: transparent;
+}
+
+.toggle-record {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("Aperture-50.png");
+    -fx-background-color: transparent;
+}
+
+.video-background {
+    -fx-background-image: url("burrow.jpg");
+    -fx-background-size: cover;
 }
 
 .split-pane *.split-pane-divider {

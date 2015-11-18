@@ -25,16 +25,6 @@ public class ButtonSelector extends HBox{
         mapButton = new ToggleButton();
         toggleGroup = new ToggleGroup();
 
-//        infoStack = new StackPane();
-
-//        cameraStack.getChildren().addAll(cameraButton, rect);
-//        infoStack.getChildren().add(cameraButton);
-
-//        rect.setArcHeight(0);
-//        rect.setArcWidth(0);
-//        rect.setFill(Color.RED);
-//        rect.getStyleClass().add("carbon-button");
-
         cameraButton.getStyleClass().add("toggle-camera");
         mapButton.getStyleClass().add("toggle-map");
         debugButton.getStyleClass().add("toggle-debug");
@@ -47,7 +37,6 @@ public class ButtonSelector extends HBox{
         setMaxWidth(Double.MAX_VALUE);
         setAlignment(Pos.TOP_CENTER);
 
-//        infoStack.setMaxWidth(Double.MAX_VALUE);
 
         cameraButton.setMaxWidth(Double.MAX_VALUE);
         mapButton.setMaxWidth(Double.MAX_VALUE);
@@ -63,7 +52,6 @@ public class ButtonSelector extends HBox{
         debugButton.setToggleGroup(toggleGroup);
 
 
-//        showText(true);
         setPadding(new Insets(0, 0, 0, 0));
 //        addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 //            @Override
