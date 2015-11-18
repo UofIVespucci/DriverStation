@@ -15,10 +15,8 @@ public class ButtonSelector extends HBox{
     private static ToggleButton debugButton;
     private static ToggleButton mapButton;
     private static ToggleGroup toggleGroup;
-    private final Region rect = new Region();
-    private static StackPane cameraStack;
-    private static StackPane debugStack;
-    private static StackPane mapStack;
+//    private final Region rect = new Region();
+//    private static StackPane infoStack;
 
     public ButtonSelector()
     {
@@ -27,35 +25,29 @@ public class ButtonSelector extends HBox{
         mapButton = new ToggleButton();
         toggleGroup = new ToggleGroup();
 
-        cameraStack = new StackPane();
-        debugStack = new StackPane();
-        mapStack = new StackPane();
+//        infoStack = new StackPane();
 
 //        cameraStack.getChildren().addAll(cameraButton, rect);
-        cameraStack.getChildren().add(cameraButton);
-        debugStack.getChildren().add(debugButton);
-        mapStack.getChildren().add(mapButton);
+//        infoStack.getChildren().add(cameraButton);
 
 //        rect.setArcHeight(0);
 //        rect.setArcWidth(0);
 //        rect.setFill(Color.RED);
-        rect.getStyleClass().add("carbon-button");
+//        rect.getStyleClass().add("carbon-button");
 
         cameraButton.getStyleClass().add("toggle-camera");
         mapButton.getStyleClass().add("toggle-map");
         debugButton.getStyleClass().add("toggle-debug");
-        getChildren().addAll(cameraStack, mapStack, debugStack);
+        getChildren().addAll(cameraButton, mapButton, debugButton);
 
-        setHgrow(cameraStack, Priority.ALWAYS);
-        setHgrow(mapStack, Priority.ALWAYS);
-        setHgrow(debugStack, Priority.ALWAYS);
+        setHgrow(cameraButton, Priority.ALWAYS);
+        setHgrow(mapButton, Priority.ALWAYS);
+        setHgrow(debugButton, Priority.ALWAYS);
 
         setMaxWidth(Double.MAX_VALUE);
         setAlignment(Pos.TOP_CENTER);
 
-        cameraStack.setMaxWidth(Double.MAX_VALUE);
-        mapStack.setMaxWidth(Double.MAX_VALUE);
-        debugStack.setMaxWidth(Double.MAX_VALUE);
+//        infoStack.setMaxWidth(Double.MAX_VALUE);
 
         cameraButton.setMaxWidth(Double.MAX_VALUE);
         mapButton.setMaxWidth(Double.MAX_VALUE);
