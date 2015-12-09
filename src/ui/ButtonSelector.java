@@ -1,8 +1,10 @@
 package ui;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -46,20 +48,6 @@ public class ButtonSelector extends HBox{
         mapButton.setToggleGroup(toggleGroup);
         debugButton.setToggleGroup(toggleGroup);
 
-
         setPadding(new Insets(0, 0, 0, 0));
-    }
-
-    public void showText(boolean show){
-        if (show){
-            cameraButton.setText("Camera");
-            mapButton.setText("Map");
-            debugButton.setText("Debug");
-        }
-        else {
-            cameraButton.setText("");
-            mapButton.setText("");
-            debugButton.setText("");
-        }
     }
 }

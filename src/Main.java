@@ -1,34 +1,27 @@
 package com;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.WebcamResolution;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingNode;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.serial.*;
-import javafx.stage.Stage;
 import jssc.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
-import javafx.application.*;
-import javafx.scene.*;
 import ui.ButtonSelector;
+import ui.Toolbox;
+import ui.VBoxDivider;
 import ui.VideoOverlay;
+
+import java.awt.*;
 
 
 public class Main {
@@ -65,8 +58,12 @@ public class Main {
     }
 
     private Scene createScene() {
-        SplitPane split = new SplitPane();
+        Pane demoBack = new Pane();
+        demoBack.getStyleClass().add("video-background");
+        VBox split = new VBox();
         Scene  scene  =  new  Scene(split, Color.ALICEBLUE);
+        Toolbox tb = new Toolbox();
+        BorderPane videoSP = new BorderPane();
         vo = new VideoOverlay();
         tabSelector = new ButtonSelector();
 
@@ -94,13 +91,39 @@ public class Main {
         };
         scp = new serial.SerialConnectPanel(scl);
 
-        ((HBox)scp).setAlignment(Pos.CENTER);
-        split.getItems().addAll(tabSelector, vo);
+//        Webcam webcam = Webcam.getDefault();
+        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
+
+        WebcamPanel panel = null;
+        if (webcam != null) {
+            System.out.println("Webcam: " + webcam.getName());
+            webcam.setViewSize(WebcamResolution.VGA.getSize());
+            panel = new WebcamPanel(webcam);
+            panel.setFPSDisplayed(true);
+            panel.setDisplayDebugInfo(true);
+            panel.setImageSizeDisplayed(true);
+            panel.setMirrored(true);
+        } else {
+            System.out.println("No webcam detected");
+        }
+
+        SwingNode swingNode = new SwingNode();
+        if (panel != null)  {
+            panel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            swingNode.setContent(panel);
+        }
+
+        videoSP.setLeft(tb);
+        videoSP.setCenter(swingNode);
+
+        ((HBox) scp).setAlignment(Pos.CENTER);
+        split.getChildren().addAll(tabSelector, new VBoxDivider(),videoSP);
         vo.maxWidthProperty().bind(split.widthProperty());
-//        split.
-        split.setOrientation(Orientation.VERTICAL);
         tabSelector.maxHeightProperty().bind(split.heightProperty().multiply(0.01));
-        split.setDividerPositions(0.01);
+
+        for (Webcam wc : Webcam.getWebcams()) {
+            System.out.println(wc.getName());
+        }
 
         return (scene);
     }
