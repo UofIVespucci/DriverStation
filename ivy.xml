@@ -5,9 +5,10 @@
     <conf name="testing" description="Jars used for testing"/>
   </configurations>
   <dependencies>
-    <dependency org="org.scream3r" name="jssc"         rev="2.8.0"   conf="application->default"/>
-    <dependency org="junit"        name="junit"        rev="4.12"    conf="testing->default"/>
-    <dependency org="org.hamcrest" name="hamcrest-all" rev="1.3"     conf="testing->default"/>
-    <dependency org="org.mockito"  name="mockito-core" rev="1.10.19" conf="testing->default"/>
+    <dependency org="com.github.sarxos" name="webcam-capture" rev="0.3.11" conf="application->default"/>
+    <dependency org="org.scream3r"      name="jssc"           rev="2.8.0"   conf="application->default"/>
+    <dependency org="junit"             name="junit"          rev="4.12"    conf="testing->default"/>
+    <dependency org="org.hamcrest"      name="hamcrest-all"   rev="1.3"     conf="testing->default"/>
+    <dependency org="org.mockito"       name="mockito-core"   rev="1.10.19" conf="testing->default"/>
   </dependencies>
 </ivy-module>

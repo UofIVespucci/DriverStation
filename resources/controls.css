@@ -1,4 +1,149 @@
+/*
+@font-face {
+    src: url("path/to/font.ttf");
+}
+-fx-font-family: "Font name";
+*/
+
+
 .carbon-button {
     -fx-background-insets: 50,0,80,0;
-    -fx-background-image: url("carbon.png");
+}
+
+.toggle-camera {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+    -fx-graphic: url("ui/tabs/Camera-50.png");
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-camera:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-graphic: url("ui/tabs/Camera-50i.png");
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.toggle-map {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+    -fx-graphic: url("ui/tabs/Adventures-50.png");
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-map:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-graphic: url("ui/tabs/Adventures-50i.png");
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
+
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.toggle-debug {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+    -fx-graphic: url("ui/tabs/Bug-50.png");
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.toggle-debug:selected {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0, 0, 0, 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-graphic: url("ui/tabs/Bug-50i.png");
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
+    -fx-background-color:
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
+
+.toggle-switch {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Refresh-50.png");
+    -fx-background-color: transparent;
+}
+
+.toggle-record {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Aperture-50.png");
+    -fx-background-color: transparent;
+}
+
+.video-background {
+    -fx-background-image: url("ui/demo/burrow.jpg");
+    -fx-background-size: cover;
+}
+
+.text-facing {
+    -fx-graphic: url("ui/video/Facing-Fwd.png");
+}
+
+.toolbox {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 5;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+}
+
+.htoolbox {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+}
+
+.tool-label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+.tool-item {
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+}
+
+.tool-item-box {
+    -fx-background-insets: 0;
+    -fx-padding: 5;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tool-button {
+    -fx-padding: 10;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+    -fx-text-fill: white;
+}
+
+.split-pane *.split-pane-divider {
+   -fx-padding: 0 1 0 1;
+   -fx-border-color:  transparent;
+   -fx-background-color: transparent;
+   -fx-background-insets: 0;
+   -fx-shape: " ";
 }

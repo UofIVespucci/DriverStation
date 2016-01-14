@@ -56,7 +56,7 @@ public class SerialConnectPanel extends HBox {
     public SerialConnectPanel(SerialConnectListener listener){
         this.listener = listener;
         refreshButton = new Button();
-        refreshButton.setText("Refresh");
+//        refreshButton.setText("Refresh");
         refreshButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
@@ -94,8 +94,12 @@ public class SerialConnectPanel extends HBox {
         getChildren().add(baudSelect);
         setPadding(new Insets(5, 5, 5, 5));
         setSpacing(5);
-        setStyle("-fx-background-color: #336699;");
-        refreshButton.getStyleClass().add("carbon-button");
+//        setStyle("-fx-background-color: #336699;");
+        setStyle("-fx-background-image: url('footer_lodyasS.png');");
+//        refreshButton.getStyleClass().add("pane-record");
+//        refreshButton.setContentDisplay(ContentDisplay.TOP);
+        refreshButton.setText("Refresh");
+
     }
 
     public void setBaudRate(int baudRate){
@@ -108,7 +112,7 @@ public class SerialConnectPanel extends HBox {
 
     /*
         Sometimes serial port actions can block for many seconds, so connect and
-        disconnect are run off the UI thread. These functions control the four
+        disconnect are run off the ui thread. These functions control the four
         states and prevent multiple port actions from racing eachother
     */
     private static final String BUTTON_CONNECTING    = "Connecting";
