@@ -1,3 +1,5 @@
+package com.serial;
+
 import com.serial.*;
 
 import java.io.*;
