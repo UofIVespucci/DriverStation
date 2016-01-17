@@ -85,7 +85,7 @@ object App {
         |        ${assign.mkString("\n        ")}
         |        return buf;
         |    }
-        |}
+        |};
         |#endif
         |""".stripMargin
     }
