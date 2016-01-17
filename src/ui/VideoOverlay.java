@@ -91,6 +91,6 @@ public class VideoOverlay extends GridPane{
             }
         });
 
-        getStyleClass().add("video-background");
+//        getStyleClass().add("video-background");
     }
 }

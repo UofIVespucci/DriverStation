@@ -66,7 +66,6 @@ public class Toolbox extends HBox{
 
         lightColorGrid = new GridPane();
         lightColorOver = new GridPane();
-//        lightColorGrid.prefWidthProperty().bind(this.widthProperty());
         cameraSwitchGrid = new GridPane();
         cameraSwitchOver = new GridPane();
         brightnessGrid = new GridPane();
@@ -80,19 +79,14 @@ public class Toolbox extends HBox{
         lightColorGrid.add(lightBlueTB, 0, 2);
         lightColorGrid.setVgap(5);
         lightColorGrid.setPrefWidth(ALLWIDTH);
-//        lightColorGrid.maxWidthProperty().bind(toolsVBox.widthProperty());
-//        lightColorGrid.prefWidthProperty().bind(lightColorOver.widthProperty());
         cameraSwitchGrid.add(cameraSwitchTB, 0, 1);
-//        cameraSwitchGrid.prefWidthProperty().bind(cameraSwitchOver.widthProperty());
         cameraSwitchGrid.setVgap(5);
         cameraSwitchGrid.setPrefWidth(ALLWIDTH);
         brightnessGrid.add(brightnessAnchor, 0, 1);
         brightnessGrid.add(brightnessSlider, 0, 2);
-//        brightnessGrid.prefWidthProperty().bind(brightnessOver.widthProperty());
         brightnessGrid.setVgap(5);
         brightnessGrid.setPrefWidth(ALLWIDTH);
         recordGrid.add(recordTB, 0, 1);
-//        recordGrid.prefWidthProperty().bind(recordOver.widthProperty());
         recordGrid.setVgap(5);
         recordGrid.setPrefWidth(ALLWIDTH);
 
@@ -123,8 +117,6 @@ public class Toolbox extends HBox{
         brightnessLbl.getStyleClass().add("tool-label");
         recordLbl.getStyleClass().add("tool-label");
 
-//        toolsVBox.prefWidthProperty().bind(maxWidthProperty());
-//        toolsVBox.minWidthProperty().bind(maxWidthProperty());
         toolsVBox.setSpacing(0);
 
         getChildren().addAll(toolsVBox, new VBoxDivider());
@@ -158,9 +150,5 @@ public class Toolbox extends HBox{
         cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
         brightnessLbl.minWidthProperty().bind(brightnessGrid.widthProperty());
         recordLbl.minWidthProperty().bind(recordGrid.widthProperty());
-
-//        toolsVBox.maxWidth(toolsVBox.getWidth());
-//        maxWidthProperty().bind(prefWidthProperty());
-//        maxWidth(getWidth());
     }
 }

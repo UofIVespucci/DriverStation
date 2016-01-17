@@ -3,11 +3,15 @@ package com;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import input.KeyControl;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingNode;
+import javafx.event.*;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javax.swing.JFrame;
@@ -15,6 +19,7 @@ import javax.swing.SwingUtilities;
 import com.serial.*;
 import jssc.*;
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 
 import ui.ButtonSelector;
 import ui.Toolbox;
@@ -32,6 +37,7 @@ public class Main {
     private SerialPort sp;
     private ButtonSelector tabSelector;
     private VideoOverlay vo;
+    private WebcamPanel panel;
 
     private void initAndShowGUI() {
         // This method is invoked on the EDT thread
@@ -65,7 +71,12 @@ public class Main {
         Toolbox tb = new Toolbox();
         BorderPane videoSP = new BorderPane();
         vo = new VideoOverlay();
+        StackPane videoStack = new StackPane();
         tabSelector = new ButtonSelector();
+        SwingNode swingNode = new SwingNode();
+
+        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> System.out.println("Pressed" + event.getCode()));
+        videoStack.getChildren().addAll(swingNode, vo);
 
         sp = null;
         jtf = new JTextArea(20,80);
@@ -91,10 +102,10 @@ public class Main {
         };
         scp = new serial.SerialConnectPanel(scl);
 
-//        Webcam webcam = Webcam.getDefault();
-        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
+        Webcam webcam = Webcam.getDefault();
+//        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
 
-        WebcamPanel panel = null;
+        panel = null;
         if (webcam != null) {
             System.out.println("Webcam: " + webcam.getName());
             webcam.setViewSize(WebcamResolution.VGA.getSize());
@@ -106,15 +117,16 @@ public class Main {
         } else {
             System.out.println("No webcam detected");
         }
+        System.out.println(panel.isFocusable());
 
-        SwingNode swingNode = new SwingNode();
+
         if (panel != null)  {
             panel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
             swingNode.setContent(panel);
         }
 
         videoSP.setLeft(tb);
-        videoSP.setCenter(swingNode);
+        videoSP.setCenter(videoStack);
 
         ((HBox) scp).setAlignment(Pos.CENTER);
         split.getChildren().addAll(tabSelector, new VBoxDivider(),videoSP);
@@ -141,4 +153,5 @@ public class Main {
     private void updateText(String newText){
         jtf.setText(jtf.getText() + newText);
     }
+
 }
