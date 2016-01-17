@@ -75,7 +75,8 @@ public class Main {
         tabSelector = new ButtonSelector();
         SwingNode swingNode = new SwingNode();
 
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> System.out.println("Pressed" + event.getCode()));
+        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
+                System.out.println("Pressed" + event.getCode()));
         videoStack.getChildren().addAll(swingNode, vo);
 
         sp = null;
