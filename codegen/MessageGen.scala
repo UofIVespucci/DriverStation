@@ -42,7 +42,7 @@ object App {
         |        ${readbuf}
         |        /*handle the message*/
         |    }
-        |    public byte[] build(${argline}){
+        |    public static byte[] build(${argline}){
         |        ByteBuffer buf = ByteBuffer.allocate(${length});
         |        buf.put(${msg.sig});
         |        ${buildbuf}
@@ -63,7 +63,7 @@ object App {
         s"""|#ifndef ${msg.name.toUpperCase}_H
         |#define ${msg.name.toUpperCase}_H
         |
-        |#include "serial/Receiver";
+        |#include "serial/Receiver.h"
         |
         |typedef struct ${msg.name}conv {
         |    uint8_t sig;
