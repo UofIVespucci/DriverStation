@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 import com.serial.Checksum;
 
 class VespuChat{
-    static final byte MOTOR_COMMAND = 0x00;
-
     static final byte[]  HEADER = new byte[]{ 0x5F };
     static final byte[]  FOOTER = new byte[]{ 0x0A };
     static final Checksum CHECK = new Checksum(){
