@@ -3,6 +3,7 @@
   <configurations>
     <conf name="application" description="Jars used by the application"/>
     <conf name="testing" description="Jars used for testing"/>
+    <conf name="scala" description="Jars used for scala"/>
   </configurations>
   <dependencies>
     <dependency org="com.github.sarxos" name="webcam-capture" rev="0.3.11"  conf="application->default"/>
@@ -10,5 +11,9 @@
     <dependency org="junit"             name="junit"          rev="4.12"    conf="testing->default"/>
     <dependency org="org.hamcrest"      name="hamcrest-all"   rev="1.3"     conf="testing->default"/>
     <dependency org="org.mockito"       name="mockito-core"   rev="1.10.19" conf="testing->default"/>
+    <dependency org="org.scala-lang"    name="scala-library"  rev="2.11.7"  conf="scala->default"/>
+    <dependency org="org.scala-lang"    name="scala-compiler" rev="2.11.7"  conf="scala->default"/>
+    <dependency org="org.scala-lang"    name="scala-reflect"  rev="2.11.7"  conf="scala->default"/>
+    <dependency org="org.scala-lang.modules" name="scala-xml_2.11" rev="1.0.5" conf="scala->default"/>
   </dependencies>
 </ivy-module>

@@ -1,0 +1,27 @@
+package com.VespuChat.messages;
+
+import com.serial.PacketReader;
+import java.nio.ByteBuffer;
+
+public abstract class AccelData implements PacketReader {
+    public int claim(byte data){
+        return (data == 1)? 13 : -1;
+    }
+    public void handle(byte[] data){
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        byte  sig = buf.get();
+        float xgs = buf.getFloat();
+        float ygs = buf.getFloat();
+        float zgs = buf.getFloat();
+        onReceive(xgs, ygs, zgs);
+    }
+    public static byte[] build(float xgs, float ygs, float zgs){
+        ByteBuffer buf = ByteBuffer.allocate(13);
+        buf.put((byte)1);
+        buf.putFloat(xgs);
+        buf.putFloat(ygs);
+        buf.putFloat(zgs);
+        return buf.array();
+    }
+    protected abstract void onReceive(float xgs, float ygs, float zgs);
+}

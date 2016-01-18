@@ -1,7 +1,7 @@
 import scala.xml._
 import java.io._
 
-object App {
+object MessageGen {
     sealed abstract class DType { val name: String; val bytes: Int }
     case class Flt32(val name: String) extends DType { val bytes = 4 }
     case class Int32(val name: String) extends DType { val bytes = 4 }
