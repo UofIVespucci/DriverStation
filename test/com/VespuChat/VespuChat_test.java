@@ -1,5 +1,6 @@
 package com.VespuChat;
 
+import com.VespuChat.messages.*;
 import com.serial.*;
 
 import org.junit.*;
@@ -13,8 +14,14 @@ import java.util.List;
 
 public class VespuChat_test {
     @Test
-    public void testMotorCommand() throws Exception {
-        PacketReader reader = mock(PacketReader.class);
+    public void MotorCommand_integration() throws Exception {
+        //the array is for getting around the final reference inner-class problem
+        boolean[] pass = new boolean[]{false};
+        PacketReader reader = new MotorCommand(){
+            protected void onReceive(short left, short right){
+                if(left == (short)0xaabb && right == (short)0xccdd) pass[0] = true;
+            }
+        };
         List<PacketReader> rl = new ArrayList<PacketReader>();
         rl.add(reader);
         PipedOutputStream os = new PipedOutputStream();
@@ -22,15 +29,19 @@ public class VespuChat_test {
         VespuChatTransmitter t = new VespuChatTransmitter(os);
         VespuChatReceiver r = new VespuChatReceiver(is, rl);
 
-        when(reader.claim(VespuChat.MOTOR_COMMAND)).thenReturn(256);
-        t.sendMotorCommand((short)0xaabb, (short)0xccdd);
+        t.send(MotorCommand.build((short)0xaabb, (short)0xccdd));
+
+        try{
+            //Receiver is asynchronous, so we need to sleep at least one READ_PERIOD
+            Thread.sleep(VespuChatReceiver.READ_PERIOD);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         t.close();
         //closing the receiver will make it wait until it has finished the read
         r.close();
 
-        verify(reader).handle(new byte[]{
-                VespuChat.MOTOR_COMMAND, (byte)0xaa, (byte)0xbb, (byte)0xcc, (byte)0xdd}
-            );
+        assertTrue(pass[0]);
     }
-
 }
