@@ -94,7 +94,11 @@
         </junit>
     </target>
 
-    <target name="generateMessages">
+    <uptodate property="codegen.messagesOutOfdate" targetfile="src/VespuChat/messages/spec.xml">
+        <srcfiles dir= "src/VespuChat/messages" includes="*.java"/>
+    </uptodate>
+
+    <target name="generateMessages" if="codegen.messagesOutOfdate">
         <scalac srcdir="codegen" destdir="codegen" classpathref="scala.classpath">
             <include name="*.scala"/>
         </scalac>
