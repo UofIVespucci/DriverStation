@@ -14,8 +14,8 @@ import com.serial.PacketReader;
  */
 
 public class VespuChatReceiver {
-    private static final long READ_PERIOD = 50; //time between reads
-    private static final TimeUnit UNIT = TimeUnit.MILLISECONDS; //READ_PERIOD units
+    static final long READ_PERIOD = 50; //time between reads
+    static final TimeUnit UNIT = TimeUnit.MILLISECONDS; //READ_PERIOD units
 
     private ScheduledThreadPoolExecutor timer;
     private Decoder decoder;

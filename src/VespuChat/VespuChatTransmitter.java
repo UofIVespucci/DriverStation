@@ -14,15 +14,7 @@ public class VespuChatTransmitter{
         output.close();
     }
 
-    public void sendMotorCommand(short left, short right){
-        ByteBuffer buf = ByteBuffer.allocate(5);
-        buf.put(VespuChat.MOTOR_COMMAND);
-        buf.putShort(left);
-        buf.putShort(right);
-        send(buf.array());
-    }
-
-    private void send(byte[] message) {
+    public void send(byte[] message) {
         try{
             output.write(VespuChat.wrap(message));
         } catch (Exception e) {

@@ -1,66 +1,25 @@
 package com.VespuChat.messages;
 
-class MotorCommand implements PacketReader {
+import com.serial.PacketReader;
+import java.nio.ByteBuffer;
+
+public abstract class MotorCommand implements PacketReader {
     public int claim(byte data){
-        return (data == ${sig}) ${length} : -1;
+        return (data == 0)? 5 : -1;
     }
     public void handle(byte[] data){
-        ByteBuffer buf = ByteBuffer.wrap(msg);
-        byte  sig   = buf.get();
-        short left  = buf.getShort();
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        byte  sig = buf.get();
+        short left = buf.getShort();
         short right = buf.getShort();
-        /*handler code*/
+        onReceive(left, right);
     }
     public static byte[] build(short left, short right){
         ByteBuffer buf = ByteBuffer.allocate(5);
-        buf.put(VespuChat.MOTOR_COMMAND);
+        buf.put((byte)0);
         buf.putShort(left);
         buf.putShort(right);
-        buf.array();
+        return buf.array();
     }
+    protected abstract void onReceive(short left, short right);
 }
-
-class MotorCommand : public Receiver {
-public:
-    int claim(char data) {
-        return (data == ${sig}) ${length} : -1;
-    }
-    void handle(const char* buf, int len){
-        ${getfrom("buf",0)}
-    }
-    static byte* build(args...){
-        byte *buf = malloc(${length});
-        ${writeto("buf",0)}
-        return buf;
-    }
-}
-
-public void handle(byte[] data){
-    ByteBuffer buf = ByteBuffer.wrap(data);
-    byte  sig = buf.get();
-    ${readbuf(fields)}
-    ${handler}
-}
-public byte[] build(${argline(fields)}){
-    ByteBuffer buf = ByteBuffer.allocate(${length});
-    buf.put(VespuChat.MOTOR_COMMAND);
-    ${buildbuf(fields)}
-    buf.array();
-}
-
-argline
-buildbuf
-readbuf
-
-Float,Int32,Int16,Uint8
-
-<message name="MotorCommand">
-    <value name="left", type="int16"/>
-    <value name="right", type="int16"/>
-</message>
-<message name="AccelData">
-    <value name="xgs", type="float"/>
-    <value name="ygs", type="float"/>
-    <value name="zgs", type="float"/>
-</message>
-
