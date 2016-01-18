@@ -18,3 +18,4 @@ bin/*
 .idea/*
 out/*
 *.iml
+codegen/output/*

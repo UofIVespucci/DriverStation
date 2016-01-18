@@ -66,6 +66,7 @@ object App {
         |#define ${msg.name.toUpperCase}_H
         |
         |#include "serial/Receiver.h"
+        |#include <stdint.h>
         |
         |typedef struct ${msg.name}conv {
         |    uint8_t sig;
@@ -80,8 +81,8 @@ object App {
         |        ${msg.name}conv *data = (*${msg.name}conv) buf;
         |        //handle data
         |    }
-        |    static byte* build(${idents.mkString(", ")}){
-        |        byte *buf = malloc(${length});
+        |    static uint8_t* build(${idents.mkString(", ")}){
+        |        uint8_t *buf = malloc(${length});
         |        ${msg.name}conv *data = (*${msg.name}conv) buf;
         |        data->sig = ${msg.sig};
         |        ${assign.mkString("\n        ")}
