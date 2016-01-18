@@ -31,23 +31,25 @@ object App {
         s"""|package com.VespuChat.messages;
         |
         |import com.serial.PacketReader;
+        |import java.nio.ByteBuffer;
         |
-        |class ${msg.name} implements PacketReader {
+        |public abstract class ${msg.name} implements PacketReader {
         |    public int claim(byte data){
-        |        return (data == ${msg.sig}) ${length} : -1;
+        |        return (data == ${msg.sig})? ${length} : -1;
         |    }
         |    public void handle(byte[] data){
         |        ByteBuffer buf = ByteBuffer.wrap(data);
         |        byte  sig = buf.get();
         |        ${readbuf}
-        |        /*handle the message*/
+        |        onReceive(${msg.data.map(_.name).mkString(", ")});
         |    }
         |    public static byte[] build(${argline}){
         |        ByteBuffer buf = ByteBuffer.allocate(${length});
-        |        buf.put(${msg.sig});
+        |        buf.put((byte)${msg.sig});
         |        ${buildbuf}
-        |        buf.array();
+        |        return buf.array();
         |    }
+        |    protected abstract void onReceive(${argline});
         |}
         |""".stripMargin
     }
@@ -72,7 +74,7 @@ object App {
         |class ${msg.name} : public Receiver {
         |public:
         |    int claim(char data) {
-        |        return (data == ${msg.sig}) ${length} : -1;
+        |        return (data == ${msg.sig})? ${length} : -1;
         |    }
         |    void handle(const char* buf, int len){
         |        ${msg.name}conv *data = (*${msg.name}conv) buf;
