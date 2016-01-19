@@ -65,28 +65,33 @@ object MessageGen {
         s"""|#ifndef ${msg.name.toUpperCase}_H
         |#define ${msg.name.toUpperCase}_H
         |
-        |#include "serial/Receiver.h"
+        |#include "../serial/Receiver.h"
+        |#include "../serial/VCTransmitter.h"
         |#include <stdint.h>
         |
         |typedef struct ${msg.name}conv {
         |    uint8_t sig;
         |    ${idents.mkString(";\n    ")};
         |} ${msg.name}conv;
+        |typedef void (*handleFunc) (${idents.mkString(", ")});
         |class ${msg.name} : public Receiver {
+        |private:
+        |   handleFunc hF;
         |public:
+        |    ${msg.name}(handleFunc hF): hF(hF) {}
         |    int claim(char data) {
         |        return (data == ${msg.sig})? ${length} : -1;
         |    }
         |    void handle(const char* buf, int len){
-        |        ${msg.name}conv *data = (*${msg.name}conv) buf;
-        |        //handle data
+        |        ${msg.name}conv *data = (${msg.name}conv*) buf;
+        |        hF(${msg.data.map("data->"+_.name).mkString(", ")});
         |    }
-        |    static uint8_t* build(${idents.mkString(", ")}){
-        |        uint8_t *buf = malloc(${length});
-        |        ${msg.name}conv *data = (*${msg.name}conv) buf;
+        |    static void build(VCTransmitter* vct, ${idents.mkString(", ")}){
+        |        uint8_t buf[${length}];
+        |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        data->sig = ${msg.sig};
         |        ${assign.mkString("\n        ")}
-        |        return buf;
+        |        vct->transmit(buf, 5);
         |    }
         |};
         |#endif
