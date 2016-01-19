@@ -3,13 +3,6 @@
         xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <property file="build.properties" />
 
-    <path id="scala.classpath">
-        <fileset dir="${scalaLibDir}">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-    <taskdef resource="scala/tools/ant/antlib.xml" classpathref="scala.classpath"/>
-
     <target name="init">
         <mkdir dir="${resourceDir}"/>
         <mkdir dir="${sourceDir}"/>
@@ -19,6 +12,7 @@
         <mkdir dir="${reportsDir}"/>
         <mkdir dir="${testLibDir}"/>
         <mkdir dir="${scalaLibDir}"/>
+        <mkdir dir="${codegenOutputDir}"/>
     </target>
 
     <target name="retrieve" depends="init">
@@ -31,6 +25,7 @@
         <delete dir="${outputDir}"/>
         <delete dir="${libDir}"/>
         <delete dir="${reportsDir}"/>
+        <delete dir="${codegenOutputDir}"/>
         <ivy:cleancache />
     </target>
 
@@ -99,6 +94,13 @@
     </uptodate>
 
     <target name="generateMessages" if="codegen.messagesOutOfdate">
+        <path id="scala.classpath">
+            <fileset dir="${scalaLibDir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <taskdef resource="scala/tools/ant/antlib.xml" classpathref="scala.classpath"/>
+
         <scalac srcdir="codegen" destdir="codegen" classpathref="scala.classpath">
             <include name="*.scala"/>
         </scalac>
