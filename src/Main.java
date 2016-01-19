@@ -105,21 +105,7 @@ public class Main {
 
         Webcam webcam = Webcam.getDefault();
 //        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
-
-        panel = null;
-        if (webcam != null) {
-            System.out.println("Webcam: " + webcam.getName());
-            webcam.setViewSize(WebcamResolution.VGA.getSize());
-            panel = new WebcamPanel(webcam);
-            panel.setFPSDisplayed(true);
-            panel.setDisplayDebugInfo(true);
-            panel.setImageSizeDisplayed(true);
-            panel.setMirrored(true);
-        } else {
-            System.out.println("No webcam detected");
-        }
-        System.out.println(panel.isFocusable());
-
+        panel = setWebcam(webcam);
 
         if (panel != null)  {
             panel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
@@ -149,6 +135,24 @@ public class Main {
                 initMain.initAndShowGUI();
             }
         });
+    }
+
+    public static WebcamPanel setWebcam(Webcam w)
+    {
+        WebcamPanel wcPanel;
+        if (w != null) {
+            System.out.println("Webcam: " + w.getName());
+            w.setViewSize(WebcamResolution.VGA.getSize());
+            wcPanel = new WebcamPanel(w);
+            wcPanel.setFPSDisplayed(true);
+            wcPanel.setDisplayDebugInfo(true);
+            wcPanel.setImageSizeDisplayed(true);
+            wcPanel.setMirrored(true);
+            return wcPanel;
+        } else {
+            System.out.println("No webcam detected");
+            return null;
+        }
     }
 
     private void updateText(String newText){
