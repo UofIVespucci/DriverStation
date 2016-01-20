@@ -2,7 +2,7 @@
 #define ACCELDATA_H
 
 #include "../serial/Receiver.h"
-#include "../serial/VCTransmitter.h"
+#include "../VespuChat.h"
 #include <stdint.h>
 
 typedef struct AccelDataconv {
@@ -24,14 +24,14 @@ public:
         AccelDataconv *data = (AccelDataconv*) buf;
         hF(data->xgs, data->ygs, data->zgs);
     }
-    static void build(VCTransmitter* vct, float xgs, float ygs, float zgs){
+    static void build(VespuChat& vct, float xgs, float ygs, float zgs){
         uint8_t buf[13];
         AccelDataconv *data = (AccelDataconv*) buf;
         data->sig = 1;
         data->xgs = xgs;
         data->ygs = ygs;
         data->zgs = zgs;
-        vct->transmit(buf, 5);
+        vct.deliver(buf, 5);
     }
 };
 #endif

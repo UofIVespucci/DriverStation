@@ -6,7 +6,10 @@
 #include "Protocol.h"
 #include "Receiver.h"
 
-typedef char (*InputStream) (void);
+class InputStream {
+public:
+    virtual char read() = 0;
+};
 
 struct Packet{
     int start;
@@ -19,12 +22,12 @@ struct Packet{
 
 class Decoder{
 public:
-    Decoder(InputStream read, Protocol* protocol, Receiver** receivers, int num_receivers):
-        read(read), protocol(protocol), receivers(receivers), num_receivers(num_receivers) { }
+    Decoder(InputStream* is, Protocol* protocol, Receiver** receivers, int num_receivers):
+        is(is), protocol(protocol), receivers(receivers), num_receivers(num_receivers) { }
     void update();
 private:
     static const int BUF_SIZE = 64;
-    InputStream read;
+    InputStream* is;
     Protocol* protocol;
     Receiver** receivers;
     int num_receivers;
@@ -44,10 +47,10 @@ private:
 //When a message goes past its maximum length without a matching checksum, dump it
 //When a message gets matched, dump all older messages
 void Decoder::update(){
-    char c = read();
+    char c = is->read();
     while(c != 0) {
         receive(c);
-        c = read();
+        c = is->read();
     }
 }
 

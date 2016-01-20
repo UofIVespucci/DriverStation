@@ -2,17 +2,17 @@
 #include "serial/Decoder.h"
 #include "VespuChat.h"
 
-char readInput(){ return Serial.read(); }
-Receiver* receivers[] = {
-
-};
-const int num_receivers = 0;
-Decoder decoder(&readInput, &VespuChat, receivers, num_receivers);
+extern VespuChat vespuChat;
+MotorCommand mcmd([](int16_t left, int16_t right){
+    MotorCommand::build(vespuChat, left, right);
+});
+Receiver* receivers[] = { &mcmd };
+VespuChat vespuChat(Serial, receivers, sizeof(receivers)/sizeof(receivers[0]));
 
 void setup(){
     Serial.begin(9600);
 }
 
 void loop(){
-    decoder.update();
+    vespuChat.update();
 }

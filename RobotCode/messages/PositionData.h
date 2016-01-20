@@ -2,7 +2,7 @@
 #define POSITIONDATA_H
 
 #include "../serial/Receiver.h"
-#include "../serial/VCTransmitter.h"
+#include "../VespuChat.h"
 #include <stdint.h>
 
 typedef struct PositionDataconv {
@@ -24,14 +24,14 @@ public:
         PositionDataconv *data = (PositionDataconv*) buf;
         hF(data->x, data->y, data->z);
     }
-    static void build(VCTransmitter* vct, float x, float y, float z){
+    static void build(VespuChat& vct, float x, float y, float z){
         uint8_t buf[13];
         PositionDataconv *data = (PositionDataconv*) buf;
         data->sig = 2;
         data->x = x;
         data->y = y;
         data->z = z;
-        vct->transmit(buf, 5);
+        vct.deliver(buf, 5);
     }
 };
 #endif

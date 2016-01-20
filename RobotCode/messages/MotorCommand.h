@@ -2,7 +2,7 @@
 #define MOTORCOMMAND_H
 
 #include "../serial/Receiver.h"
-#include "../serial/VCTransmitter.h"
+#include "../VespuChat.h"
 #include <stdint.h>
 
 typedef struct MotorCommandconv {
@@ -23,13 +23,13 @@ public:
         MotorCommandconv *data = (MotorCommandconv*) buf;
         hF(data->left, data->right);
     }
-    static void build(VCTransmitter* vct, int16_t left, int16_t right){
+    static void build(VespuChat& vct, int16_t left, int16_t right){
         uint8_t buf[5];
         MotorCommandconv *data = (MotorCommandconv*) buf;
         data->sig = 0;
         data->left = left;
         data->right = right;
-        vct->transmit(buf, 5);
+        vct.deliver(buf, 5);
     }
 };
 #endif

@@ -66,7 +66,7 @@ object MessageGen {
         |#define ${msg.name.toUpperCase}_H
         |
         |#include "../serial/Receiver.h"
-        |#include "../serial/VCTransmitter.h"
+        |#include "../VespuChat.h"
         |#include <stdint.h>
         |
         |typedef struct ${msg.name}conv {
@@ -86,12 +86,12 @@ object MessageGen {
         |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        hF(${msg.data.map("data->"+_.name).mkString(", ")});
         |    }
-        |    static void build(VCTransmitter* vct, ${idents.mkString(", ")}){
+        |    static void build(VespuChat& vct, ${idents.mkString(", ")}){
         |        uint8_t buf[${length}];
         |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        data->sig = ${msg.sig};
         |        ${assign.mkString("\n        ")}
-        |        vct->transmit(buf, 5);
+        |        vct.deliver(buf, 5);
         |    }
         |};
         |#endif
