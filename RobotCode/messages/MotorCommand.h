@@ -9,7 +9,7 @@ typedef struct MotorCommandconv {
     uint8_t sig;
     int16_t left;
     int16_t right;
-} MotorCommandconv;
+} __attribute__((__packed__)) MotorCommandconv;
 typedef void (*handleFunc) (int16_t left, int16_t right);
 class MotorCommand : public Receiver {
 private:

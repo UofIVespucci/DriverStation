@@ -10,7 +10,7 @@ typedef struct AccelDataconv {
     float xgs;
     float ygs;
     float zgs;
-} AccelDataconv;
+} __attribute__((__packed__)) AccelDataconv;
 typedef void (*handleFunc) (float xgs, float ygs, float zgs);
 class AccelData : public Receiver {
 private:

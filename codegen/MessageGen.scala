@@ -72,7 +72,7 @@ object MessageGen {
         |typedef struct ${msg.name}conv {
         |    uint8_t sig;
         |    ${idents.mkString(";\n    ")};
-        |} ${msg.name}conv;
+        |} __attribute__((__packed__)) ${msg.name}conv;
         |typedef void (*handleFunc) (${idents.mkString(", ")});
         |class ${msg.name} : public Receiver {
         |private:

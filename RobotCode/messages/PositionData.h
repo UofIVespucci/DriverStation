@@ -10,7 +10,7 @@ typedef struct PositionDataconv {
     float x;
     float y;
     float z;
-} PositionDataconv;
+} __attribute__((__packed__)) PositionDataconv;
 typedef void (*handleFunc) (float x, float y, float z);
 class PositionData : public Receiver {
 private:
