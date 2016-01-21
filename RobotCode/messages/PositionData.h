@@ -18,7 +18,7 @@ private:
 public:
     PositionData(_handlePositionData hF): hF(hF) {}
     int claim(char data) {
-        return (data == 2)? 13 : -1;
+        return (data == 3)? 13 : -1;
     }
     void handle(const char* buf, int len){
         PositionDataconv *data = (PositionDataconv*) buf;
@@ -27,7 +27,7 @@ public:
     static void build(VespuChat& vct, float x, float y, float z){
         uint8_t buf[13];
         PositionDataconv *data = (PositionDataconv*) buf;
-        data->sig = 2;
+        data->sig = 3;
         data->x = x;
         data->y = y;
         data->z = z;

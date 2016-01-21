@@ -1,12 +1,18 @@
 #include "messages/MotorCommand.h"
 #include "messages/Error.h"
-#include "messages/Debug.h"
 #include "serial/Decoder.h"
 #include "VespuChat.h"
 
+#include <AltSoftSerial.h>
+AltSoftSerial motorSerial;
+
 extern VespuChat vespuChat;
-MotorCommand mcmd([](int16_t left, int16_t right){
-    MotorCommand::build(vespuChat, left, right);
+MotorCommand mcmd([](uint8_t left, uint8_t right){
+    MotorCommand::build(vespuChat, left, right); //echo command
+    motorSerial.write(0x89);//motor 0 speed set
+    motorSerial.write(left&0xff);
+    motorSerial.write(0x8D);//motor 1 speed set
+    motorSerial.write(right&0xff);
 });
 Error ecmd([](uint8_t code){
     Error::build(vespuChat, code);
@@ -16,6 +22,10 @@ VespuChat vespuChat(Serial, receivers, sizeof(receivers)/sizeof(receivers[0]));
 
 void setup(){
     Serial.begin(9600);
+    motorSerial.begin(38400);
+    delay(100);
+    motorSerial.write(0xAA);//motor BAUD detection byte
+    Error::build(vespuChat, 0x00/*starting*/);
 }
 
 void loop(){

@@ -1,8 +1,9 @@
 
 <messagespec>
+    <message name="donusecommandzero"/>
     <message name="MotorCommand">
-        <value name="left" type="int16"/>
-        <value name="right" type="int16"/>
+        <value name="left" type="uint8"/>
+        <value name="right" type="uint8"/>
     </message>
     <message name="AccelData">
         <value name="xgs" type="float"/>

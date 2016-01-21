@@ -145,7 +145,7 @@ public class Main {
 
         final List<PacketReader> rl = new ArrayList<PacketReader>();
         rl.add(new MotorCommand(){
-            protected void onReceive(short left, short right){
+            protected void onReceive(byte left, byte right){
                 System.out.println("Received motor command "+left+" "+right);
             }
         });
@@ -159,7 +159,7 @@ public class Main {
             VespuChatTransmitter t = null;
             VespuChatReceiver r = null;
             ScheduledThreadPoolExecutor scheduler = null;
-            short counter = 0;
+            byte counter = 0;
             public void connectionEstablished(SerialPort newConnection){
                 t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
                 //SerialInputStream sis = new SerialInputStream(newConnection);
@@ -168,7 +168,9 @@ public class Main {
                 Runnable transmit = new Runnable(){
                     public void run(){
                         counter += 1;
-                        byte[] data = com.VespuChat.messages.Error.build((byte)counter);
+                        //byte[] data = com.VespuChat.messages.Error.build((byte)counter);
+                        if(counter >= 127) counter = 0;
+                        byte[] data = MotorCommand.build(counter, counter);
 
                         System.out.print("Sending a message ");
                         for(int i=0; i<data.length; i++){
