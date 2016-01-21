@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import com.serial.Checksum;
 
 class VespuChat{
-    static final byte[]  HEADER = new byte[]{ 0x5F };
-    static final byte[]  FOOTER = new byte[]{ 0x0A };
+    static final byte[]  HEADER = new byte[]{ (byte)'H' };
+    static final byte[]  FOOTER = new byte[]{ (byte)'F' };
     static final Checksum CHECK = new Checksum(){
         public int length() { return 1; }
         public byte[] calc(byte[] txt){ return VespuChat.checksum(txt); }

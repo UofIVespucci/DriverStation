@@ -2,6 +2,7 @@ package com.VespuChat.messages;
 
 import com.serial.PacketReader;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public abstract class AccelData implements PacketReader {
     public int claim(byte data){
@@ -9,6 +10,7 @@ public abstract class AccelData implements PacketReader {
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
         byte  sig = buf.get();
         float xgs = buf.getFloat();
         float ygs = buf.getFloat();
@@ -17,6 +19,7 @@ public abstract class AccelData implements PacketReader {
     }
     public static byte[] build(float xgs, float ygs, float zgs){
         ByteBuffer buf = ByteBuffer.allocate(13);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
         buf.put((byte)1);
         buf.putFloat(xgs);
         buf.putFloat(ygs);

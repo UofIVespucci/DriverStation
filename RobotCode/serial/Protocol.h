@@ -21,7 +21,7 @@ public:
     int footer_len;
     /**return whether `char c[len]` has a valid checksum at the end */
     virtual bool checksum(const char* c, int len) = 0;
-    virtual char read();
+    virtual int read();
 };
 
 #endif

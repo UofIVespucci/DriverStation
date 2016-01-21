@@ -9,12 +9,12 @@ typedef struct Errorconv {
     uint8_t sig;
     uint8_t num;
 } __attribute__((__packed__)) Errorconv;
-typedef void (*handleFunc) (uint8_t num);
+typedef void (*_handleError) (uint8_t num);
 class Error : public Receiver {
 private:
-   handleFunc hF;
+   _handleError hF;
 public:
-    Error(handleFunc hF): hF(hF) {}
+    Error(_handleError hF): hF(hF) {}
     int claim(char data) {
         return (data == 3)? 2 : -1;
     }
@@ -27,7 +27,7 @@ public:
         Errorconv *data = (Errorconv*) buf;
         data->sig = 3;
         data->num = num;
-        vct.deliver(buf, 5);
+        vct.deliver(buf, 2);
     }
 };
 #endif

@@ -11,12 +11,12 @@ typedef struct PositionDataconv {
     float y;
     float z;
 } __attribute__((__packed__)) PositionDataconv;
-typedef void (*handleFunc) (float x, float y, float z);
+typedef void (*_handlePositionData) (float x, float y, float z);
 class PositionData : public Receiver {
 private:
-   handleFunc hF;
+   _handlePositionData hF;
 public:
-    PositionData(handleFunc hF): hF(hF) {}
+    PositionData(_handlePositionData hF): hF(hF) {}
     int claim(char data) {
         return (data == 2)? 13 : -1;
     }
@@ -31,7 +31,7 @@ public:
         data->x = x;
         data->y = y;
         data->z = z;
-        vct.deliver(buf, 5);
+        vct.deliver(buf, 13);
     }
 };
 #endif

@@ -9,12 +9,12 @@ typedef struct intmsgconv {
     uint8_t sig;
     int32_t test;
 } __attribute__((__packed__)) intmsgconv;
-typedef void (*handleFunc) (int32_t test);
+typedef void (*_handleintmsg) (int32_t test);
 class intmsg : public Receiver {
 private:
-   handleFunc hF;
+   _handleintmsg hF;
 public:
-    intmsg(handleFunc hF): hF(hF) {}
+    intmsg(_handleintmsg hF): hF(hF) {}
     int claim(char data) {
         return (data == 4)? 5 : -1;
     }

@@ -32,6 +32,7 @@ object MessageGen {
         |
         |import com.serial.PacketReader;
         |import java.nio.ByteBuffer;
+        |import java.nio.ByteOrder;
         |
         |public abstract class ${msg.name} implements PacketReader {
         |    public int claim(byte data){
@@ -39,12 +40,14 @@ object MessageGen {
         |    }
         |    public void handle(byte[] data){
         |        ByteBuffer buf = ByteBuffer.wrap(data);
+        |        buf.order(ByteOrder.LITTLE_ENDIAN);
         |        byte  sig = buf.get();
         |        ${readbuf.mkString("\n        ")}
         |        onReceive(${names.mkString(", ")});
         |    }
         |    public static byte[] build(${defs.mkString(", ")}){
         |        ByteBuffer buf = ByteBuffer.allocate(${length});
+        |        buf.order(ByteOrder.LITTLE_ENDIAN);
         |        buf.put((byte)${msg.sig});
         |        ${buildbuf.mkString("\n        ")}
         |        return buf.array();
@@ -90,7 +93,7 @@ object MessageGen {
         |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        data->sig = ${msg.sig};
         |        ${assign.mkString("\n        ")}
-        |        vct.deliver(buf, 5);
+        |        vct.deliver(buf, ${length});
         |    }
         |};
         |#endif

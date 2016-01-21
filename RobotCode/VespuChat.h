@@ -6,8 +6,8 @@
 #include "Stream.h"
 
 namespace{
-    const char HEADER[] = { 0x5F };
-    const char FOOTER[] = { 0x0A };
+    const char HEADER[] = { 'H' };
+    const char FOOTER[] = { 'F' };
     const int H_LEN = 1;
     const int F_LEN = 1;
 }
@@ -25,7 +25,9 @@ public:
         return sum;
     }
     bool checksum(const char* c, int len){
-        return c[len-1] == calcSum((const uint8_t*)c, len-1);
+        uint8_t found = c[len-1];
+        uint8_t expected = calcSum((const uint8_t*)c, len-1);
+        return found == expected;
     }
     //wrap and transmit a payload
     void deliver(const uint8_t* data, int len){
@@ -34,15 +36,15 @@ public:
         stream.write(calcSum(data,len));
         stream.write(FOOTER, F_LEN);
     }
-    char read() {
+    int read() {
         return stream.read();
+    }
+    int available() {
+        return stream.available();
     }
     void update() {
         decoder.update();
     }
 };
-
-extern VespuChat vespuChat;
-
 
 #endif

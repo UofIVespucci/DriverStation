@@ -11,12 +11,12 @@ typedef struct AccelDataconv {
     float ygs;
     float zgs;
 } __attribute__((__packed__)) AccelDataconv;
-typedef void (*handleFunc) (float xgs, float ygs, float zgs);
+typedef void (*_handleAccelData) (float xgs, float ygs, float zgs);
 class AccelData : public Receiver {
 private:
-   handleFunc hF;
+   _handleAccelData hF;
 public:
-    AccelData(handleFunc hF): hF(hF) {}
+    AccelData(_handleAccelData hF): hF(hF) {}
     int claim(char data) {
         return (data == 1)? 13 : -1;
     }
@@ -31,7 +31,7 @@ public:
         data->xgs = xgs;
         data->ygs = ygs;
         data->zgs = zgs;
-        vct.deliver(buf, 5);
+        vct.deliver(buf, 13);
     }
 };
 #endif

@@ -20,4 +20,12 @@
     <message name="intmsg">
         <value name="test" type="int32"/>
     </message>
+    <message name="nodata">
+    </message>
+    <message name="Debug">
+        <value name="A" type="uint8"/>
+        <value name="B" type="uint8"/>
+        <value name="C" type="uint8"/>
+        <value name="D" type="uint8"/>
+    </message>
 </messagespec>

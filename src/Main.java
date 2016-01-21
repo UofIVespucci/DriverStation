@@ -143,14 +143,26 @@ public class Main {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        PacketReader reader = new MotorCommand(){
+        final List<PacketReader> rl = new ArrayList<PacketReader>();
+        rl.add(new MotorCommand(){
             protected void onReceive(short left, short right){
                 System.out.println("Received motor command "+left+" "+right);
             }
-        };
-        final List<PacketReader> rl = new ArrayList<PacketReader>();
-        rl.add(reader);
-
+        });
+        rl.add(new com.VespuChat.messages.Error(){
+            protected void onReceive(byte code){
+                System.out.println("Error "+(code&0xff));
+            }
+        });
+        rl.add(new com.VespuChat.messages.Debug(){
+            protected void onReceive(byte a, byte b, byte c, byte d){
+                System.out.println("debug "+
+                                            Integer.toHexString(a)+", "+
+                                            Integer.toHexString(b)+", "+
+                                            Integer.toHexString(c)+", "+
+                                            Integer.toHexString(d));
+            }
+        });
 
         SerialConnectListener connectListener = new SerialConnectListener(){
             VespuChatTransmitter t = null;
@@ -159,17 +171,20 @@ public class Main {
             short counter = 0;
             public void connectionEstablished(SerialPort newConnection){
                 t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
+                //SerialInputStream sis = new SerialInputStream(newConnection);
                 r = new VespuChatReceiver(new SerialInputStream(newConnection), rl);
                 scheduler = new ScheduledThreadPoolExecutor(1 /*num cores*/);
                 Runnable transmit = new Runnable(){
                     public void run(){
                         counter += 1;
-                        byte[] data = MotorCommand.build((short)counter, (short) 100);
-                        System.out.print("Sending a motor command ");
+                        byte[] data = com.VespuChat.messages.Error.build((byte)counter);
+
+                        System.out.print("Sending a message ");
                         for(int i=0; i<data.length; i++){
                             System.out.print((data[i]&0xFF)+", ");
                         }
                         System.out.println();
+
                         t.send(data);
                     }
                 };
@@ -185,7 +200,6 @@ public class Main {
                 }
             }
         };
-
 
         Platform.runLater(new Runnable() {
             @Override

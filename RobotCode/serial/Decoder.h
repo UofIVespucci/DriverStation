@@ -8,7 +8,8 @@
 
 class InputStream {
 public:
-    virtual char read() = 0;
+    virtual int read() = 0;
+    virtual int available() = 0;
 };
 
 struct Packet{
@@ -24,6 +25,7 @@ class Decoder{
 public:
     Decoder(InputStream* is, Protocol* protocol, Receiver** receivers, int num_receivers):
         is(is), protocol(protocol), receivers(receivers), num_receivers(num_receivers) { }
+    /** Check the input stream for more data; process anything new */
     void update();
 private:
     static const int BUF_SIZE = 64;
@@ -31,12 +33,18 @@ private:
     Protocol* protocol;
     Receiver** receivers;
     int num_receivers;
-    circBuf<int, BUF_SIZE> buffer;
+    circBuf<char, BUF_SIZE> buffer;
     circBuf<Packet, 4> packets;
+    /** receive a char, buffer it, check for packet matches */
     void receive(char);
-    bool bufferMatch(int, const char *, int);
-    int  findReceiver(char);
-    void checkPackets(int);
+    /** check for a match with `str` of length `len` that ends at `end` */
+    bool bufferMatch(int end, const char * str, int len);
+    /** return the index of the receiver that accepts the passed in signifier
+      * returns -1 if no receiver is found
+      */
+    int  findReceiver(char sig);
+    /** check and handle packets ending at `end` */
+    void checkPackets(int end);
 };
 
 //when a header is found, a one byte signifier follows
@@ -47,11 +55,7 @@ private:
 //When a message goes past its maximum length without a matching checksum, dump it
 //When a message gets matched, dump all older messages
 void Decoder::update(){
-    char c = is->read();
-    while(c != -1) {
-        receive(c);
-        c = is->read();
-    }
+    while(is->available()) receive( (char)(is->read() & 0xff) );
 }
 
 void Decoder::receive(char c){
@@ -81,12 +85,13 @@ bool Decoder::bufferMatch(int end, const char * str, int len){
 
 int Decoder::findReceiver(char sig){
     for(int i=0; i<num_receivers; i++){
-        if(receivers[i]->claim(sig)) return i;
+        if(receivers[i]->claim(sig) != -1) {
+            return i;
+        }
     }
     return -1;
 }
 
-//check for a packet ending at `end`
 void Decoder::checkPackets(int end){
     for(int i=packets.start(); i<packets.end(); i++){
 
@@ -101,6 +106,7 @@ void Decoder::checkPackets(int end){
 
         //check for a match
         if(protocol->checksum(msg, length)){
+
             //call back to claming packet handler
             receivers[packets[i].callback]->handle(msg, length);
             //clean packets list

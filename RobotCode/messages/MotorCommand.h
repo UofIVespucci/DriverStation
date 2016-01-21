@@ -10,12 +10,12 @@ typedef struct MotorCommandconv {
     int16_t left;
     int16_t right;
 } __attribute__((__packed__)) MotorCommandconv;
-typedef void (*handleFunc) (int16_t left, int16_t right);
+typedef void (*_handleMotorCommand) (int16_t left, int16_t right);
 class MotorCommand : public Receiver {
 private:
-   handleFunc hF;
+   _handleMotorCommand hF;
 public:
-    MotorCommand(handleFunc hF): hF(hF) {}
+    MotorCommand(_handleMotorCommand hF): hF(hF) {}
     int claim(char data) {
         return (data == 0)? 5 : -1;
     }

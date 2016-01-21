@@ -133,10 +133,10 @@ public class SerialConnectPanel extends HBox {
         (new Thread(connectSerial)).start();
     }
     private void connectDone(){
-        refreshButton.setDisable(true);
+/*        refreshButton.setDisable(true);
         dropDown.setDisable(true);
         connectButton.setDisable(true);
-        connectButton.setText(BUTTON_CONNECTED);
+        connectButton.setText(BUTTON_CONNECTED);*/
         inProgress = false;
     }
     private void disconnect(){
@@ -152,10 +152,10 @@ public class SerialConnectPanel extends HBox {
         (new Thread(disconnectSerial)).start();
     }
     private void disconnectDone(){
-        refreshButton.setDisable(false);
+/*        refreshButton.setDisable(false);
         dropDown.setDisable(false);
         connectButton.setDisable(false);
-        connectButton.setText(BUTTON_DISCONNECTED);
+        connectButton.setText(BUTTON_DISCONNECTED);*/
         inProgress = false;
     }
 
