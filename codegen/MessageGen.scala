@@ -19,15 +19,15 @@ object MessageGen {
         val typemap: Map[Class[_<:DType],String] =
             Map( (classOf[Flt32] -> "float"), (classOf[Int32] -> "int"),
                  (classOf[Int16] -> "short"), (classOf[UInt8] -> "byte") )
+        val bbmethod: Map[Class[_<:DType],String] =
+            Map( (classOf[Flt32] -> "Float"), (classOf[Int32] -> "Int"),
+                 (classOf[Int16] -> "Short"), (classOf[UInt8] -> "") )
         def toIdent(t: DType): String = typemap(t.getClass) +" "+ t.name
-        val length = msg.data.map(_.bytes).sum + 1 //for the signifier byte
-        val argline = msg.data.map(toIdent).mkString(", ")
-        val readbuf = msg.data.map{t =>
-                toIdent(t)+" = buf.get"+typemap(t.getClass).capitalize+"();"
-            }.mkString("\n        ")
-        val buildbuf = msg.data.map{t =>
-                "buf.put"+typemap(t.getClass).capitalize+"("+t.name+");"
-            }.mkString("\n        ")
+        val length   = msg.data.map(_.bytes).sum + 1 //for the signifier byte
+        val names    = msg.data.map(_.name)
+        val defs     = msg.data.map(t=> typemap(t.getClass)+" "+t.name)
+        val buildbuf = msg.data.map(t=> s"buf.put${bbmethod(t.getClass)}(${t.name});")
+        val readbuf  = msg.data.map(t=> s"${toIdent(t)} = buf.get${bbmethod(t.getClass)}();")
         s"""|package com.VespuChat.messages;
         |
         |import com.serial.PacketReader;
@@ -40,16 +40,16 @@ object MessageGen {
         |    public void handle(byte[] data){
         |        ByteBuffer buf = ByteBuffer.wrap(data);
         |        byte  sig = buf.get();
-        |        ${readbuf}
-        |        onReceive(${msg.data.map(_.name).mkString(", ")});
+        |        ${readbuf.mkString("\n        ")}
+        |        onReceive(${names.mkString(", ")});
         |    }
-        |    public static byte[] build(${argline}){
+        |    public static byte[] build(${defs.mkString(", ")}){
         |        ByteBuffer buf = ByteBuffer.allocate(${length});
         |        buf.put((byte)${msg.sig});
-        |        ${buildbuf}
+        |        ${buildbuf.mkString("\n        ")}
         |        return buf.array();
         |    }
-        |    protected abstract void onReceive(${argline});
+        |    protected abstract void onReceive(${defs.mkString(", ")});
         |}
         |""".stripMargin
     }
