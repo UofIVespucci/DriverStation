@@ -4,15 +4,9 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import javafx.embed.swing.SwingNode;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import jssc.SerialPort;
-import jssc.SerialPortEvent;
-import jssc.SerialPortEventListener;
-
-import javax.swing.*;
 import java.awt.*;
 
 public class GUIManager {
@@ -39,32 +33,14 @@ public class GUIManager {
         wcStack = new StackPane();
         scene = new Scene(buttonSelectorContainer, Color.ALICEBLUE);
 
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
-                System.out.println("Pressed" + event.getCode()));
+        initWebcam();
+        initKeyListener();
+
         wcStack.getChildren().addAll(wcNode, videoOverlay);
 
-        Webcam webcam = Webcam.getDefault();
-//        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
-//        wcPanel = setWebcam(webcam);
-        setWebcam(webcam);
-
-        if (wcPanel != null)  {
-            wcPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-            wcNode.setContent(wcPanel);
-        }
-
-//        toolboxContainer.setLeft(toolbox);
-//        toolboxContainer.setCenter(wcStack);
         toolboxContainer.getChildren().addAll(toolbox,wcStack);
-
-//        ((HBox) scp).setAlignment(Pos.CENTER);
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(),toolboxContainer);
-        videoOverlay.maxWidthProperty().bind(toolboxContainer.widthProperty());
-//        buttonSelector.maxHeightProperty().bind(toolboxContainer.heightProperty().multiply(0.01));
-
-        for (Webcam wc : Webcam.getWebcams()) {
-            System.out.println(wc.getName());
-        }
+//        videoOverlay.maxWidthProperty().bind(toolboxContainer.widthProperty());
 
         return scene;
     }
@@ -80,11 +56,32 @@ public class GUIManager {
             wcPanel.setDisplayDebugInfo(true);
             wcPanel.setImageSizeDisplayed(true);
             wcPanel.setMirrored(true);
-//            return wcPanel;
         } else {
             System.out.println("No webcam detected");
             wcPanel = null;
-//            return null;
         }
+    }
+
+    private void initKeyListener(){
+        //Add keyboard listener for the scene
+        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
+                //Temporary, soon to be obsolete keyboard listener event
+                System.out.println("Pressed" + event.getCode()));
+    }
+
+    private void initWebcam(){
+        for (Webcam wc : Webcam.getWebcams()) {
+            System.out.println(wc.getName());
+        }
+
+        Webcam webcam = Webcam.getDefault();
+//        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
+        setWebcam(webcam);
+
+        if (wcPanel != null)  {
+            wcPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            wcNode.setContent(wcPanel);
+        }
+
     }
 }
