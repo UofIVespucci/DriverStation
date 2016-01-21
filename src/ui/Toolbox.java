@@ -50,7 +50,8 @@ public class Toolbox extends HBox{
     private AnchorPane brightnessAnchor;
 
     private WebcamDropDown wcComboBox;
-    private Button wcTB;
+    private Button wcConnectTB;
+    private Button wcRefreshTB;
 
     public Toolbox(){
 //        minWidth(ALLWIDTH);
@@ -94,7 +95,8 @@ public class Toolbox extends HBox{
         wcOver = new GridPane();
         wcLabel = new Label("WEBCAM");
         wcComboBox = new WebcamDropDown();
-        wcTB = new Button("CONNECT");
+        wcConnectTB = new Button("CONNECT");
+        wcRefreshTB = new Button("REFRESH");
 
 
         initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl, wcLabel);
@@ -131,7 +133,8 @@ public class Toolbox extends HBox{
     private void initWebcamDropDown()
     {
         wcGrid.add(wcComboBox, 0, 1);
-        wcGrid.add(wcTB, 0, 2);
+        wcGrid.add(wcConnectTB, 0, 2);
+        wcGrid.add(wcRefreshTB, 0, 3);
         wcGrid.setVgap(5);
         wcGrid.setPrefWidth(ALLWIDTH);
 
@@ -144,10 +147,17 @@ public class Toolbox extends HBox{
         wcComboBox.setPrefWidth(ALLWIDTH);
         wcLabel.setPrefWidth(ALLWIDTH);
 
-        wcTB.setOnAction(new EventHandler<ActionEvent>() {
+        wcConnectTB.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Main.guiManager.setWebcam(wcComboBox.getSelected());
+            }
+        });
+
+        wcRefreshTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                wcComboBox.getWebcams();
             }
         });
     }
