@@ -154,15 +154,6 @@ public class Main {
                 System.out.println("Error "+(code&0xff));
             }
         });
-        rl.add(new com.VespuChat.messages.Debug(){
-            protected void onReceive(byte a, byte b, byte c, byte d){
-                System.out.println("debug "+
-                                            Integer.toHexString(a)+", "+
-                                            Integer.toHexString(b)+", "+
-                                            Integer.toHexString(c)+", "+
-                                            Integer.toHexString(d));
-            }
-        });
 
         SerialConnectListener connectListener = new SerialConnectListener(){
             VespuChatTransmitter t = null;
