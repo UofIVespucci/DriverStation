@@ -15,6 +15,9 @@
         <value name="z" type="float"/>
     </message>
     <message name="Error">
-        <value name="code" type="int16"/>
+        <value name="num" type="uint8"/>
+    </message>
+    <message name="intmsg">
+        <value name="test" type="int32"/>
     </message>
 </messagespec>

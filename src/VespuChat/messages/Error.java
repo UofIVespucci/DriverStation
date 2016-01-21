@@ -5,19 +5,19 @@ import java.nio.ByteBuffer;
 
 public abstract class Error implements PacketReader {
     public int claim(byte data){
-        return (data == 3)? 3 : -1;
+        return (data == 3)? 2 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
         byte  sig = buf.get();
-        short code = buf.getShort();
-        onReceive(code);
+        byte num = buf.get();
+        onReceive(num);
     }
-    public static byte[] build(short code){
-        ByteBuffer buf = ByteBuffer.allocate(3);
+    public static byte[] build(byte num){
+        ByteBuffer buf = ByteBuffer.allocate(2);
         buf.put((byte)3);
-        buf.putShort(code);
+        buf.put(num);
         return buf.array();
     }
-    protected abstract void onReceive(short code);
+    protected abstract void onReceive(byte num);
 }
