@@ -1,8 +1,12 @@
 package ui;
 
+import com.Main;
 import com.github.sarxos.webcam.WebcamPicker;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
@@ -30,6 +34,7 @@ public class Toolbox extends HBox{
     private Label cameraSwitchLbl;
     private Label brightnessLbl;
     private Label recordLbl;
+    private Label wcLabel;
 
     private GridPane lightColorGrid;
     private GridPane lightColorOver;
@@ -39,8 +44,13 @@ public class Toolbox extends HBox{
     private GridPane brightnessOver;
     private GridPane recordGrid;
     private GridPane recordOver;
+    private GridPane wcGrid;
+    private GridPane wcOver;
 
     private AnchorPane brightnessAnchor;
+
+    private WebcamDropDown wcComboBox;
+    private Button wcTB;
 
     public Toolbox(){
 //        minWidth(ALLWIDTH);
@@ -79,13 +89,22 @@ public class Toolbox extends HBox{
         recordLbl           = new Label ("RECORD");
         recordTB            = new ToggleButton("RECORD");
 
-        initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl);
+        //Init Components for Webcam Pane
+        wcGrid = new GridPane();
+        wcOver = new GridPane();
+        wcLabel = new Label("WEBCAM");
+        wcComboBox = new WebcamDropDown();
+        wcTB = new Button("CONNECT");
+
+
+        initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl, wcLabel);
         initLightColor();
         initCameraSwitch();
         initBrightness();
         initRecordSwitch();
+        initWebcamDropDown();
 
-        toolsVBox.getChildren().addAll(lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        toolsVBox.getChildren().addAll(wcOver ,lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
         toolsVBox.getStyleClass().add("toolbox");
 
         toolsVBox.setSpacing(0);
@@ -107,6 +126,30 @@ public class Toolbox extends HBox{
             l.setAlignment(p);
             l.getStyleClass().add("tool-label");
         }
+    }
+
+    private void initWebcamDropDown()
+    {
+        wcGrid.add(wcComboBox, 0, 1);
+        wcGrid.add(wcTB, 0, 2);
+        wcGrid.setVgap(5);
+        wcGrid.setPrefWidth(ALLWIDTH);
+
+        wcOver.add(wcLabel, 0, 0);
+        wcOver.add(wcGrid, 0, 1);
+
+        wcGrid.getStyleClass().add("tool-item");
+        wcOver.getStyleClass().add("tool-item-box");
+
+        wcComboBox.setPrefWidth(ALLWIDTH);
+        wcLabel.setPrefWidth(ALLWIDTH);
+
+        wcTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Main.guiManager.setWebcam(wcComboBox.getSelected());
+            }
+        });
     }
 
     private void initLightColor(){

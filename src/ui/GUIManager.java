@@ -47,15 +47,22 @@ public class GUIManager {
 
     public void setWebcam(Webcam w)
     {
-        wcPanel = null;
+//        if (wcPanel!=null) wcPanel.getWebcam().close();
+//        wcPanel = null;
         if (w != null) {
+            w.close();
+//            w.close();
             System.out.println("Webcam: " + w.getName());
             w.setViewSize(WebcamResolution.VGA.getSize());
+            w.open();
             wcPanel = new WebcamPanel(w);
+            wcPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            wcNode.setContent(wcPanel);
             wcPanel.setFPSDisplayed(true);
             wcPanel.setDisplayDebugInfo(true);
             wcPanel.setImageSizeDisplayed(true);
             wcPanel.setMirrored(true);
+//            w.open();
         } else {
             System.out.println("No webcam detected");
             wcPanel = null;
@@ -75,6 +82,7 @@ public class GUIManager {
         }
 
         Webcam webcam = Webcam.getDefault();
+        webcam.open();
 //        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
         setWebcam(webcam);
 
