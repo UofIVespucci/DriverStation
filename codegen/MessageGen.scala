@@ -70,15 +70,14 @@ object MessageGen {
         |#include <stdint.h>
         |
         |typedef struct ${msg.name}conv {
-        |    uint8_t sig;
-        |    ${idents.mkString(";\n    ")};
+        |    ${("uint8_t sig"+:idents).mkString(";\n    ")};
         |} __attribute__((__packed__)) ${msg.name}conv;
-        |typedef void (*handleFunc) (${idents.mkString(", ")});
+        |typedef void (*_handle${msg.name}) (${idents.mkString(", ")});
         |class ${msg.name} : public Receiver {
         |private:
-        |   handleFunc hF;
+        |   _handle${msg.name} hF;
         |public:
-        |    ${msg.name}(handleFunc hF): hF(hF) {}
+        |    ${msg.name}(_handle${msg.name} hF): hF(hF) {}
         |    int claim(char data) {
         |        return (data == ${msg.sig})? ${length} : -1;
         |    }
@@ -86,7 +85,7 @@ object MessageGen {
         |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        hF(${msg.data.map("data->"+_.name).mkString(", ")});
         |    }
-        |    static void build(VespuChat& vct, ${idents.mkString(", ")}){
+        |    static void build(${("VespuChat& vct"+:idents).mkString(", ")}){
         |        uint8_t buf[${length}];
         |        ${msg.name}conv *data = (${msg.name}conv*) buf;
         |        data->sig = ${msg.sig};
