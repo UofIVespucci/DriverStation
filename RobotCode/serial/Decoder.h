@@ -48,7 +48,7 @@ private:
 //When a message gets matched, dump all older messages
 void Decoder::update(){
     char c = is->read();
-    while(c != 0) {
+    while(c != -1) {
         receive(c);
         c = is->read();
     }

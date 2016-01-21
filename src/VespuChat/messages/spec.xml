@@ -14,4 +14,7 @@
         <value name="y" type="float"/>
         <value name="z" type="float"/>
     </message>
+    <message name="Error">
+        <value name="code" type="int16"/>
+    </message>
 </messagespec>

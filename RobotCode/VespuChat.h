@@ -42,4 +42,7 @@ public:
     }
 };
 
+extern VespuChat vespuChat;
+
+
 #endif

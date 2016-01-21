@@ -13,8 +13,15 @@ import javafx.scene.paint.Color;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.serial.*;
+import com.VespuChat.*;
+import com.VespuChat.messages.*;
+import java.util.List;
+import java.util.ArrayList;
 import jssc.*;
 import javax.swing.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 
 import ui.ButtonSelector;
 import ui.Toolbox;
@@ -128,12 +135,76 @@ public class Main {
         return (scene);
     }
 
+    public static void testSerial(){
+        JFrame frame = new JFrame("Vespucci");
+        final JFXPanel fxPanel = new JFXPanel();
+        frame.add(fxPanel);
+        frame.setSize(300, 200);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        PacketReader reader = new MotorCommand(){
+            protected void onReceive(short left, short right){
+                System.out.println("Received motor command "+left+" "+right);
+            }
+        };
+        final List<PacketReader> rl = new ArrayList<PacketReader>();
+        rl.add(reader);
+
+
+        SerialConnectListener connectListener = new SerialConnectListener(){
+            VespuChatTransmitter t = null;
+            VespuChatReceiver r = null;
+            ScheduledThreadPoolExecutor scheduler = null;
+            short counter = 0;
+            public void connectionEstablished(SerialPort newConnection){
+                t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
+                r = new VespuChatReceiver(new SerialInputStream(newConnection), rl);
+                scheduler = new ScheduledThreadPoolExecutor(1 /*num cores*/);
+                Runnable transmit = new Runnable(){
+                    public void run(){
+                        counter += 1;
+                        byte[] data = MotorCommand.build((short)counter, (short) 100);
+                        System.out.print("Sending a motor command ");
+                        for(int i=0; i<data.length; i++){
+                            System.out.print((data[i]&0xFF)+", ");
+                        }
+                        System.out.println();
+                        t.send(data);
+                    }
+                };
+                scheduler.scheduleAtFixedRate(transmit, 100, 100, TimeUnit.MILLISECONDS);
+            }
+            public void disconnectRequest(){
+                try{
+                    scheduler.shutdown();
+                    r.close();
+                    t.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                serial.SerialConnectPanel panel = new serial.SerialConnectPanel(connectListener);
+                panel.showBaudSelector(true);
+                Scene scene = new Scene(panel, Color.ALICEBLUE);
+                fxPanel.setScene(scene);
+            }
+        });
+    }
+
     public static void main(String[] args) {
         final Main initMain = new Main();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                initMain.initAndShowGUI();
+                //initMain.initAndShowGUI();
+                testSerial();
             }
         });
     }
