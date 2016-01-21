@@ -95,31 +95,36 @@
     </uptodate>
 
     <target name="generateMessages" if="codegen.messagesOutOfdate">
+        <!-- Import scalac ant command -->
         <path id="scala.classpath">
             <fileset dir="${scalaLibDir}">
                 <include name="*.jar"/>
             </fileset>
         </path>
         <taskdef resource="scala/tools/ant/antlib.xml" classpathref="scala.classpath"/>
-
+        <!-- Compile the code generator -->
         <scalac srcdir="codegen" destdir="codegen" classpathref="scala.classpath">
             <include name="*.scala"/>
         </scalac>
+        <!-- Run the code generaton -->
         <java dir="codegen" classname="MessageGen" fork="true" classpathref="scala.classpath">
             <classpath>
                 <pathelement location="codegen"/>
             </classpath>
             <arg value="../src/VespuChat/messages/spec.xml"/>
         </java>
-        <copy todir="src/VespuChat/messages/">
+        <!-- Move the java message classes -->
+        <move todir="src/VespuChat/messages/">
           <fileset dir="codegen/output">
             <include name="*.java"/>
           </fileset>
-        </copy>
-        <copy todir="RobotCode/messages/">
+        </move>
+        <!-- Move the cpp message classes -->
+        <move todir="RobotCode/messages/">
           <fileset dir="codegen/output">
             <include name="*.h"/>
           </fileset>
-        </copy>
+        </move>
+        <!-- clean output directory -->
     </target>
 </project>
