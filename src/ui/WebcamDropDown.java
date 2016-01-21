@@ -25,7 +25,7 @@ public class WebcamDropDown extends ComboBox{
             @Override
             public void onChanged(Change<? extends String> c) {
                 if (wcMap.get(getSelectionModel().getSelectedItem().toString())!=null)
-                    Main.setWebcam(wcMap.get(getSelectionModel().getSelectedItem().toString()));
+                    Main.guiManager.setWebcam(wcMap.get(getSelectionModel().getSelectedItem().toString()));
             }
         });
     }

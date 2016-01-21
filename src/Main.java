@@ -1,32 +1,14 @@
 package com;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.WebcamResolution;
-import input.KeyControl;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.embed.swing.SwingNode;
-import javafx.event.*;
-import javafx.event.Event;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.serial.*;
 import jssc.*;
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-
-import ui.ButtonSelector;
-import ui.Toolbox;
-import ui.VBoxDivider;
-import ui.VideoOverlay;
-
-import java.awt.*;
+import ui.*;
 
 
 public class Main {
@@ -35,9 +17,7 @@ public class Main {
     private serial.SerialConnectPanel scp;
     private JTextArea jtf;
     private SerialPort sp;
-    private ButtonSelector tabSelector;
-    private VideoOverlay vo;
-    private WebcamPanel panel;
+    public static GUIManager guiManager = new GUIManager();
 
     private void initAndShowGUI() {
         // This method is invoked on the EDT thread
@@ -64,23 +44,6 @@ public class Main {
     }
 
     private Scene createScene() {
-        Pane demoBack = new Pane();
-        demoBack.getStyleClass().add("video-background");
-        VBox split = new VBox();
-        Scene  scene  =  new  Scene(split, Color.ALICEBLUE);
-        Toolbox tb = new Toolbox();
-        BorderPane videoSP = new BorderPane();
-        vo = new VideoOverlay();
-        StackPane videoStack = new StackPane();
-        tabSelector = new ButtonSelector();
-        SwingNode swingNode = new SwingNode();
-
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
-                System.out.println("Pressed" + event.getCode()));
-        videoStack.getChildren().addAll(swingNode, vo);
-
-        sp = null;
-        jtf = new JTextArea(20,80);
         spel = new SerialPortEventListener(){
             public void serialEvent(SerialPortEvent serialEvent){
                 try{
@@ -103,28 +66,7 @@ public class Main {
         };
         scp = new serial.SerialConnectPanel(scl);
 
-        Webcam webcam = Webcam.getDefault();
-//        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
-        panel = setWebcam(webcam);
-
-        if (panel != null)  {
-            panel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-            swingNode.setContent(panel);
-        }
-
-        videoSP.setLeft(tb);
-        videoSP.setCenter(videoStack);
-
-        ((HBox) scp).setAlignment(Pos.CENTER);
-        split.getChildren().addAll(tabSelector, new VBoxDivider(),videoSP);
-        vo.maxWidthProperty().bind(split.widthProperty());
-        tabSelector.maxHeightProperty().bind(split.heightProperty().multiply(0.01));
-
-        for (Webcam wc : Webcam.getWebcams()) {
-            System.out.println(wc.getName());
-        }
-
-        return (scene);
+        return (guiManager.createScene());
     }
 
     public static void main(String[] args) {
@@ -137,23 +79,7 @@ public class Main {
         });
     }
 
-    public static WebcamPanel setWebcam(Webcam w)
-    {
-        WebcamPanel wcPanel;
-        if (w != null) {
-            System.out.println("Webcam: " + w.getName());
-            w.setViewSize(WebcamResolution.VGA.getSize());
-            wcPanel = new WebcamPanel(w);
-            wcPanel.setFPSDisplayed(true);
-            wcPanel.setDisplayDebugInfo(true);
-            wcPanel.setImageSizeDisplayed(true);
-            wcPanel.setMirrored(true);
-            return wcPanel;
-        } else {
-            System.out.println("No webcam detected");
-            return null;
-        }
-    }
+
 
     private void updateText(String newText){
         jtf.setText(jtf.getText() + newText);
