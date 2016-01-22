@@ -1,8 +1,12 @@
 package ui;
 
+import com.Main;
 import com.github.sarxos.webcam.WebcamPicker;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
@@ -10,8 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
+import java.util.Collection;
+
 public class Toolbox extends HBox{
-    public static int ALLWIDTH = 100;
+    public static int ALLWIDTH = 125;
 
     private VBox toolsVBox;
     private ToggleButton lightWhiteTB;
@@ -23,12 +29,12 @@ public class Toolbox extends HBox{
     private ImageView sunView;
     private Image moonImg;
     private ImageView moonView;
-    private WebcamPicker picker;
 
     private Label lightColorLbl;
     private Label cameraSwitchLbl;
     private Label brightnessLbl;
     private Label recordLbl;
+    private Label wcLabel;
 
     private GridPane lightColorGrid;
     private GridPane lightColorOver;
@@ -38,66 +44,166 @@ public class Toolbox extends HBox{
     private GridPane brightnessOver;
     private GridPane recordGrid;
     private GridPane recordOver;
+    private GridPane wcGrid;
+    private GridPane wcOver;
 
     private AnchorPane brightnessAnchor;
 
+    private WebcamDropDown wcComboBox;
+    private Button wcConnectTB;
+    private Button wcRefreshTB;
+
     public Toolbox(){
-        toolsVBox = new VBox();
+//        minWidth(ALLWIDTH);
+        setMinWidth(ALLWIDTH);
 
-        lightWhiteTB = new ToggleButton("WHITE LIGHT");
-        lightBlueTB = new ToggleButton("RED LIGHT");
-        cameraSwitchTB = new ToggleButton("SWITCH CAMERA");
-        recordTB = new ToggleButton("RECORD");
-        brightnessSlider = new Slider();
+        toolsVBox           = new VBox();
+        toolsVBox.setPrefWidth(ALLWIDTH);
 
-        sunImg = new Image("ui/toolbox/Sun-50i.png");
-        sunView = new ImageView();
-        moonImg = new Image("ui/toolbox/Moon-50i.png");
-        moonView = new ImageView();
+        //Init Components for Brightness Pane
+        brightnessOver      = new GridPane();
+        brightnessGrid      = new GridPane();
+        brightnessAnchor    = new AnchorPane();
+        brightnessLbl       = new Label ("HEADLIGHT");
+        brightnessSlider    = new Slider();
+        sunImg              = new Image("ui/toolbox/Sun-50i.png");
+        moonImg             = new Image("ui/toolbox/Moon-50i.png");
+        sunView             = new ImageView();
+        moonView            = new ImageView();
 
-        lightColorLbl = new Label  ("HEADLIGHT COLOR");
-        lightColorLbl.setAlignment(Pos.CENTER);
-        cameraSwitchLbl = new Label("CAMERA DIRECTION");
-        cameraSwitchLbl.setAlignment(Pos.CENTER);
-        brightnessLbl = new Label  ("LED BRIGHTNESS");
-        brightnessLbl.setAlignment(Pos.CENTER);
-        recordLbl = new Label      ("RECORD");
-        recordLbl.setAlignment(Pos.CENTER);
+        //Init Components for Light Color Selector Pane
+        lightColorOver      = new GridPane();
+        lightColorGrid      = new GridPane();
+        lightColorLbl       = new Label ("LIGHT COLOR");
+        lightWhiteTB        = new ToggleButton("WHITE LIGHT");
+        lightBlueTB         = new ToggleButton("RED LIGHT");
 
-        lightColorGrid = new GridPane();
-        lightColorOver = new GridPane();
-//        lightColorGrid.prefWidthProperty().bind(this.widthProperty());
-        cameraSwitchGrid = new GridPane();
-        cameraSwitchOver = new GridPane();
-        brightnessGrid = new GridPane();
-        brightnessOver = new GridPane();
-        recordGrid = new GridPane();
-        recordOver = new GridPane();
+        //Init Components for Camera Switch Pane
+        cameraSwitchOver    = new GridPane();
+        cameraSwitchGrid    = new GridPane();
+        cameraSwitchLbl     = new Label("CAMERA");
+        cameraSwitchTB      = new ToggleButton("SWITCH CAMERA");
 
-        brightnessAnchor = new AnchorPane();
+        //Init Components for Recording Pane
+        recordOver          = new GridPane();
+        recordGrid          = new GridPane();
+        recordLbl           = new Label ("RECORD");
+        recordTB            = new ToggleButton("RECORD");
 
+        //Init Components for Webcam Pane
+        wcGrid = new GridPane();
+        wcOver = new GridPane();
+        wcLabel = new Label("WEBCAM");
+        wcComboBox = new WebcamDropDown();
+        wcConnectTB = new Button("CONNECT");
+        wcRefreshTB = new Button("REFRESH");
+
+
+        initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl, wcLabel);
+        initLightColor();
+        initCameraSwitch();
+        initBrightness();
+        initRecordSwitch();
+        initWebcamDropDown();
+
+        toolsVBox.getChildren().addAll(wcOver ,lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        toolsVBox.getStyleClass().add("toolbox");
+
+        toolsVBox.setSpacing(0);
+
+        getChildren().addAll(toolsVBox, new VBoxDivider());
+
+        toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
+
+        getStyleClass().add("htoolbox");
+        toolsVBox.setSpacing(5);
+    }
+
+    private void initLabels(Pos p, Label... labels)
+    {
+        for (Label l: labels) {
+            l.setAlignment(p);
+            l.getStyleClass().add("tool-label");
+        }
+    }
+
+    private void initWebcamDropDown()
+    {
+        wcGrid.add(wcComboBox, 0, 1);
+        wcGrid.add(wcConnectTB, 0, 2);
+        wcGrid.add(wcRefreshTB, 0, 3);
+        wcGrid.setVgap(5);
+        wcGrid.setPrefWidth(ALLWIDTH);
+
+        wcOver.add(wcLabel, 0, 0);
+        wcOver.add(wcGrid, 0, 1);
+
+        wcGrid.getStyleClass().add("tool-item");
+        wcOver.getStyleClass().add("tool-item-box");
+
+        wcComboBox.setPrefWidth(ALLWIDTH);
+        wcLabel.setPrefWidth(ALLWIDTH);
+
+        wcConnectTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Main.guiManager.setWebcam(wcComboBox.getSelected());
+            }
+        });
+
+        wcRefreshTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                wcComboBox.getWebcams();
+            }
+        });
+    }
+
+    private void initLightColor(){
         lightColorGrid.add(lightWhiteTB, 0, 1);
         lightColorGrid.add(lightBlueTB, 0, 2);
         lightColorGrid.setVgap(5);
         lightColorGrid.setPrefWidth(ALLWIDTH);
-//        lightColorGrid.maxWidthProperty().bind(toolsVBox.widthProperty());
-//        lightColorGrid.prefWidthProperty().bind(lightColorOver.widthProperty());
+
+        lightColorOver.add(lightColorLbl, 0, 0);
+        lightColorOver.add(lightColorGrid, 0, 1);
+
+        lightColorGrid.getStyleClass().add("tool-item");
+        lightColorOver.getStyleClass().add("tool-item-box");
+
+        lightWhiteTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
+        lightWhiteTB.getStyleClass().add("tool-button");
+        lightBlueTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
+        lightBlueTB.getStyleClass().add("tool-button");
+
+        lightColorLbl.minWidthProperty().bind(lightColorGrid.widthProperty());
+    }
+
+    private void initCameraSwitch(){
         cameraSwitchGrid.add(cameraSwitchTB, 0, 1);
-//        cameraSwitchGrid.prefWidthProperty().bind(cameraSwitchOver.widthProperty());
         cameraSwitchGrid.setVgap(5);
         cameraSwitchGrid.setPrefWidth(ALLWIDTH);
+
+        cameraSwitchOver.add(cameraSwitchLbl, 0, 0);
+        cameraSwitchOver.add(cameraSwitchGrid, 0, 1);
+
+        cameraSwitchGrid.getStyleClass().add("tool-item");
+        cameraSwitchOver.getStyleClass().add("tool-item-box");
+
+        cameraSwitchTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
+        cameraSwitchTB.getStyleClass().add("tool-button");
+
+        cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
+    }
+
+    private void initBrightness(){
         brightnessGrid.add(brightnessAnchor, 0, 1);
         brightnessGrid.add(brightnessSlider, 0, 2);
-//        brightnessGrid.prefWidthProperty().bind(brightnessOver.widthProperty());
         brightnessGrid.setVgap(5);
         brightnessGrid.setPrefWidth(ALLWIDTH);
-        recordGrid.add(recordTB, 0, 1);
-//        recordGrid.prefWidthProperty().bind(recordOver.widthProperty());
-        recordGrid.setVgap(5);
-        recordGrid.setPrefWidth(ALLWIDTH);
-
-        sunView.setImage(sunImg);
-        moonView.setImage(moonImg);
 
         brightnessAnchor.getChildren().addAll(sunView, moonView);
         brightnessAnchor.setRightAnchor(moonView, 0.0);
@@ -105,62 +211,34 @@ public class Toolbox extends HBox{
         brightnessAnchor.setLeftAnchor(sunView, 0.0);
         brightnessAnchor.setTopAnchor(moonView, 0.0);
 
-        lightColorOver.add(lightColorLbl, 0, 0);
-        lightColorOver.add(lightColorGrid, 0, 1);
-        cameraSwitchOver.add(cameraSwitchLbl, 0, 0);
-        cameraSwitchOver.add(cameraSwitchGrid, 0, 1);
         brightnessOver.add(brightnessLbl, 0, 0);
         brightnessOver.add(brightnessGrid, 0, 1);
-        recordOver.add(recordLbl, 0, 0);
-        recordOver.add(recordGrid, 0, 1);
 
-        SwingNode sn = new SwingNode();
-        sn.setContent(picker);
-        toolsVBox.getChildren().addAll(sn , lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
-        toolsVBox.getStyleClass().add("toolbox");
-        lightColorLbl.getStyleClass().add("tool-label");
-        cameraSwitchLbl.getStyleClass().add("tool-label");
-        brightnessLbl.getStyleClass().add("tool-label");
-        recordLbl.getStyleClass().add("tool-label");
+        sunView.setImage(sunImg);
+        moonView.setImage(moonImg);
 
-//        toolsVBox.prefWidthProperty().bind(maxWidthProperty());
-//        toolsVBox.minWidthProperty().bind(maxWidthProperty());
-        toolsVBox.setSpacing(0);
-
-        getChildren().addAll(toolsVBox, new VBoxDivider());
-
-        toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
-        lightColorGrid.getStyleClass().add("tool-item");
-        lightColorOver.getStyleClass().add("tool-item-box");
-        toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
-        cameraSwitchGrid.getStyleClass().add("tool-item");
-        cameraSwitchOver.getStyleClass().add("tool-item-box");
-        toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
         brightnessGrid.getStyleClass().add("tool-item");
         brightnessOver.getStyleClass().add("tool-item-box");
-        recordGrid.getStyleClass().add("tool-item");
-        recordOver.getStyleClass().add("tool-item-box");
-        toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
-
-        lightWhiteTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
-        lightWhiteTB.getStyleClass().add("tool-button");
-        lightBlueTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
-        lightBlueTB.getStyleClass().add("tool-button");
-        cameraSwitchTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
-        cameraSwitchTB.getStyleClass().add("tool-button");
-        recordTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
-        recordTB.getStyleClass().add("tool-button");
         brightnessSlider.getStyleClass().add("tool-button");
 
-        getStyleClass().add("htoolbox");
-        toolsVBox.setSpacing(5);
-        lightColorLbl.minWidthProperty().bind(lightColorGrid.widthProperty());
-        cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
         brightnessLbl.minWidthProperty().bind(brightnessGrid.widthProperty());
-        recordLbl.minWidthProperty().bind(recordGrid.widthProperty());
+    }
 
-//        toolsVBox.maxWidth(toolsVBox.getWidth());
-//        maxWidthProperty().bind(prefWidthProperty());
-//        maxWidth(getWidth());
+    private void initRecordSwitch(){
+        recordGrid.add(recordTB, 0, 1);
+        recordGrid.setVgap(5);
+        recordGrid.setPrefWidth(ALLWIDTH);
+
+        recordOver.add(recordLbl, 0, 0);
+        recordOver.add(recordTB, 0, 1);
+
+        recordGrid.getStyleClass().add("tool-item");
+        recordOver.getStyleClass().add("tool-item-box");
+
+        recordTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
+        recordTB.getStyleClass().add("tool-button");
+
+//        recordLbl.minWidthProperty().bind(recordGrid.widthProperty());
+        recordLbl.setMinWidth(ALLWIDTH);
     }
 }
