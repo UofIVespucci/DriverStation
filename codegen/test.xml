@@ -1,0 +1,12 @@
+
+<messagespec>
+    <message name="MotorCommand">
+        <value name="left" type="int16"/>
+        <value name="right" type="int16"/>
+    </message>
+    <message name="AccelData">
+        <value name="xgs" type="float"/>
+        <value name="ygs" type="float"/>
+        <value name="zgs" type="float"/>
+    </message>
+</messagespec>

@@ -6,8 +6,15 @@ import javafx.scene.Scene;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import com.serial.*;
+import com.VespuChat.*;
+import com.VespuChat.messages.*;
+import java.util.List;
+import java.util.ArrayList;
 import jssc.*;
 import javax.swing.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.awt.*;
 import ui.*;
 
 
@@ -69,12 +76,83 @@ public class Main {
         return (guiManager.createScene());
     }
 
+    public static void testSerial(){
+        JFrame frame = new JFrame("Vespucci");
+        final JFXPanel fxPanel = new JFXPanel();
+        frame.add(fxPanel);
+        frame.setSize(300, 200);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        final List<PacketReader> rl = new ArrayList<PacketReader>();
+        rl.add(new MotorCommand(){
+            protected void onReceive(byte left, byte right){
+                System.out.println("Received motor command "+left+" "+right);
+            }
+        });
+        rl.add(new com.VespuChat.messages.Error(){
+            protected void onReceive(byte code){
+                System.out.println("Error "+(code&0xff));
+            }
+        });
+
+        SerialConnectListener connectListener = new SerialConnectListener(){
+            VespuChatTransmitter t = null;
+            VespuChatReceiver r = null;
+            ScheduledThreadPoolExecutor scheduler = null;
+            byte counter = 0;
+            public void connectionEstablished(SerialPort newConnection){
+                t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
+                //SerialInputStream sis = new SerialInputStream(newConnection);
+                r = new VespuChatReceiver(new SerialInputStream(newConnection), rl);
+                scheduler = new ScheduledThreadPoolExecutor(1 /*num cores*/);
+                Runnable transmit = new Runnable(){
+                    public void run(){
+                        counter += 1;
+                        //byte[] data = com.VespuChat.messages.Error.build((byte)counter);
+                        if(counter >= 127) counter = 0;
+                        byte[] data = MotorCommand.build(counter, counter);
+
+                        System.out.print("Sending a message ");
+                        for(int i=0; i<data.length; i++){
+                            System.out.print((data[i]&0xFF)+", ");
+                        }
+                        System.out.println();
+
+                        t.send(data);
+                    }
+                };
+                scheduler.scheduleAtFixedRate(transmit, 100, 100, TimeUnit.MILLISECONDS);
+            }
+            public void disconnectRequest(){
+                try{
+                    scheduler.shutdown();
+                    r.close();
+                    t.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                serial.SerialConnectPanel panel = new serial.SerialConnectPanel(connectListener);
+                panel.showBaudSelector(true);
+                Scene scene = new Scene(panel, Color.ALICEBLUE);
+                fxPanel.setScene(scene);
+            }
+        });
+    }
+
     public static void main(String[] args) {
         final Main initMain = new Main();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                initMain.initAndShowGUI();
+                //initMain.initAndShowGUI();
+                testSerial();
             }
         });
     }

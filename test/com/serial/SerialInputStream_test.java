@@ -1,4 +1,4 @@
-import com.serial.*;
+package com.serial;
 
 import org.junit.*;
 import static org.junit.Assert.*;

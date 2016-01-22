@@ -11,21 +11,25 @@
         <mkdir dir="${libDir}"/>
         <mkdir dir="${reportsDir}"/>
         <mkdir dir="${testLibDir}"/>
+        <mkdir dir="${scalaLibDir}"/>
+        <mkdir dir="${codegenOutputDir}"/>
     </target>
 
     <target name="retrieve" depends="init">
         <ivy:retrieve conf="testing" pattern="${testLibDir}/[artifact].[ext]"/>
         <ivy:retrieve conf="application" pattern="${libDir}/[artifact].[ext]"/>
+        <ivy:retrieve conf="scala" pattern="${scalaLibDir}/[artifact].[ext]"/>
     </target>
 
     <target name="clean" depends="init">
         <delete dir="${outputDir}"/>
         <delete dir="${libDir}"/>
         <delete dir="${reportsDir}"/>
+        <delete dir="${codegenOutputDir}"/>
         <ivy:cleancache />
     </target>
 
-    <target name="compile" depends="init">
+    <target name="compile" depends="init,generateMessages">
         <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}"
                 includeantruntime="false" >
             <classpath path="${classpath}">
@@ -83,5 +87,43 @@
                 </fileset>
             </batchtest>
         </junit>
+    </target>
+
+    <uptodate property="codegen.messagesOutOfdate" targetfile="src/VespuChat/messages/spec.xml">
+        <srcfiles dir= "src/VespuChat/messages" includes="*.java"/>
+        <srcfiles dir= "RobotCode/messages" includes="*.h"/>
+    </uptodate>
+
+    <target name="generateMessages" if="codegen.messagesOutOfdate">
+        <!-- Import scalac ant command -->
+        <path id="scala.classpath">
+            <fileset dir="${scalaLibDir}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <taskdef resource="scala/tools/ant/antlib.xml" classpathref="scala.classpath"/>
+        <!-- Compile the code generator -->
+        <scalac srcdir="codegen" destdir="codegen" classpathref="scala.classpath">
+            <include name="*.scala"/>
+        </scalac>
+        <!-- Run the code generaton -->
+        <java dir="codegen" classname="MessageGen" fork="true" classpathref="scala.classpath">
+            <classpath>
+                <pathelement location="codegen"/>
+            </classpath>
+            <arg value="../src/VespuChat/messages/spec.xml"/>
+        </java>
+        <!-- Move the java message classes -->
+        <move todir="src/VespuChat/messages/">
+          <fileset dir="codegen/output">
+            <include name="*.java"/>
+          </fileset>
+        </move>
+        <!-- Move the cpp message classes -->
+        <move todir="RobotCode/messages/">
+          <fileset dir="codegen/output">
+            <include name="*.h"/>
+          </fileset>
+        </move>
     </target>
 </project>

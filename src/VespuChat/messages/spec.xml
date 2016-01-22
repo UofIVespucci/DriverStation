@@ -1,0 +1,21 @@
+
+<messagespec>
+    <message name="donusecommandzero"/>
+    <message name="MotorCommand">
+        <value name="left" type="uint8"/>
+        <value name="right" type="uint8"/>
+    </message>
+    <message name="AccelData">
+        <value name="xgs" type="float"/>
+        <value name="ygs" type="float"/>
+        <value name="zgs" type="float"/>
+    </message>
+    <message name="PositionData">
+        <value name="x" type="float"/>
+        <value name="y" type="float"/>
+        <value name="z" type="float"/>
+    </message>
+    <message name="Error">
+        <value name="num" type="uint8"/>
+    </message>
+</messagespec>
