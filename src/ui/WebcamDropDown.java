@@ -26,7 +26,6 @@ public class WebcamDropDown extends ComboBox{
             if (wc.getName()!=null) getItems().add(wc.getName());
             wcMap.put(wc.getName(), wc);
         }
-//        setVisibleRowCount(20);
     }
 
     private Webcam getWebcamByName(String n)

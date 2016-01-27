@@ -1,17 +1,37 @@
 package ui;
 
+import com.Main;
+import com.VespuChat.VespuChat;
+import com.VespuChat.VespuChatReceiver;
+import com.VespuChat.VespuChatTransmitter;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
+import input.KeyControl;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import java.awt.*;
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import com.serial.SerialOutputStream;
+import com.serial.*;
+import com.VespuChat.*;
+import com.VespuChat.messages.*;
 
-public class GUIManager {
-    private WebcamPanel wcPanel;
-    private SwingNode wcNode;
+//import static org.mockito.Mockito.*;
+
+import java.io.PipedOutputStream;
+import java.io.PipedInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+
+public class GUIManager
+{
     private ButtonSelector buttonSelector;
     private Toolbox toolbox;
     private VideoOverlay videoOverlay;
@@ -19,77 +39,75 @@ public class GUIManager {
     private HBox toolboxContainer;
     private StackPane wcStack;
     private Scene scene;
+    private SerialPortEventListener spel;
+    private com.serial.SerialConnectListener connectListener;
+    private serial.SerialConnectPanel scp;
+    private SerialPort sp;
+    private List<PacketReader> readerList;
+    private JTextArea jtf;
+    private WCFXPanel wcfxPanel;
 
-    public GUIManager(){
-    }
+    protected VespuChatTransmitter t;
+    protected VespuChatReceiver r;
 
-    public Scene createScene() {
-        wcNode = new SwingNode();
+    public Scene createScene()
+    {
         toolbox = new Toolbox();
         buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();
         buttonSelectorContainer = new VBox();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
+        wcfxPanel = new WCFXPanel();
         scene = new Scene(buttonSelectorContainer, Color.ALICEBLUE);
 
-        initWebcam();
         initKeyListener();
+        readerList = new ArrayList<PacketReader>();
+        connectListener = new SerialConnectListener(){
+            public void connectionEstablished(SerialPort newConnection){
+                t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
+                r = new VespuChatReceiver(new SerialInputStream(newConnection), readerList);
+            }
+            public void disconnectRequest() {
+                try {
+                    r.close();
+                    t.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        initSerial();
 
-        wcStack.getChildren().addAll(wcNode, videoOverlay);
-
+        wcStack.getChildren().addAll(videoOverlay, wcfxPanel, scp);
         toolboxContainer.getChildren().addAll(toolbox,wcStack);
+        toolboxContainer.setHgrow(wcStack, Priority.SOMETIMES);
+
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(),toolboxContainer);
-//        videoOverlay.maxWidthProperty().bind(toolboxContainer.widthProperty());
 
         return scene;
     }
 
-    public void setWebcam(Webcam w)
-    {
-//        if (wcPanel!=null) wcPanel.getWebcam().close();
-//        wcPanel = null;
-        if (w != null) {
-            w.close();
-//            w.close();
-            System.out.println("Webcam: " + w.getName());
-            w.setViewSize(WebcamResolution.VGA.getSize());
-            w.open();
-            wcPanel = new WebcamPanel(w);
-            wcPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-            wcNode.setContent(wcPanel);
-            wcPanel.setFPSDisplayed(true);
-            wcPanel.setDisplayDebugInfo(true);
-            wcPanel.setImageSizeDisplayed(true);
-            wcPanel.setMirrored(true);
-//            w.open();
-        } else {
-            System.out.println("No webcam detected");
-            wcPanel = null;
-        }
+    public void setWebcam(Webcam w) {
+        wcfxPanel.setWebcam(w);
     }
 
-    private void initKeyListener(){
+    private void initKeyListener()
+    {
         //Add keyboard listener for the scene
         scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
-                //Temporary, soon to be obsolete keyboard listener event
-                System.out.println("Pressed" + event.getCode()));
+                Main.guiManager.handleInput(event.getCode()));
     }
 
-    private void initWebcam(){
-        for (Webcam wc : Webcam.getWebcams()) {
-            System.out.println(wc.getName());
-        }
-
-        Webcam webcam = Webcam.getDefault();
-        webcam.open();
-//        Webcam webcam = Webcam.getWebcamByName("USB 2821 Device 1");
-        setWebcam(webcam);
-
-        if (wcPanel != null)  {
-            wcPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-            wcNode.setContent(wcPanel);
-        }
-
+    private void initSerial()
+    {
+        spel = new SerialPortEventListener(){
+            public void serialEvent(SerialPortEvent serialEvent){
+                try{
+                    jtf.setText(jtf.getText() + new String(sp.readBytes()));
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        };
+        scp = new serial.SerialConnectPanel(connectListener);
     }
 }

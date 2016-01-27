@@ -3,7 +3,7 @@ package com.VespuChat;
 import java.io.ByteArrayOutputStream;
 import com.serial.Checksum;
 
-class VespuChat{
+public class VespuChat{
     static final byte[]  HEADER = new byte[]{ (byte)'H' };
     static final byte[]  FOOTER = new byte[]{ (byte)'F' };
     static final Checksum CHECK = new Checksum(){
