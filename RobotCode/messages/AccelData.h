@@ -18,7 +18,7 @@ private:
 public:
     AccelData(_handleAccelData hF): hF(hF) {}
     int claim(char data) {
-        return (data == 2)? 13 : -1;
+        return (data == 1)? 13 : -1;
     }
     void handle(const char* buf, int len){
         AccelDataconv *data = (AccelDataconv*) buf;
@@ -27,7 +27,7 @@ public:
     static void build(VespuChat& vct, float xgs, float ygs, float zgs){
         uint8_t buf[13];
         AccelDataconv *data = (AccelDataconv*) buf;
-        data->sig = 2;
+        data->sig = 1;
         data->xgs = xgs;
         data->ygs = ygs;
         data->zgs = zgs;

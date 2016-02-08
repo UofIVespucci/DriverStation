@@ -1,6 +1,5 @@
 
 <messagespec>
-    <message name="donusecommandzero"/>
     <message name="MotorCommand">
         <value name="left" type="uint8"/>
         <value name="right" type="uint8"/>

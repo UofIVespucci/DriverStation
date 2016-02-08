@@ -17,7 +17,7 @@ private:
 public:
     MotorCommand(_handleMotorCommand hF): hF(hF) {}
     int claim(char data) {
-        return (data == 1)? 3 : -1;
+        return (data == 0)? 3 : -1;
     }
     void handle(const char* buf, int len){
         MotorCommandconv *data = (MotorCommandconv*) buf;
@@ -26,7 +26,7 @@ public:
     static void build(VespuChat& vct, uint8_t left, uint8_t right){
         uint8_t buf[3];
         MotorCommandconv *data = (MotorCommandconv*) buf;
-        data->sig = 1;
+        data->sig = 0;
         data->left = left;
         data->right = right;
         vct.deliver(buf, 3);

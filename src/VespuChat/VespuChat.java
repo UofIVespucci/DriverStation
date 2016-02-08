@@ -12,7 +12,7 @@ class VespuChat{
     };
 
     static byte[] checksum(byte[] txt) {
-        byte[] sum = new byte[]{ 0 };
+        byte[] sum = new byte[]{ (byte)txt.length };
         for(byte b : txt) sum[0] ^= b;
         return sum;
     }

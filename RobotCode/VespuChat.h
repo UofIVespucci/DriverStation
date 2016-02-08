@@ -20,11 +20,13 @@ public:
         stream(stream),
         decoder(this, this, receivers, num_receivers) {}
     uint8_t calcSum(const uint8_t* buf, int len){
-        uint8_t sum = 0;
+        uint8_t sum = len;
         for(int i=0; i<len; i++) sum ^= buf[i];
         return sum;
     }
     bool checksum(const char* c, int len){
+        //at least one character and the sum must be present
+        if(len == 1) return false;
         uint8_t found = c[len-1];
         uint8_t expected = calcSum((const uint8_t*)c, len-1);
         return found == expected;

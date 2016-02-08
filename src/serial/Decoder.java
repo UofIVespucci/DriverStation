@@ -93,7 +93,7 @@ public class Decoder{
         for(int i=0; i < foundHeaders.size(); i++){
             Packet p = foundHeaders.get(i);
             int packLen = checksumPos-p.startPos;
-            if(packLen < 0) continue; //packet doesn't have both type byte and checksum
+            if(packLen <= 0) continue; //packet doesn't have both type byte and checksum
             if(packLen > p.maxLength) continue; //packet exceeds max length specified
 
             byte[] data = new byte[packLen];
@@ -103,7 +103,7 @@ public class Decoder{
             if(match(checksum, footerPos)){
                 //remove older headers and call handler
                 foundHeaders.subList(0, i+1).clear();
-                p.claimee.handle(data);
+                (new Thread(() -> p.claimee.handle(data))).start();
                 return;
             }
         }

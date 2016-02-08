@@ -1,6 +1,6 @@
+#include "serial/Decoder.h"
 #include "messages/MotorCommand.h"
 #include "messages/Error.h"
-#include "serial/Decoder.h"
 #include "VespuChat.h"
 
 #include <AltSoftSerial.h>

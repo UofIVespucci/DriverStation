@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 public abstract class Error implements PacketReader {
     public int claim(byte data){
-        return (data == 4)? 2 : -1;
+        return (data == 3)? 2 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
@@ -18,7 +18,7 @@ public abstract class Error implements PacketReader {
     public static byte[] build(byte num){
         ByteBuffer buf = ByteBuffer.allocate(2);
         buf.order(ByteOrder.LITTLE_ENDIAN);
-        buf.put((byte)4);
+        buf.put((byte)3);
         buf.put(num);
         return buf.array();
     }
