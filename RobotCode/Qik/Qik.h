@@ -16,20 +16,18 @@ enum CoastMode { _COAST, _BRAKE };
 class Qik{
 private:
     //Commands
-    static const uint8_t ForwardLow[]  = {0x88, 0x8C};
-    static const uint8_t ForwardHigh[] = {0x89, 0x8D};
-    static const uint8_t ReverseLow[]  = {0x8A, 0x8E};
-    static const uint8_t ReverseHigh[] = {0x8B, 0x8F};
-    static const uint8_t MotorCoast[]  = {0x86, 0x87};
-    static const uint8_t BaudStartVal  =  0xAA;
-    static const uint8_t PollCommand   =  0x83;
-    static const uint8_t SetCommand    =  0x84;
-    static const uint8_t SetFooter[]   = {0x55, 0x2A};
+    static constexpr uint8_t ForwardLow[]  = {0x88, 0x8C};
+    static constexpr uint8_t ForwardHigh[] = {0x89, 0x8D};
+    static constexpr uint8_t ReverseLow[]  = {0x8A, 0x8E};
+    static constexpr uint8_t ReverseHigh[] = {0x8B, 0x8F};
+    static constexpr uint8_t MotorCoast[]  = {0x86, 0x87};
+    static constexpr uint8_t BaudStartVal  =  0xAA;
+    static constexpr uint8_t PollCommand   =  0x83;
+    static constexpr uint8_t SetCommand    =  0x84;
+    static constexpr uint8_t SetFooter[]   = {0x55, 0x2A};
     //paramater ID's
-    static const uint8_t P_DeviceID      = 0;
-    static const uint8_t P_DriveMode     = 1;
-    static const uint8_t P_ErrorMode     = 2;
-    static const uint8_t P_SerialTimeOut = 3;
+    enum Parameter { _DeviceID = 0, _DriveMode = 1,
+                     _ErrorMode = 2, _SerialTimeout = 3};
     //internal settings
     static const uint32_t DefaultTimeout = 100; //milliseconds
 
@@ -44,23 +42,23 @@ private:
         return 0;
     }
     /** clear the buffer of any stale inbound bytes */
-    uint8_t clearComms(){
-        while(comms->avalible()) {
+    void clearComms(){
+        while(comms->available()) {
             comms->read();
         }
     }
     /** polls the Qik's value for `param` */
-    uint8_t getParameter(uint8_t param){
+    uint8_t getParameter(Parameter param){
         clearComms();
         comms->write(PollCommand);
         comms->write(param & 0x7F); //high bit 0 in non-command values
-        return GetResponse(DefaultTimeout);
+        return getResponse(DefaultTimeout);
     }
     /**
      * sets the Qik's value for `param` to `value`
      * Response 0 => success, 1 => bad parameter, 2 => bad value
      */
-    uint8_t setParameter(uint8_t param, uint8_t value){
+    uint8_t setParameter(Parameter param, uint8_t value){
         clearComms();
         comms->write(SetCommand);
         comms->write(param & 0x7F); //high bit 0 in non-command values
@@ -70,7 +68,7 @@ private:
     }
     /** Set the sevenBitPwm field according to the DriveMode `m` */
     void updatePwmBitrate(DriveMode m){
-        sevenBitPwm = (m & 0x01 == 0);
+        sevenBitPwm = ((m & 0x01) == 0);
     }
     /**
      * Command motor `select` to run at `power` taking current configuration
@@ -106,7 +104,7 @@ private:
                 if(pwmSet > 127) {
                     comms->write(ForwardLow[select]);
                 } else {
-                    comms->write(FordwardHigh[select]);
+                    comms->write(ForwardHigh[select]);
                 }
             }
             if(pwmSet > 127) pwmSet -= min(pwmSet-127, 127);
@@ -122,7 +120,7 @@ public:
      */
     void enable(){
         comms->write(BaudStartVal);
-        updatePwmBitrate(getParameter(P_DriveMode));
+        updatePwmBitrate((DriveMode)getParameter(_DriveMode));
     }
     /**
      * Set motor power and direction with a signed 8 bit number,
@@ -134,10 +132,10 @@ public:
         commandMotor(1, M1);
     }
     void setM0(int8_t power){
-        commandMotor(0, M0);
+        commandMotor(0, power);
     }
     void setM1(int8_t power){
-        commandMotor(1, M1);
+        commandMotor(1, power);
     }
     /**
      * When a motor is set to stop (powen = 0), should it coast or brake
@@ -152,7 +150,7 @@ public:
      * power losses due to switching.
      */
     void setDriveMode(DriveMode m){
-        setParameter(P_DriveMode, m);
+        setParameter(_DriveMode, m);
     }
     /**
      * Set the response when a serial error occurs
@@ -160,7 +158,7 @@ public:
      * The Qik saves this in nonvolatile memory, but defaults to _SHUTDOWN
      */
     void setErrorMode(ErrorMode m){
-        setParameter(P_ErrorMode, m);
+        setParameter(_ErrorMode, m);
     }
     /**
      * Set the length of time (in seconds) that must occur with no new
@@ -171,20 +169,20 @@ public:
      */
     float setSerialTimeout(float seconds){
         static const float TIMEOUT_FACT = 0.262f;
-        static const float MAX_SECONDS  = 1920f;
+        static const float MAX_SECONDS  = 1920.0f;
 
         uint16_t units = min(fabs(seconds)/TIMEOUT_FACT, MAX_SECONDS);
         uint8_t highestSetBit = 0;
         for(int i = 0; i<16; i++){
-            if(units & (1 << i) != 0) {
+            if((units & (1 << i)) != 0) {
                 highestSetBit = i;
             }
         }
-        uint8_t exp = min( max(highSetBit, 4) - 4, 0x7 );
+        uint8_t exp = min( max(highestSetBit, 4) - 4, 0x7 );
         uint8_t mantissa = (units>>exp) & 0xF;
         uint8_t time = (exp<<4) | mantissa;
 
-        setPamater(P_SerialTimeOut, time);
+        setParameter(_SerialTimeout, time);
 
         return TIMEOUT_FACT * (float) (mantissa * (1 << exp));
     }
