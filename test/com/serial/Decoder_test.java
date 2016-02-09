@@ -49,6 +49,14 @@ public class Decoder_test {
         return bytes;
     }
 
+    private void delay(int ms){
+        try{
+            Thread.sleep(ms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void matchRandomData() throws IOException {
         for(int i=1; i<64; i++){
@@ -59,7 +67,7 @@ public class Decoder_test {
             when(mRead.claim(data[0])).thenReturn(data.length);
             decoder.update();
 
-            verify(mRead).handle(data);
+            verify(mRead, timeout(100)).handle(data);
         }
     }
 
@@ -76,7 +84,7 @@ public class Decoder_test {
         decoder.addPacketReader(mRead);
         decoder.update();
 
-        verify(check).calc(data);
+        verify(check, timeout(100)).calc(data);
     }
 
     @Test
@@ -91,7 +99,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(data);
+        verify(mRead, timeout(100)).handle(data);
     }
 
     @Test
@@ -106,7 +114,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(data);
+        verify(mRead, timeout(100)).handle(data);
     }
 
     @Test
@@ -124,9 +132,8 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(data);
+        verify(mRead, timeout(100)).handle(data);
     }
-
 
     @Test
     public void badPacketBefore() throws IOException {
@@ -149,7 +156,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(data);
+        verify(mRead, timeout(100)).handle(data);
     }
 
     @Test
@@ -167,7 +174,7 @@ public class Decoder_test {
         when(mRead.claim(anyByte())).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(data);
+        verify(mRead, timeout(100)).handle(data);
     }
 
     @Test
@@ -187,7 +194,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead, times(30)).handle(data);
+        verify(mRead, timeout(100).times(30)).handle(data);
     }
 
     @Test
@@ -215,8 +222,8 @@ public class Decoder_test {
         when(bRead.claim(data[1][0])).thenReturn(data[1].length);
         decoder.update();
 
-        verify(bRead).handle(data[1]);
-        verify(aRead).handle(data[0]);
+        verify(bRead, timeout(100)).handle(data[1]);
+        verify(aRead, timeout(100)).handle(data[0]);
     }
 
     @Test
@@ -228,7 +235,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(any(byte[].class));
+        verify(mRead, timeout(100)).handle(any(byte[].class));
     }
 
     @Test
@@ -240,7 +247,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
-        verify(mRead).handle(any(byte[].class));
+        verify(mRead, timeout(100)).handle(any(byte[].class));
     }
 
     @Test
@@ -253,8 +260,10 @@ public class Decoder_test {
         when(mRead.claim(any(byte.class))).thenReturn(-1);
         decoder.update();
 
+        delay(20);
         verify(mRead, never()).handle(any(byte[].class));
     }
+
     @Test
     public void badChecksum() throws IOException {
         byte[] data        = "noChecksum".getBytes();
@@ -265,6 +274,20 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length);
         decoder.update();
 
+        delay(20);
+        verify(mRead, never()).handle(any(byte[].class));
+    }
+
+    @Test
+    public void packetTooShort() throws IOException {
+        byte[] data        = "".getBytes();
+        PacketReader mRead = mock(PacketReader.class);
+        Decoder decoder    = testDecoder(data, mRead);
+
+        when(mRead.claim(any(byte.class))).thenReturn(data.length);
+        decoder.update();
+
+        delay(20);
         verify(mRead, never()).handle(any(byte[].class));
     }
 
@@ -277,6 +300,7 @@ public class Decoder_test {
         when(mRead.claim(data[0])).thenReturn(data.length-1);
         decoder.update();
 
+        delay(20);
         verify(mRead, never()).handle(any(byte[].class));
     }
 
@@ -290,6 +314,7 @@ public class Decoder_test {
         decoder.removePacketReader(mRead);
         decoder.update();
 
+        delay(20);
         verify(mRead, never()).handle(any(byte[].class));
     }
 }
