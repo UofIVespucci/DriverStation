@@ -84,6 +84,7 @@ public class GUIManager
         toolboxContainer.setHgrow(wcStack, Priority.SOMETIMES);
 
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(),toolboxContainer);
+        buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
 
         return scene;
     }
