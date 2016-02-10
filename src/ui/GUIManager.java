@@ -80,7 +80,7 @@ public class GUIManager
         initSerial();
 
         wcStack.getChildren().addAll(videoOverlay, wcfxPanel, scp);
-        toolboxContainer.getChildren().addAll(toolbox,wcStack);
+        toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.SOMETIMES);
 
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(),toolboxContainer);

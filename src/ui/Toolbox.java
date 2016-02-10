@@ -16,7 +16,7 @@ import javafx.scene.layout.*;
 
 import java.util.Collection;
 
-public class Toolbox extends HBox{
+public class Toolbox extends VBox{
     public static int ALLWIDTH = 125;
 
     private VBox toolsVBox;
@@ -54,12 +54,6 @@ public class Toolbox extends HBox{
     private Button wcRefreshTB;
 
     public Toolbox(){
-//        minWidth(ALLWIDTH);
-        setMinWidth(ALLWIDTH);
-
-        toolsVBox           = new VBox();
-        toolsVBox.setPrefWidth(ALLWIDTH);
-
         //Init Components for Brightness Pane
         brightnessOver      = new GridPane();
         brightnessGrid      = new GridPane();
@@ -106,20 +100,18 @@ public class Toolbox extends HBox{
         initRecordSwitch();
         initWebcamDropDown();
 
-        toolsVBox.getChildren().addAll(wcOver ,lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
-        toolsVBox.getStyleClass().add("toolbox");
+        this.getChildren().addAll(wcOver ,lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        this.getStyleClass().add("toolbox");
 
-        toolsVBox.setSpacing(0);
+        this.setSpacing(0);
 
-        getChildren().addAll(toolsVBox, new VBoxDivider());
-
-        toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
-        toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
-        toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
-        toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
+        this.setVgrow(lightColorOver, Priority.ALWAYS);
+        this.setVgrow(cameraSwitchOver, Priority.ALWAYS);
+        this.setVgrow(brightnessOver, Priority.ALWAYS);
+        this.setVgrow(recordOver, Priority.ALWAYS);
 
         getStyleClass().add("htoolbox");
-        toolsVBox.setSpacing(5);
+        this.setSpacing(5);
     }
 
     private void initLabels(Pos p, Label... labels)

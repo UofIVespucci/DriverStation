@@ -69,8 +69,6 @@ public class Main {
         });
     }
 
-
-
     private void updateText(String newText){
         jtf.setText(jtf.getText() + newText);
     }
