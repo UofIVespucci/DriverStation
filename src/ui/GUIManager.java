@@ -11,6 +11,7 @@ import input.KeyControl;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import jssc.SerialPort;
@@ -98,6 +99,8 @@ public class GUIManager
         //Add keyboard listener for the scene
         scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
                 Main.guiManager.handleInput(event.getCode()));
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, event ->
+                Main.guiManager.handleUpInput(event.getCode()));
     }
 
     private void initSerial()
