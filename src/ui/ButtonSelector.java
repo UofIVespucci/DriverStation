@@ -43,5 +43,6 @@ public class ButtonSelector extends HBox{
         cameraButton.setToggleGroup(toggleGroup);
         mapButton.setToggleGroup(toggleGroup);
         debugButton.setToggleGroup(toggleGroup);
+        cameraButton.setSelected(true);
     }
 }
