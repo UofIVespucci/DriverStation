@@ -68,7 +68,6 @@ public class GUIManager
             protected void onReceive(byte left, byte right){
                 System.out.println("Received "+left+", "+right);
             }
-
         });
         connectListener = new SerialConnectListener(){
             public void connectionEstablished(SerialPort newConnection){
@@ -103,10 +102,14 @@ public class GUIManager
     private void initKeyListener()
     {
         //Add keyboard listener for the scene
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event ->
-                Main.guiManager.handleInput(event.getCode()));
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, event ->
-                Main.guiManager.handleUpInput(event.getCode()));
+        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+            Main.guiManager.handleInput(event.getCode());
+            event.consume();
+        });
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            Main.guiManager.handleUpInput(event.getCode());
+            event.consume();
+        });
     }
 
     private void initSerial()
