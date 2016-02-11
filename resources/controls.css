@@ -100,7 +100,7 @@
 }
 
 .text-facing {
-    -fx-graphic: url("ui/video/Facing-Fwd.png");
+    -fx-graphic: url("ui/video/Camera-Fwd.png");
 }
 
 .toolbox {

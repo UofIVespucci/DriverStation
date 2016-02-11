@@ -33,12 +33,13 @@ public class VideoOverlay extends GridPane{
         recordButton.getStyleClass().add("toggle-record");
         facingText.getStyleClass().add("text-facing");
 
-        switchHBox.getChildren().addAll(switchButton, facingText);
+//        switchHBox.getChildren().addAll(switchButton, facingText);
+        switchHBox.getChildren().addAll(facingText);
         switchHBox.setSpacing(SPACING);
         switchHBox.setAlignment(Pos.BOTTOM_LEFT);
 
         add(switchHBox, 0, 1);
-        add(recordButton, 1, 1);
+//        add(recordButton, 1, 1);
 
         setHgrow(switchHBox, Priority.ALWAYS);
         setHgrow(recordButton, Priority.ALWAYS);
