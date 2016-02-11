@@ -107,7 +107,7 @@ public class Toolbox extends ScrollPane{
         initWebcamDropDown();
         initRobotPane();
 
-        toolsVBox.getChildren().addAll(wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver, scpOver);
+        toolsVBox.getChildren().addAll(scpOver, wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
         toolsVBox.getStyleClass().add("toolbox");
 
         toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
@@ -147,6 +147,8 @@ public class Toolbox extends ScrollPane{
         wcOver.getStyleClass().add("tool-item-box");
 
         wcComboBox.setPrefWidth(ALLWIDTH);
+        wcConnectTB.setPrefWidth(ALLWIDTH);
+        wcRefreshTB.setPrefWidth(ALLWIDTH);
         wcLabel.setPrefWidth(ALLWIDTH);
 
         wcConnectTB.setOnAction(new EventHandler<ActionEvent>() {
@@ -181,7 +183,8 @@ public class Toolbox extends ScrollPane{
         lightBlueTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
         lightBlueTB.getStyleClass().add("tool-button");
 
-        lightColorLbl.minWidthProperty().bind(lightColorGrid.widthProperty());
+//        lightColorLbl.minWidthProperty().bind(lightColorGrid.widthProperty());
+        lightColorLbl.setPrefWidth(ALLWIDTH);
     }
 
     private void initCameraSwitch(){
@@ -198,7 +201,8 @@ public class Toolbox extends ScrollPane{
         cameraSwitchTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
         cameraSwitchTB.getStyleClass().add("tool-button");
 
-        cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
+//        cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
+        cameraSwitchLbl.setPrefWidth(ALLWIDTH);
     }
 
     private void initBrightness(){
@@ -223,7 +227,8 @@ public class Toolbox extends ScrollPane{
         brightnessOver.getStyleClass().add("tool-item-box");
         brightnessSlider.getStyleClass().add("tool-button");
 
-        brightnessLbl.minWidthProperty().bind(brightnessGrid.widthProperty());
+//        brightnessLbl.minWidthProperty().bind(brightnessGrid.widthProperty());
+        brightnessLbl.setPrefWidth(ALLWIDTH);
     }
 
     private void initRecordSwitch(){

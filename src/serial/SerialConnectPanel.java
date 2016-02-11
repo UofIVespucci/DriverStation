@@ -13,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jssc.*;
+import ui.Toolbox;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -67,7 +69,7 @@ public class SerialConnectPanel extends VBox {
             }
         });
         connectButton = new Button();
-        connectButton.setText("Connect");
+        connectButton.setText("CONNECT");
         connectButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
@@ -93,13 +95,17 @@ public class SerialConnectPanel extends VBox {
         getChildren().add(connectButton);
         getChildren().add(refreshButton);
         getChildren().add(baudSelect);
+        dropDown.setPrefWidth(Toolbox.ALLWIDTH);
+        connectButton.setPrefWidth(Toolbox.ALLWIDTH);
+        refreshButton.setPrefWidth(Toolbox.ALLWIDTH);
+        baudSelect.setPrefWidth(Toolbox.ALLWIDTH);
         setPadding(new Insets(5, 5, 5, 5));
         setSpacing(5);
 //        setStyle("-fx-background-color: #336699;");
         setStyle("-fx-background-image: url('footer_lodyasS.png');");
 //        refreshButton.getStyleClass().add("pane-record");
 //        refreshButton.setContentDisplay(ContentDisplay.TOP);
-        refreshButton.setText("Refresh");
+        refreshButton.setText("REFRESH");
 
     }
 
