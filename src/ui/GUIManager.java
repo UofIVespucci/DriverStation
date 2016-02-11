@@ -88,8 +88,12 @@ public class GUIManager
         initSerial();
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay, scp);
+//        wcStack.getChildren().addAll(videoOverlay, scp);
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
-        toolboxContainer.setHgrow(wcStack, Priority.SOMETIMES);
+//        toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider());
+        toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
+//        toolboxContainer.setHgrow(toolbox, Priority.ALWAYS);
+//        toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(), toolboxContainer);
         buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);

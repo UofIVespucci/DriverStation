@@ -42,6 +42,7 @@ public class WCFXPanel extends BorderPane {
     private void initView()
     {
 //        wcImg.fitWidthProperty().bind(Main.guiManager.getVOWProperty());
+        wcImg.fitWidthProperty().bind(Main.guiManager.getVOWProperty());
         wcImg.fitHeightProperty().bind(Main.guiManager.getVOHProperty());
 //        wcImg.setFitHeight(getHeight());
 //        wcImg.setFitWidth(getWidth());
@@ -52,6 +53,10 @@ public class WCFXPanel extends BorderPane {
 //        wcImg.maxHeight(Double.MAX_VALUE);
 //        wcImg.maxWidth(Double.MAX_VALUE);
         wcImg.setPreserveRatio(true);
+        wcImg.minWidth(0);
+        wcImg.minHeight(0);
+        minWidth(0);
+        minHeight(0);
 //        prefHeight(Double.MAX_VALUE);
 //        prefWidth(Double.MAX_VALUE);
     }

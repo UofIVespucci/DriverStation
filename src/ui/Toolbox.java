@@ -6,17 +6,14 @@ import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.util.Collection;
 
-public class Toolbox extends VBox{
+public class Toolbox extends ScrollPane{
     public static int ALLWIDTH = 125;
 
     private VBox toolsVBox;
@@ -54,6 +51,7 @@ public class Toolbox extends VBox{
     private Button wcRefreshTB;
 
     public Toolbox(){
+        toolsVBox = new VBox();
         //Init Components for Brightness Pane
         brightnessOver      = new GridPane();
         brightnessGrid      = new GridPane();
@@ -100,18 +98,23 @@ public class Toolbox extends VBox{
         initRecordSwitch();
         initWebcamDropDown();
 
-        this.getChildren().addAll(wcOver ,lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
-        this.getStyleClass().add("toolbox");
+        toolsVBox.getChildren().addAll(wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        toolsVBox.getStyleClass().add("toolbox");
 
-        this.setSpacing(0);
+//        toolsVBox.setSpacing(0);
 
-        this.setVgrow(lightColorOver, Priority.ALWAYS);
-        this.setVgrow(cameraSwitchOver, Priority.ALWAYS);
-        this.setVgrow(brightnessOver, Priority.ALWAYS);
-        this.setVgrow(recordOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
 
         getStyleClass().add("htoolbox");
-        this.setSpacing(5);
+        toolsVBox.setSpacing(5);
+
+//        getChildren().add(toolsVBox);
+        setContent(toolsVBox);
+        setHbarPolicy(ScrollBarPolicy.NEVER);
+        setVbarPolicy(ScrollBarPolicy.ALWAYS);
     }
 
     private void initLabels(Pos p, Label... labels)
