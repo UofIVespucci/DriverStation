@@ -13,7 +13,7 @@ Qik motor(&motorSerial);
 extern VespuChat vespuChat;
 MotorCommand mcmd([](uint8_t left, uint8_t right){
     MotorCommand::build(vespuChat, left, right); //echo command
-    motor.setMotors((int8_t)left, (int8_t)right);
+    motor.setMotors(-(int8_t)left, -(int8_t)right);
 });
 Error ecmd([](uint8_t code){
     Error::build(vespuChat, code);

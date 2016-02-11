@@ -64,6 +64,12 @@ public class GUIManager
 
         initKeyListener();
         readerList = new ArrayList<PacketReader>();
+        readerList.add(new MotorCommand(){
+            protected void onReceive(byte left, byte right){
+                System.out.println("Received "+left+", "+right);
+            }
+
+        });
         connectListener = new SerialConnectListener(){
             public void connectionEstablished(SerialPort newConnection){
                 t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
