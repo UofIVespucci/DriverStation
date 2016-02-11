@@ -1,5 +1,6 @@
 package ui;
 
+import com.Main;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 import javafx.application.Platform;
@@ -40,6 +41,8 @@ public class WCFXPanel extends BorderPane {
 
     private void initView()
     {
+//        wcImg.fitWidthProperty().bind(Main.guiManager.getVOWProperty());
+        wcImg.fitHeightProperty().bind(Main.guiManager.getVOHProperty());
 //        wcImg.setFitHeight(getHeight());
 //        wcImg.setFitWidth(getWidth());
 //        wcImg.prefHeight(getHeight());
@@ -48,7 +51,7 @@ public class WCFXPanel extends BorderPane {
 //        wcImg.fitHeightProperty().bind(heightProperty());
 //        wcImg.maxHeight(Double.MAX_VALUE);
 //        wcImg.maxWidth(Double.MAX_VALUE);
-//        wcImg.setPreserveRatio(true);
+        wcImg.setPreserveRatio(true);
 //        prefHeight(Double.MAX_VALUE);
 //        prefWidth(Double.MAX_VALUE);
     }

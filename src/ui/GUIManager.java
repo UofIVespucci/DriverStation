@@ -8,6 +8,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamResolution;
 import input.KeyControl;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -85,11 +87,11 @@ public class GUIManager
         };
         initSerial();
 
-        wcStack.getChildren().addAll(videoOverlay, wcfxPanel, scp);
+        wcStack.getChildren().addAll(wcfxPanel, videoOverlay, scp);
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.SOMETIMES);
 
-        buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(),toolboxContainer);
+        buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(), toolboxContainer);
         buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
 
         return scene;
@@ -122,5 +124,13 @@ public class GUIManager
             }
         };
         scp = new serial.SerialConnectPanel(connectListener);
+    }
+
+    public ReadOnlyDoubleProperty getVOWProperty() {
+        return videoOverlay.widthProperty();
+    }
+
+    public ReadOnlyDoubleProperty getVOHProperty() {
+        return videoOverlay.heightProperty();
     }
 }
