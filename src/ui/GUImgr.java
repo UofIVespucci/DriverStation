@@ -23,6 +23,7 @@ public class GUImgr extends GUIManager {
         }
     }
     private void move(byte l, byte r) {
+        if(t==null) return;
         t.send(com.VespuChat.messages.MotorCommand.build(l, r));
         System.out.println("Sending " + l + " " + r);
     }
