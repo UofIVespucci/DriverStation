@@ -147,3 +147,11 @@
    -fx-background-insets: 0;
    -fx-shape: " ";
 }
+
+.tool-scrollpane {
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+}
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}

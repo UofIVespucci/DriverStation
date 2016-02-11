@@ -101,17 +101,14 @@ public class Toolbox extends ScrollPane{
         toolsVBox.getChildren().addAll(wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
         toolsVBox.getStyleClass().add("toolbox");
 
-//        toolsVBox.setSpacing(0);
-
         toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
         toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
         toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
         toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
 
-        getStyleClass().add("htoolbox");
+        getStyleClass().add("tool-scrollpane");
         toolsVBox.setSpacing(5);
 
-//        getChildren().add(toolsVBox);
         setContent(toolsVBox);
         setHbarPolicy(ScrollBarPolicy.NEVER);
         setVbarPolicy(ScrollBarPolicy.ALWAYS);
