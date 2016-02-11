@@ -3,9 +3,6 @@
 
 #include "Stream.h"
 
-enum DriveMode { _32KHZ = 0, _16KHS = 1, _8KHS = 2, _4KHS = 3 };
-enum ErrorMode { _CONTINUE = 0, _SHUTDOWN = 1 };
-enum CoastMode { _COAST, _BRAKE };
 
 /**
  * Communicates with a Qix 2s9v1 pololu motor controller using the compact
@@ -13,22 +10,30 @@ enum CoastMode { _COAST, _BRAKE };
  * https://www.pololu.com/docs/0J25
  */
 
-class Qik{
-private:
+
+enum DriveMode { _32KHZ = 0, _16KHS = 1, _8KHS = 2, _4KHS = 3 };
+enum ErrorMode { _CONTINUE = 0, _SHUTDOWN = 1 };
+enum CoastMode { _COAST, _BRAKE };
+
+namespace{
     //Commands
-    static constexpr uint8_t ForwardLow[]  = {0x88, 0x8C};
-    static constexpr uint8_t ForwardHigh[] = {0x89, 0x8D};
-    static constexpr uint8_t ReverseLow[]  = {0x8A, 0x8E};
-    static constexpr uint8_t ReverseHigh[] = {0x8B, 0x8F};
-    static constexpr uint8_t MotorCoast[]  = {0x86, 0x87};
-    static constexpr uint8_t BaudStartVal  =  0xAA;
-    static constexpr uint8_t PollCommand   =  0x83;
-    static constexpr uint8_t SetCommand    =  0x84;
-    static constexpr uint8_t SetFooter[]   = {0x55, 0x2A};
+    const uint8_t ForwardLow[]  = {0x88, 0x8C};
+    const uint8_t ForwardHigh[] = {0x89, 0x8D};
+    const uint8_t ReverseLow[]  = {0x8A, 0x8E};
+    const uint8_t ReverseHigh[] = {0x8B, 0x8F};
+    const uint8_t MotorCoast[]  = {0x86, 0x87};
+    const uint8_t BaudStartVal  =  0xAA;
+    const uint8_t PollCommand   =  0x83;
+    const uint8_t SetCommand    =  0x84;
+    const uint8_t SetFooter[]   = {0x55, 0x2A};
+
     //paramater ID's
     enum Parameter { _DeviceID = 0, _DriveMode = 1,
                      _ErrorMode = 2, _SerialTimeout = 3};
-    //internal settings
+}
+
+class Qik{
+private:
     static const uint32_t DefaultTimeout = 100; //milliseconds
 
     Stream* comms;

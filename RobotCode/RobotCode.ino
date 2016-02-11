@@ -13,11 +13,7 @@ Qik motor(&motorSerial);
 extern VespuChat vespuChat;
 MotorCommand mcmd([](uint8_t left, uint8_t right){
     MotorCommand::build(vespuChat, left, right); //echo command
-    motor.setMotors(left, right);
-    //motorSerial.write(0x89);//motor 0 speed set
-    //motorSerial.write(left&0xff);
-    //motorSerial.write(0x8D);//motor 1 speed set
-    //motorSerial.write(right&0xff);
+    motor.setMotors((int8_t)left, (int8_t)right);
 });
 Error ecmd([](uint8_t code){
     Error::build(vespuChat, code);
@@ -30,7 +26,6 @@ void setup(){
     motorSerial.begin(38400);
     delay(100);
     motor.enable();
-    //motorSerial.write(0xAA);//motor BAUD detection byte
     Error::build(vespuChat, 0x00/*starting*/);
 }
 
