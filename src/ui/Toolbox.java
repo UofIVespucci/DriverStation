@@ -32,6 +32,7 @@ public class Toolbox extends ScrollPane{
     private Label brightnessLbl;
     private Label recordLbl;
     private Label wcLabel;
+    private Label scpLabel;
 
     private GridPane lightColorGrid;
     private GridPane lightColorOver;
@@ -43,6 +44,8 @@ public class Toolbox extends ScrollPane{
     private GridPane recordOver;
     private GridPane wcGrid;
     private GridPane wcOver;
+    private GridPane scpGrid;
+    private GridPane scpOver;
 
     private AnchorPane brightnessAnchor;
 
@@ -90,21 +93,28 @@ public class Toolbox extends ScrollPane{
         wcConnectTB = new Button("CONNECT");
         wcRefreshTB = new Button("REFRESH");
 
+        //Init Components for Comms Pane
+        scpGrid = new GridPane();
+        scpOver = new GridPane();
+        scpLabel = new Label("COMMUNICATION");
 
-        initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl, wcLabel);
+
+        initLabels(Pos.CENTER, lightColorLbl, cameraSwitchLbl, brightnessLbl, recordLbl, wcLabel, scpLabel);
         initLightColor();
         initCameraSwitch();
         initBrightness();
         initRecordSwitch();
         initWebcamDropDown();
+        initRobotPane();
 
-        toolsVBox.getChildren().addAll(wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        toolsVBox.getChildren().addAll(wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver, scpOver);
         toolsVBox.getStyleClass().add("toolbox");
 
         toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
         toolsVBox.setVgrow(cameraSwitchOver, Priority.ALWAYS);
         toolsVBox.setVgrow(brightnessOver, Priority.ALWAYS);
         toolsVBox.setVgrow(recordOver, Priority.ALWAYS);
+        toolsVBox.setVgrow(scpOver, Priority.ALWAYS);
 
         getStyleClass().add("tool-scrollpane");
         toolsVBox.setSpacing(5);
@@ -232,5 +242,23 @@ public class Toolbox extends ScrollPane{
 
 //        recordLbl.minWidthProperty().bind(recordGrid.widthProperty());
         recordLbl.setMinWidth(ALLWIDTH);
+    }
+
+    private void initRobotPane(){
+//        scpGrid.add(scp, 0, 1);
+        scpGrid.setVgap(5);
+        scpGrid.setPrefWidth(ALLWIDTH);
+
+        scpOver.add(scpLabel, 0, 0);
+        scpOver.add(scpGrid, 0, 1);
+
+        scpGrid.getStyleClass().add("tool-item");
+        scpOver.getStyleClass().add("tool-item-box");
+
+        scpLabel.setMinWidth(ALLWIDTH);
+    }
+
+    protected void setScp(serial.SerialConnectPanel scp) {
+        scpGrid.add(scp, 0, 1);
     }
 }

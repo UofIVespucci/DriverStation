@@ -86,14 +86,16 @@ public class GUIManager
             }
         };
         initSerial();
+        toolbox.setScp(scp);
 
-        wcStack.getChildren().addAll(wcfxPanel, videoOverlay, scp);
+        wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(), toolboxContainer);
         buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
+        buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
 
         return scene;
     }

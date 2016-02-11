@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import jssc.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +19,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class SerialConnectPanel extends HBox {
+public class SerialConnectPanel extends VBox {
     private static class BaudRate{
         public String name;
         public int id;
@@ -88,9 +89,9 @@ public class SerialConnectPanel extends HBox {
         }
         baudSelect.setVisible(false);
         baudSelect.managedProperty().bind(baudSelect.visibleProperty());
-        getChildren().add(refreshButton);
         getChildren().add(dropDown);
         getChildren().add(connectButton);
+        getChildren().add(refreshButton);
         getChildren().add(baudSelect);
         setPadding(new Insets(5, 5, 5, 5));
         setSpacing(5);
