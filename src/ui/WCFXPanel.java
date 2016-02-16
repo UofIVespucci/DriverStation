@@ -75,8 +75,11 @@ public class WCFXPanel extends BorderPane {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Image img = SwingFXUtils.toFXImage(addDate(getImage), null);
-                                    imgProperty.set(img);
+                                    if (getImage != null)
+                                    {
+                                        Image img = SwingFXUtils.toFXImage(addDate(getImage), null);
+                                        imgProperty.set(img);
+                                    }
                                 }
                             });
                             getImage.flush();
