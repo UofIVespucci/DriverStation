@@ -34,6 +34,8 @@ public class WebcamDropDown extends ComboBox{
     }
 
     public Webcam getSelected(){
-        return getWebcamByName(getSelectionModel().getSelectedItem().toString());
+        if (getSelectionModel().getSelectedItem()!=null)
+            return getWebcamByName(getSelectionModel().getSelectedItem().toString());
+        else return null;
     }
 }

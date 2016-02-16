@@ -111,12 +111,14 @@ public class WCFXPanel extends BorderPane {
 
     public void setWebcam(Webcam w)
     {
+        if (webcam != null) webcam.close();
         if (w != null) {
             isStreaming = false;
-            w.close();
+//            w.close();
             System.out.println("Webcam: " + w.getName());
             w.setViewSize(WebcamResolution.VGA.getSize());
             w.open();
+            webcam = w;
             isStreaming = true;
             startStream();
         } else {
