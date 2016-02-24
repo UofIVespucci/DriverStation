@@ -130,8 +130,7 @@ public class WCFXPanel extends BorderPane {
         g2.dispose();
 
         modified.flush();
-//
-//        return image;
+
         return modified;
     }
 }
