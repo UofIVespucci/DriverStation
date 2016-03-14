@@ -65,6 +65,7 @@
                 <fileset dir="${testLibDir}">
                     <include name="**/*.jar"/>
                 </fileset>
+                <file name="${java.home}\lib\ext\jfxrt.jar"/>
             </classpath>
             <compilerarg value="-XDignore.symbol.file"/>
         </javac>
