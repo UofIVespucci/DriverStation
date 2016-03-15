@@ -132,7 +132,9 @@ public class DirectionButtons implements EventHandler<KeyEvent>{
         if(keymap.get(event.getCode()) == null) return;
         event.consume(); //we know about this key; stop others from getting it
         if(event.getEventType() == KeyEvent.KEY_PRESSED){
-            keyStack.add(0, event.getCode());
+            if(!keyStack.contains(event.getCode())){
+                keyStack.add(0, event.getCode());
+            }
         } else if (event.getEventType() == KeyEvent.KEY_RELEASED){
             keyStack.remove(event.getCode());
         } else {

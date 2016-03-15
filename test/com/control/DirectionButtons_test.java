@@ -75,6 +75,20 @@ public class DirectionButtons_test{
         assertEquals(DirectionButtons.CommandState.SOUTH, db.getState());
     }
     @Test
+    public void keyPressEventRepeated(){
+        DirectionButtons db = new DirectionButtons();
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_PRESSED,  DOWN));
+        db.handle(makeEvent(KEY_RELEASED, DOWN));
+        assertEquals(DirectionButtons.CommandState.STOPPED, db.getState());
+    }
+    @Test
     public void keyRemap(){
         DirectionButtons db = new DirectionButtons();
         Map<KeyCode, Input> newMap = new HashMap<KeyCode, Input>();
