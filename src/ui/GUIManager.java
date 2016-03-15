@@ -23,6 +23,7 @@ import com.serial.SerialOutputStream;
 import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
+import com.control.DirectionButtons;
 
 //import static org.mockito.Mockito.*;
 
@@ -49,6 +50,7 @@ public class GUIManager
     private List<PacketReader> readerList;
     private JTextArea jtf;
     private WCFXPanel wcfxPanel;
+    private DirectionButtons robotKeys;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
@@ -104,18 +106,14 @@ public class GUIManager
         wcfxPanel.setWebcam(w);
     }
 
-    private void initKeyListener()
-    {
-        //Add keyboard listener for the scene
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-            Main.guiManager.handleInput(event.getCode());
-            event.consume();
-        });
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-            Main.guiManager.handleUpInput(event.getCode());
-            event.consume();
-        });
+    private void initKeyListener() {
+        robotKeys = new DirectionButtons();
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, robotKeys);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, robotKeys);
+        initRobotCommandListener(robotKeys);
     }
+
+    protected void initRobotCommandListener(DirectionButtons db){}
 
     private void initSerial()
     {
