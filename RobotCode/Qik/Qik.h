@@ -107,7 +107,7 @@ private:
                     comms->write(ForwardHigh[select]);
                 }
             }
-            if(pwmSet > 127) pwmSet -= min(pwmSet-127, 127);
+            if(pwmSet > 127) pwmSet = min(pwmSet-127, 127);
             comms->write(pwmSet);
         }
     }
