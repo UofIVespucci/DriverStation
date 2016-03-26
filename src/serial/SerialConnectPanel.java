@@ -1,6 +1,7 @@
 package serial;
 
 import com.serial.SerialConnectListener;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.*;
@@ -103,6 +104,8 @@ public class SerialConnectPanel extends VBox {
         setSpacing(5);
 //        setStyle("-fx-background-color: #336699;");
         setStyle("-fx-background-image: url('footer_lodyasS.png');");
+        connectButton.getStyleClass().add("tool-button");
+        refreshButton.getStyleClass().add("tool-button");
 //        refreshButton.getStyleClass().add("pane-record");
 //        refreshButton.setContentDisplay(ContentDisplay.TOP);
         refreshButton.setText("REFRESH");
@@ -122,10 +125,10 @@ public class SerialConnectPanel extends VBox {
         disconnect are run off the ui thread. These functions control the four
         states and prevent multiple port actions from racing eachother
     */
-    private static final String BUTTON_CONNECTING    = "Connecting";
-    private static final String BUTTON_CONNECTED     = "Disconnect";
-    private static final String BUTTON_DISCONNECTING = "Disabling ";
-    private static final String BUTTON_DISCONNECTED  = " Connect  ";
+    private static final String BUTTON_CONNECTING    = "CONNECTING";
+    private static final String BUTTON_CONNECTED     = "DISCONNECT";
+    private static final String BUTTON_DISCONNECTING = "DISABLING ";
+    private static final String BUTTON_DISCONNECTED  = " CONNECT  ";
     private boolean inProgress = false;
     private void connect(){
         if(inProgress){
@@ -137,7 +140,7 @@ public class SerialConnectPanel extends VBox {
         connectButton.setDisable(true);
         connectButton.setText(BUTTON_CONNECTING);
         inProgress = true;
-        (new Thread(connectSerial)).start();
+        Platform.runLater(new Thread(connectSerial));
     }
     private void connectDone(){
         refreshButton.setDisable(true);
@@ -156,13 +159,13 @@ public class SerialConnectPanel extends VBox {
         connectButton.setDisable(true);
         connectButton.setText(BUTTON_DISCONNECTING);
         inProgress = true;
-        (new Thread(disconnectSerial)).start();
+        Platform.runLater(new Thread(disconnectSerial));
     }
     private void disconnectDone(){
-/*        refreshButton.setDisable(false);
+        refreshButton.setDisable(false);
         dropDown.setDisable(false);
         connectButton.setDisable(false);
-        connectButton.setText(BUTTON_DISCONNECTED);*/
+        connectButton.setText(BUTTON_DISCONNECTED);
         inProgress = false;
     }
 
@@ -173,7 +176,10 @@ public class SerialConnectPanel extends VBox {
 
     private Runnable connectSerial = new Runnable(){
         public void run(){
-            if(dropDown.getSelectionModel().getSelectedItem() == null) return;
+            if(dropDown.getSelectionModel().getSelectedItem() == null) {
+                disconnectDone();
+                return;
+            }
 
             SerialPort serialPort = new SerialPort((String)dropDown.getSelectionModel().getSelectedItem());
 

@@ -4,9 +4,7 @@ import com.Main;
 import com.VespuChat.VespuChat;
 import com.VespuChat.VespuChatReceiver;
 import com.VespuChat.VespuChatTransmitter;
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.*;
 import input.KeyControl;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -28,7 +26,9 @@ import com.VespuChat.messages.*;
 
 import java.io.PipedOutputStream;
 import java.io.PipedInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
@@ -55,6 +55,31 @@ public class GUIManager
 
     public Scene createScene()
     {
+//        Webcam testw = Webcam.getDefault();
+//        testw.open(true);
+//        testw.addWebcamListener(new WebcamListener() {
+//            @Override
+//            public void webcamOpen(WebcamEvent webcamEvent) {
+//
+//            }
+//
+//            @Override
+//            public void webcamClosed(WebcamEvent webcamEvent) {
+//
+//            }
+//
+//            @Override
+//            public void webcamDisposed(WebcamEvent webcamEvent) {
+//
+//            }
+//
+//            @Override
+//            public void webcamImageObtained(WebcamEvent webcamEvent) {
+////                System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
+//            }
+//        });
+
+
         toolbox = new Toolbox();
         buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();

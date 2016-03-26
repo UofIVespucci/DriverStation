@@ -6,6 +6,7 @@
     <conf name="scala" description="Jars used for scala"/>
   </configurations>
   <dependencies>
+    <dependency org="org.boofcv"        name="jcodec"         rev="0.22"    conf="application->default"/>
     <dependency org="com.github.sarxos" name="webcam-capture" rev="0.3.11"  conf="application->default"/>
     <dependency org="org.scream3r"      name="jssc"           rev="2.8.0"   conf="application->default"/>
     <dependency org="junit"             name="junit"          rev="4.12"    conf="testing->default"/>

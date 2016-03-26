@@ -34,7 +34,7 @@ public class VideoOverlay extends GridPane{
         facingText.getStyleClass().add("text-facing");
 
 //        switchHBox.getChildren().addAll(switchButton, facingText);
-        switchHBox.getChildren().addAll(facingText);
+//        switchHBox.getChildren().addAll(facingText);
         switchHBox.setSpacing(SPACING);
         switchHBox.setAlignment(Pos.BOTTOM_LEFT);
 

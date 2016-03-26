@@ -145,6 +145,8 @@ public class Toolbox extends ScrollPane{
 
         wcGrid.getStyleClass().add("tool-item");
         wcOver.getStyleClass().add("tool-item-box");
+        wcConnectTB.getStyleClass().add("tool-button");
+        wcRefreshTB.getStyleClass().add("tool-button");
 
         wcComboBox.setPrefWidth(ALLWIDTH);
         wcConnectTB.setPrefWidth(ALLWIDTH);

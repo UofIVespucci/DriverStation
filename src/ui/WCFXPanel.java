@@ -2,6 +2,8 @@ package ui;
 
 import com.Main;
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamEvent;
+import com.github.sarxos.webcam.WebcamListener;
 import com.github.sarxos.webcam.WebcamResolution;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -25,9 +27,11 @@ import java.util.TimerTask;
  */
 
 public class WCFXPanel extends BorderPane {
+    private boolean cameraFace = true;
     private ImageView wcImg;
     private Webcam webcam;
     private BufferedImage getImage;
+    private BufferedImage stillImage;
     private boolean isStreaming = false;
     private ObjectProperty<Image> imgProperty = new SimpleObjectProperty<Image>();
 
@@ -63,12 +67,12 @@ public class WCFXPanel extends BorderPane {
                 while (isStreaming) {
                     try {
                         if ((getImage = webcam.getImage()) != null) {
-                            Image img = SwingFXUtils.toFXImage(addDate(getImage), null);
+                            stillImage = addDate(getImage);
+                            Image img = SwingFXUtils.toFXImage(stillImage, null);
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (getImage != null)
-                                    {
+                                    if (getImage != null) {
                                         imgProperty.set(img);
                                     }
                                 }
@@ -109,7 +113,41 @@ public class WCFXPanel extends BorderPane {
             System.out.println("Webcam: " + w.getName());
             w.setViewSize(WebcamResolution.VGA.getSize());
             webcam = w;
-            w.open();
+            w.open(true);
+            w.addWebcamListener(new WebcamListener() {
+                @Override
+                public void webcamOpen(WebcamEvent webcamEvent) {
+
+                }
+
+                @Override
+                public void webcamClosed(WebcamEvent webcamEvent) {
+
+                }
+
+                @Override
+                public void webcamDisposed(WebcamEvent webcamEvent) {
+
+                }
+                int count;
+                @Override
+                public void webcamImageObtained(WebcamEvent webcamEvent) {
+//                    getImage = w.getImage();
+                    //System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
+                    count++;
+//                    System.out.println(count);
+//                    stillImage = addDate(getImage);
+//                    Image img = SwingFXUtils.toFXImage(stillImage, null);
+//                    Platform.runLater(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (getImage != null) {
+//                                imgProperty.set(img);
+//                            }
+//                        }
+//                    });
+                }
+            });
             startStream();
         } else {
             System.out.println("No webcam detected");
@@ -120,6 +158,7 @@ public class WCFXPanel extends BorderPane {
 
         int w = image.getWidth();
         int h = image.getHeight();
+        String cameraText = (cameraFace) ? "FRONT CAMERA" : "REVERSE CAMERA";
 
         BufferedImage modified = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 
@@ -127,10 +166,22 @@ public class WCFXPanel extends BorderPane {
         g2.drawImage(image, null, 0, 0);
 
         g2.drawString(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(new Date()), 25, 25);
+        g2.drawString(cameraText, 25, image.getHeight()-25);
         g2.dispose();
 
         modified.flush();
 
         return modified;
+    }
+
+    public void setCameraFace(boolean isFront)
+    {
+        cameraFace = isFront;
+    }
+
+    public BufferedImage getStillImage()
+    {
+        if (stillImage!=null) return stillImage;
+        else return null;
     }
 }

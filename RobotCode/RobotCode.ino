@@ -26,6 +26,7 @@ void setup(){
     motorSerial.begin(38400);
     delay(100);
     motor.enable();
+    motor.setDriveMode(_32KHZ);
     Error::build(vespuChat, 0x00/*starting*/);
 }
 
