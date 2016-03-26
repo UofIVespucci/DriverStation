@@ -55,31 +55,6 @@ public class GUIManager
 
     public Scene createScene()
     {
-//        Webcam testw = Webcam.getDefault();
-//        testw.open(true);
-//        testw.addWebcamListener(new WebcamListener() {
-//            @Override
-//            public void webcamOpen(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamClosed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamDisposed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamImageObtained(WebcamEvent webcamEvent) {
-////                System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
-//            }
-//        });
-
-
         toolbox = new Toolbox();
         buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();
