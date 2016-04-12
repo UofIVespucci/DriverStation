@@ -26,6 +26,12 @@ public class GUImgr extends GUIManager {
         });
     }
 
+    protected void setHeadlightBrightness(byte l){
+        if(t==null) return;
+        t.send(com.VespuChat.messages.Headlight.build(l));
+        System.out.println("Set lamp to "+l);
+    }
+
     private void move(byte l, byte r) {
         if(t==null) return;
         t.send(com.VespuChat.messages.MotorCommand.build(l, r));

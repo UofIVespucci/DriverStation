@@ -73,6 +73,16 @@ public class GUIManager
                 System.out.println("Received "+left+", "+right);
             }
         });
+        readerList.add(new com.VespuChat.messages.Error(){
+            protected void onReceive(byte num){
+                System.out.println("Error  "+num);
+            }
+        });
+        readerList.add(new com.VespuChat.messages.PositionData(){
+            protected void onReceive(short left, short right){
+                System.out.println("Encoders at "+left+", "+right);
+            }
+        });
         connectListener = new SerialConnectListener(){
             public void connectionEstablished(SerialPort newConnection){
                 t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
