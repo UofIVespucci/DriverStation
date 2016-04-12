@@ -11,7 +11,7 @@
  */
 
 
-enum DriveMode { _32KHZ = 0, _16KHS = 1, _8KHS = 2, _4KHS = 3 };
+enum DriveMode { _32KHZ = 0, _16KHZ = 1, _8KHZ = 2, _4KHZ = 3 };
 enum ErrorMode { _CONTINUE = 0, _SHUTDOWN = 1 };
 enum CoastMode { _COAST, _BRAKE };
 
