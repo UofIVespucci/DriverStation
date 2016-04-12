@@ -100,13 +100,13 @@ private:
         } else {
             pwmSet *= 2;
             if(reverse){
-                if(pwmSet > 127) {
+                if(pwmSet <= 127) {
                     comms->write(ReverseLow[select]);
                 } else {
                     comms->write(ReverseHigh[select]);
                 }
             } else {
-                if(pwmSet > 127) {
+                if(pwmSet <= 127) {
                     comms->write(ForwardLow[select]);
                 } else {
                     comms->write(ForwardHigh[select]);
