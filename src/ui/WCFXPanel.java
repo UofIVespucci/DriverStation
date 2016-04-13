@@ -184,4 +184,6 @@ public class WCFXPanel extends BorderPane {
         if (stillImage!=null) return stillImage;
         else return null;
     }
+
+    public boolean getStreamingStatus(){ return isStreaming; }
 }

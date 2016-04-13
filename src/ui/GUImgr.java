@@ -27,4 +27,8 @@ public class GUImgr extends GUIManager {
         t.send(com.VespuChat.messages.MotorCommand.build(l, r));
         System.out.println("Sending " + l + " " + r);
     }
+
+    public void ledBrightness(double d){
+        System.out.println("LED Brightness changed to: " + (1/d));
+    }
 }

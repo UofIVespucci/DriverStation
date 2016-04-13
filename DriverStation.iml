@@ -19,17 +19,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/src/serial" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="webcam-capture" level="project" />
     <orderEntry type="library" name="bridj" level="project" />
     <orderEntry type="library" name="slf4j-api" level="project" />
+    <orderEntry type="library" name="humble-video-noarch" level="project" />
+    <orderEntry type="library" name="humble-video-all" level="project" />
   </component>
 </module>

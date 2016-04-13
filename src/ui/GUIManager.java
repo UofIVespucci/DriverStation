@@ -24,8 +24,11 @@ import com.VespuChat.messages.*;
 
 //import static org.mockito.Mockito.*;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.PipedOutputStream;
 import java.io.PipedInputStream;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,8 +50,9 @@ public class GUIManager
     private serial.SerialConnectPanel scp;
     private SerialPort sp;
     private List<PacketReader> readerList;
-    private JTextArea jtf;
     private WCFXPanel wcfxPanel;
+    private RecordingManager rManager;
+    private TextField jtf;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
@@ -87,6 +91,7 @@ public class GUIManager
         toolboxContainer = new HBox();
         wcStack = new StackPane();
         wcfxPanel = new WCFXPanel();
+        rManager = new RecordingManager(wcfxPanel);
         scene = new Scene(buttonSelectorContainer, Color.ALICEBLUE);
 
         initKeyListener();
@@ -129,6 +134,22 @@ public class GUIManager
         wcfxPanel.setWebcam(w);
     }
 
+    private void startRecording()
+    {
+        BufferedImage still = wcfxPanel.getStillImage();
+        if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
+//            Current (for testing purposes) framerate of 30
+            rManager.record("test", "mp4", 30, still.getWidth(), still.getHeight());
+        }
+        else System.err.println(
+                "Error in recording request, either already recording, not streaming, or still image is null");
+    }
+
+    private void stopRecording()
+    {
+        if (rManager.getRecordingStatus()) rManager.stopRecording();
+    }
+
     private void initKeyListener()
     {
         //Add keyboard listener for the scene
@@ -160,5 +181,11 @@ public class GUIManager
 
     public ReadOnlyDoubleProperty getVOHProperty() {
         return videoOverlay.heightProperty();
+    }
+
+    public boolean toggleRecording()
+    {
+        if (rManager.getRecordingStatus()) {stopRecording(); return false;}
+        else {startRecording(); return true;}
     }
 }
