@@ -41,11 +41,18 @@
         </javac>
     </target>
 
-    <target name="jar" depends="compile">
+    <target name="extDeps" depends="compile">
+        <jar jarfile="${outputDir}/deps.jar">
+            <zipgroupfileset dir="${externLibDir}">
+                <include name="**/*.jar"/>
+            </zipgroupfileset>
+        </jar>
+    </target>
+
+    <target name="jar" depends="extDeps">
         <jar destfile="${outputJar}" basedir="${outputDir}">
             <fileset dir="${resourceDir}" />
-            <!--<fileset dir="${externLibDir}" />-->
-
+            <zipfileset src="${outputDir}/deps.jar" excludes="META-INF/*.SF" />
 
             <!--<restrict>-->
                 <!--<name name="**/*.class"/>-->
@@ -64,10 +71,13 @@
 
 
             <zipgroupfileset dir="${libDir}">
-                <include name="*.jar"/>
+                <include name="*.jar" />
             </zipgroupfileset>
             <manifest>
                 <attribute name="Main-Class" value="com.Main"/>
+                <attribute name="Class-Path" value="io/humble/video"/>
+                <!--Class-Path: jar1-name jar2-name directory-name/jar3-name-->
+                <!--<attribute name="Class-Path" value="extlib/humble-video-all.jar"/>-->
             </manifest>
         </jar>
         <delete dir="${outputDir}" />

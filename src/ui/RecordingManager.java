@@ -4,6 +4,7 @@ import com.Main;
 import io.humble.video.*;
 import io.humble.video.awt.MediaPictureConverter;
 import io.humble.video.awt.MediaPictureConverterFactory;
+//import io.humble.video.awt.MediaPictureConverterFactory;
 import javafx.concurrent.Task;
 import java.awt.image.BufferedImage;
 
@@ -67,6 +68,7 @@ public class RecordingManager {
                                 BufferedImage.TYPE_3BYTE_BGR);
 
                         if (mediaPictureConverter == null)
+//                            mediaPictureConverter
                             mediaPictureConverter = MediaPictureConverterFactory.createConverter(still, mediaPicture);
                         mediaPictureConverter.toPicture(mediaPicture, still, i);
 
