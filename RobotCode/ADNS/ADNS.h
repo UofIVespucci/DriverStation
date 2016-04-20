@@ -60,12 +60,18 @@
 // Extended Configuration bits
 #define ADNS3080_SERIALNPU_OFF  0x02
 
+#define CHIP_SELECTED LOW
+
+class Track{ public: int x,y; };
+
 class ADNS {
 private:
     uint8_t read_register(uint8_t address);
     void    write_register(uint8_t address, uint8_t value);
+    Track track;
+    const uint8_t CS_PIN;
 public:
-    ADNS();
+    ADNS(uint8_t cs);
     void init();
     // read latest values from sensor and fill in x,y and totals,
     // returns true on successful read
@@ -73,6 +79,5 @@ public:
     // will cause the x,y, dx, dy, and the sensor's motion registers to
     // be cleared
     void clear_motion();
-    class Track{ public: int x,y; };
     Track get_motion();
 };
