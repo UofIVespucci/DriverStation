@@ -21,6 +21,7 @@ import com.serial.SerialOutputStream;
 import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
+import com.control.DirectionButtons;
 
 //import static org.mockito.Mockito.*;
 
@@ -53,6 +54,7 @@ public class GUIManager
     private WCFXPanel wcfxPanel;
     private RecordingManager rManager;
     private TextField jtf;
+    private DirectionButtons robotKeys;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
@@ -99,6 +101,16 @@ public class GUIManager
         readerList.add(new MotorCommand(){
             protected void onReceive(byte left, byte right){
                 System.out.println("Received "+left+", "+right);
+            }
+        });
+        readerList.add(new com.VespuChat.messages.Error(){
+            protected void onReceive(byte num){
+                System.out.println("Error  "+num);
+            }
+        });
+        readerList.add(new com.VespuChat.messages.PositionData(){
+            protected void onReceive(short left, short right){
+                System.out.println("Encoders at "+left+", "+right);
             }
         });
         connectListener = new SerialConnectListener(){
@@ -150,18 +162,14 @@ public class GUIManager
         if (rManager.getRecordingStatus()) rManager.stopRecording();
     }
 
-    private void initKeyListener()
-    {
-        //Add keyboard listener for the scene
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-            Main.guiManager.handleInput(event.getCode());
-            event.consume();
-        });
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-            Main.guiManager.handleUpInput(event.getCode());
-            event.consume();
-        });
+    private void initKeyListener() {
+        robotKeys = new DirectionButtons();
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, robotKeys);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, robotKeys);
+        initRobotCommandListener(robotKeys);
     }
+
+    protected void initRobotCommandListener(DirectionButtons db){}
 
     private void initSerial()
     {

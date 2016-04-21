@@ -11,7 +11,7 @@
  */
 
 
-enum DriveMode { _32KHZ = 0, _16KHS = 1, _8KHS = 2, _4KHS = 3 };
+enum DriveMode { _32KHZ = 0, _16KHZ = 1, _8KHZ = 2, _4KHZ = 3 };
 enum ErrorMode { _CONTINUE = 0, _SHUTDOWN = 1 };
 enum CoastMode { _COAST, _BRAKE };
 
@@ -100,19 +100,19 @@ private:
         } else {
             pwmSet *= 2;
             if(reverse){
-                if(pwmSet > 127) {
+                if(pwmSet <= 127) {
                     comms->write(ReverseLow[select]);
                 } else {
                     comms->write(ReverseHigh[select]);
                 }
             } else {
-                if(pwmSet > 127) {
+                if(pwmSet <= 127) {
                     comms->write(ForwardLow[select]);
                 } else {
                     comms->write(ForwardHigh[select]);
                 }
             }
-            if(pwmSet > 127) pwmSet -= min(pwmSet-127, 127);
+            if(pwmSet > 127) pwmSet = min(pwmSet-127, 127);
             comms->write(pwmSet);
         }
     }
