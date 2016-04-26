@@ -7,6 +7,7 @@
 #include "Encoder.h"
 #include "Qik/Qik.h"
 #include <AltSoftSerial.h>
+#include "ADNS/ADNS.h"
 AltSoftSerial motorSerial;
 
 const int HEADLIGHT_PIN = 5;
