@@ -23,7 +23,7 @@ Error ecmd([](uint8_t code){
 Headlight hcmd([](uint8_t brightness){
     analogWrite(HEADLIGHT_PIN, brightness);
 });
-Receiver* receivers[] = { &mcmd, &ecmd };
+Receiver* receivers[] = { &mcmd, &ecmd, &hcmd };
 VespuChat vespuChat(Serial, receivers, sizeof(receivers)/sizeof(receivers[0]));
 
 void setup(){
@@ -35,6 +35,8 @@ void setup(){
     motor.enable();
     motor.setDriveMode(_32KHZ);
     Error::build(vespuChat, 0x00/*starting*/);
+
+    pinMode(HEADLIGHT_PIN, OUTPUT);
 }
 
 void loop(){

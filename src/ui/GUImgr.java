@@ -29,7 +29,7 @@ public class GUImgr extends GUIManager {
     protected void setHeadlightBrightness(byte l){
         if(t==null) return;
         t.send(com.VespuChat.messages.Headlight.build(l));
-        System.out.println("Set lamp to "+l);
+        System.out.println("Set lamp to "+(int)(l&0xff));
     }
 
     private void move(byte l, byte r) {
@@ -39,6 +39,6 @@ public class GUImgr extends GUIManager {
     }
 
     public void ledBrightness(double d){
-        System.out.println("LED Brightness changed to: " + (1/d));
+        setHeadlightBrightness((byte)(2.55*(100-d)));
     }
 }
