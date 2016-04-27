@@ -119,40 +119,6 @@ public class WCFXPanel extends BorderPane {
             w.setViewSize(WebcamResolution.VGA.getSize());
             webcam = w;
             w.open(true);
-            w.addWebcamListener(new WebcamListener() {
-                @Override
-                public void webcamOpen(WebcamEvent webcamEvent) {
-
-                }
-
-                @Override
-                public void webcamClosed(WebcamEvent webcamEvent) {
-
-                }
-
-                @Override
-                public void webcamDisposed(WebcamEvent webcamEvent) {
-
-                }
-                int count;
-                @Override
-                public void webcamImageObtained(WebcamEvent webcamEvent) {
-//                    getImage = w.getImage();
-                    //System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
-                    count++;
-//                    System.out.println(count);
-//                    stillImage = addDate(getImage);
-//                    Image img = SwingFXUtils.toFXImage(stillImage, null);
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (getImage != null) {
-//                                imgProperty.set(img);
-//                            }
-//                        }
-//                    });
-                }
-            });
             startStream();
         } else {
             System.out.println("No webcam detected");
