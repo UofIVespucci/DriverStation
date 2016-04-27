@@ -29,6 +29,6 @@ public class GUImgr extends GUIManager {
     }
 
     public void ledBrightness(double d){
-        System.out.println("LED Brightness changed to: " + (1/d));
+        System.out.println("LED Brightness changed to: " + (1-d));
     }
 }

@@ -48,6 +48,11 @@ public class WCFXPanel extends BorderPane {
         initWebcam();
     }
 
+    public double getFps(){
+        if (webcam!=null) return webcam.getFPS();
+        else return 0;
+    }
+
     private void initView()
     {
         wcImg.fitWidthProperty().bind(Main.guiManager.getVOWProperty());

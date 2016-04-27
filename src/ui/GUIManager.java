@@ -59,31 +59,6 @@ public class GUIManager
 
     public Scene createScene()
     {
-//        Webcam testw = Webcam.getDefault();
-//        testw.open(true);
-//        testw.addWebcamListener(new WebcamListener() {
-//            @Override
-//            public void webcamOpen(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamClosed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamDisposed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamImageObtained(WebcamEvent webcamEvent) {
-////                System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
-//            }
-//        });
-
-
         toolbox = new Toolbox();
         buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();
@@ -139,7 +114,7 @@ public class GUIManager
         BufferedImage still = wcfxPanel.getStillImage();
         if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
 //            Current (for testing purposes) framerate of 30
-            rManager.record("test", "mp4", 30, still.getWidth(), still.getHeight());
+            rManager.record("TestFile.mp4");
         }
         else System.err.println(
                 "Error in recording request, either already recording, not streaming, or still image is null");
