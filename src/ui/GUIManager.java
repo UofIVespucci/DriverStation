@@ -113,7 +113,6 @@ public class GUIManager
     {
         BufferedImage still = wcfxPanel.getStillImage();
         if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
-//            Current (for testing purposes) framerate of 30
             rManager.record("TestFile.mp4");
         }
         else System.err.println(
