@@ -28,6 +28,7 @@ import com.VespuChat.messages.*;
 //import static org.mockito.Mockito.*;
 
 import java.awt.*;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.PipedOutputStream;
 import java.io.PipedInputStream;
@@ -96,13 +97,15 @@ public class GUIManager {
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
+        wcStack.setMinWidth(0);
+        wcStack.setMinHeight(0);
+
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
         buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(), toolboxContainer);
         buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
         buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
-
 
         return scene;
     }
@@ -141,6 +144,8 @@ public class GUIManager {
                 resizeUI();
             }
         });
+//        scene.getWindow().addEventFilter(new WindowListener());
+//        scene.getWindow().heightProperty().
     }
 
     private void initSerial() {
@@ -168,7 +173,7 @@ public class GUIManager {
     }
 
     protected void resizeUI() {
-        toolbox.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
+        toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
         wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
     }
 }
