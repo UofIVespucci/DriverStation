@@ -1,10 +1,7 @@
 package ui;
 
 import com.Main;
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamEvent;
-import com.github.sarxos.webcam.WebcamListener;
-import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -103,10 +100,14 @@ public class WCFXPanel extends BorderPane {
         for (Webcam wc : Webcam.getWebcams()) {
             System.out.println(wc.getName());
         }
-
         webcam = Webcam.getDefault();
-        if (webcam!=null) webcam.open();
-        setWebcam(webcam);
+
+        try {
+            if (webcam!=null && !webcam.isOpen()) webcam.open(true);
+            setWebcam(webcam);
+        } catch (com.github.sarxos.webcam.WebcamLockException e) {
+            System.err.println("Initial Webcam " + webcam.getName() + " in use!");
+        }
     }
 
     public void setWebcam(Webcam w)
@@ -116,10 +117,12 @@ public class WCFXPanel extends BorderPane {
         if (w != null) {
             isStreaming = false;
             w.close();
-            System.out.println("Webcam: " + w.getName());
             w.setViewSize(WebcamResolution.VGA.getSize());
             webcam = w;
-            w.open(true);
+            try { w.open(true); }
+            catch (WebcamLockException e) {
+                System.out.println("Webcam " + webcam.getName() + " in use!");
+            }
             startStream();
         } else {
             System.out.println("No webcam detected");
