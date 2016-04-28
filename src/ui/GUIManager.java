@@ -144,8 +144,6 @@ public class GUIManager {
                 resizeUI();
             }
         });
-//        scene.getWindow().addEventFilter(new WindowListener());
-//        scene.getWindow().heightProperty().
     }
 
     private void initSerial() {
@@ -172,8 +170,10 @@ public class GUIManager {
         else {startRecording(); return true;}
     }
 
-    protected void resizeUI() {
-        toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
-        wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
+    public void resizeUI() {
+        if (toolbox!=null && wcStack!=null) {
+            toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
+            wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
+        }
     }
 }

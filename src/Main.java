@@ -2,6 +2,8 @@ package com;
 
 import com.VespuChat.VespuChatTransmitter;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import com.serial.SerialOutputStream;
 import com.serial.*;
