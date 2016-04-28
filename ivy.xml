@@ -2,7 +2,6 @@
   <info organisation="org.apache" module="dashboard"/>
   <configurations>
     <conf name="application" description="Jars used by the application"/>
-    <conf name="external" description="Jars that need to be included externally to meet signing requirements"/>
     <conf name="testing" description="Jars used for testing"/>
     <conf name="scala" description="Jars used for scala"/>
   </configurations>
