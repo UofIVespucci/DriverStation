@@ -1,20 +1,21 @@
 package com;
 
 import com.VespuChat.VespuChatTransmitter;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
+import javafx.application.Application;
 import javafx.scene.Scene;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import com.serial.SerialOutputStream;
 import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.ArrayList;
 
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import jssc.*;
 import javax.swing.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -23,7 +24,7 @@ import java.awt.*;
 import ui.*;
 
 
-public class Main {
+public class Main extends Application{
     private SerialPortEventListener spel;
     private com.serial.SerialConnectListener scl;
     private serial.SerialConnectPanel scp;
@@ -31,28 +32,15 @@ public class Main {
     private SerialPort sp;
     public static GUImgr guiManager = new GUImgr();
 
-    private void initAndShowGUI() {
-        // This method is invoked on the EDT thread
-        JFrame frame = new JFrame("Vespucci");
-        final JFXPanel fxPanel = new JFXPanel();
-        frame.add(fxPanel);
-        frame.setSize(640, 480);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                initFX(fxPanel);
-            }
-        });
-    }
-
-    private void initFX(JFXPanel fxPanel) {
-        // This method is invoked on the JavaFX thread
+    @Override
+    public void start(Stage stage) {
         Scene scene = createScene();
+        stage.setTitle("Vespucci");
+        stage.setScene(scene);
+        stage.setWidth(640);
+        stage.setHeight(480);
+        stage.show();
         scene.getStylesheets().add("controls.css");
-        fxPanel.setScene(scene);
     }
 
     private Scene createScene() {
@@ -60,13 +48,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        final Main initMain = new Main();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initMain.initAndShowGUI();
-            }
-        });
+        Application.launch(args);
     }
 
     private void updateText(String newText){
