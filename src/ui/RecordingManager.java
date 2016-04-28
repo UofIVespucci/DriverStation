@@ -1,12 +1,10 @@
 package ui;
 
 import javafx.concurrent.Task;
-import org.jcodec.api.SequenceEncoder8Bit;
 import org.jcodec.api.awt.AWTSequenceEncoder8Bit;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class RecordingManager {
     WCFXPanel wcfxPanel;

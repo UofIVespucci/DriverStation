@@ -111,6 +111,7 @@ public class WCFXPanel extends BorderPane {
 
     public void setWebcam(Webcam w)
     {
+        Main.guiManager.stopRecording();
         if (webcam != null) webcam.close();
         if (w != null) {
             isStreaming = false;
