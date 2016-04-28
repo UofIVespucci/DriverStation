@@ -43,10 +43,11 @@
         <jar destfile="${outputJar}" basedir="${outputDir}">
             <fileset dir="${resourceDir}" />
             <zipgroupfileset dir="${libDir}">
-                <include name="*.jar"/>
+                <include name="*.jar" />
             </zipgroupfileset>
             <manifest>
                 <attribute name="Main-Class" value="com.Main"/>
+                <attribute name="Class-Path" value="/io/humble/video/"/>
             </manifest>
         </jar>
         <delete dir="${outputDir}" />
@@ -54,7 +55,10 @@
 
     <target name="build" depends="jar">
         <java jar="${outputJar}" fork="true">
-            <classpath path="${classpath}"/>
+            <arg value="-h"/>
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
         </java>
     </target>
 

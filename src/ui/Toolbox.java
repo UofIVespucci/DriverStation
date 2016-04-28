@@ -2,6 +2,8 @@ package ui;
 
 import com.Main;
 import com.github.sarxos.webcam.WebcamPicker;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -185,7 +187,6 @@ public class Toolbox extends ScrollPane{
         lightBlueTB.prefWidthProperty().bind(lightColorGrid.widthProperty());
         lightBlueTB.getStyleClass().add("tool-button");
 
-//        lightColorLbl.minWidthProperty().bind(lightColorGrid.widthProperty());
         lightColorLbl.setPrefWidth(ALLWIDTH);
     }
 
@@ -203,7 +204,6 @@ public class Toolbox extends ScrollPane{
         cameraSwitchTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
         cameraSwitchTB.getStyleClass().add("tool-button");
 
-//        cameraSwitchLbl.minWidthProperty().bind(cameraSwitchGrid.widthProperty());
         cameraSwitchLbl.setPrefWidth(ALLWIDTH);
     }
 
@@ -229,8 +229,21 @@ public class Toolbox extends ScrollPane{
         brightnessOver.getStyleClass().add("tool-item-box");
         brightnessSlider.getStyleClass().add("tool-button");
 
-//        brightnessLbl.minWidthProperty().bind(brightnessGrid.widthProperty());
         brightnessLbl.setPrefWidth(ALLWIDTH);
+
+        brightnessSlider.setMin(1);
+        brightnessSlider.setMax(100);
+        brightnessSlider.setValue(1);
+        brightnessSlider.setMajorTickUnit(50);
+        brightnessSlider.setMinorTickCount(5);
+        brightnessSlider.setBlockIncrement(10);
+
+        brightnessSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                Main.guiManager.ledBrightness((double)newValue);
+            }
+        });
     }
 
     private void initRecordSwitch(){
@@ -247,12 +260,17 @@ public class Toolbox extends ScrollPane{
         recordTB.prefWidthProperty().bind(cameraSwitchGrid.widthProperty());
         recordTB.getStyleClass().add("tool-button");
 
-//        recordLbl.minWidthProperty().bind(recordGrid.widthProperty());
         recordLbl.setMinWidth(ALLWIDTH);
+
+        recordTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Main.guiManager.toggleRecording();
+            }
+        });
     }
 
     private void initRobotPane(){
-//        scpGrid.add(scp, 0, 1);
         scpGrid.setVgap(5);
         scpGrid.setPrefWidth(ALLWIDTH);
 

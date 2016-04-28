@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.6
+Created-By: 1.8.0_65-b17 (Oracle Corporation)
+Main-Class: com.Main
+Class-Path: humble-video-all.jar
+
