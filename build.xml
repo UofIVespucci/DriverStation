@@ -30,7 +30,7 @@
     </target>
 
     <target name="compile" depends="init,generateMessages">
-        <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}"
+        <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}; ${extDir}"
                 includeantruntime="false" >
             <classpath path="${classpath}">
                 <file name="${java.home}\lib\ext\jfxrt.jar"/>
@@ -45,9 +45,11 @@
             <zipgroupfileset dir="${libDir}">
                 <include name="*.jar" />
             </zipgroupfileset>
+            <zipgroupfileset dir="${extDir}">
+                <include name="*.jar" />
+            </zipgroupfileset>
             <manifest>
                 <attribute name="Main-Class" value="com.Main"/>
-                <attribute name="Class-Path" value="/io/humble/video/"/>
             </manifest>
         </jar>
         <delete dir="${outputDir}" />
@@ -80,6 +82,9 @@
                     <include name="**/*.jar"/>
                 </fileset>
                 <fileset dir="${libDir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${extDir}">
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>
