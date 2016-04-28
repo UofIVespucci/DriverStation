@@ -8,10 +8,14 @@ public class GUImgr extends GUIManager {
 
     public void handleInput(KeyCode keyCode) {
         switch (keyCode) {
-            case UP:    move(       motorSpeed,        motorSpeed); break;
-            case DOWN:  move((byte)-motorSpeed, (byte)-motorSpeed); break;
-            case RIGHT: move((byte)-motorSpeed,        motorSpeed); break;
-            case LEFT:  move(       motorSpeed, (byte)-motorSpeed); break;
+        case UP:    move(       motorSpeed,        motorSpeed); break;
+        case DOWN:  move((byte)-motorSpeed, (byte)-motorSpeed); break;
+        case RIGHT: move((byte)-motorSpeed,        motorSpeed); break;
+        case LEFT:  move(       motorSpeed, (byte)-motorSpeed); break;
+        case NUMPAD1: setBatteryIndicator(BatteryStatus.FULL); break;
+        case NUMPAD2: setBatteryIndicator(BatteryStatus.HALF); break;
+        case NUMPAD3: setBatteryIndicator(BatteryStatus.LOW); break;
+        case NUMPAD4: setBatteryIndicator(BatteryStatus.CRITICAL); break;
         }
     }
     public void handleUpInput(KeyCode keyCode) {

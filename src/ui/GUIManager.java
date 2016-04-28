@@ -117,6 +117,7 @@ public class GUIManager {
     private void startRecording() {
         BufferedImage still = wcfxPanel.getStillImage();
         if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
+            videoOverlay.setRecording(true);
             rManager.record("TestFile.mp4");
         }
         else System.err.println(
@@ -124,8 +125,10 @@ public class GUIManager {
     }
 
     protected void stopRecording() {
-        if (rManager!=null &&  rManager.getRecordingStatus())
+        if (rManager!=null &&  rManager.getRecordingStatus()) {
+            videoOverlay.setRecording(false);
             rManager.stopRecording();
+        }
     }
 
     private void initKeyListener() {
@@ -175,5 +178,9 @@ public class GUIManager {
             toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
             wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
         }
+    }
+
+    public void setBatteryIndicator(BatteryStatus batteryStatus){
+        videoOverlay.setBatteryLbl(batteryStatus);
     }
 }

@@ -94,6 +94,55 @@
     -fx-background-color: transparent;
 }
 
+.toggle-record-off {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-graphic: url(null);
+}
+
+.video-record {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Record-On.png");
+    -fx-background-color: transparent;
+}
+
+.video-battery-full {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Battery-Full-52.png");
+    -fx-background-color: transparent;
+}
+
+.video-battery-half {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Battery-Half-52.png");
+    -fx-background-color: transparent;
+}
+
+.video-battery-low {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Battery-Low-52.png");
+    -fx-background-color: transparent;
+}
+
+.video-battery-critical {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Battery-Critical-52.png");
+    -fx-background-color: transparent;
+}
+
+.video-battery-blank {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-padding: 0;
+    -fx-graphic: url("ui/video/Battery-Blank-52.png");
+    -fx-background-color: transparent;
+}
+
 .video-background {
     -fx-background-image: url("ui/demo/burrow.jpg");
     -fx-background-size: cover;
