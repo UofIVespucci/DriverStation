@@ -72,7 +72,7 @@ public class WCFXPanel extends BorderPane {
     }
 
     protected void stopStream() {
-        activeStreamer.stop();
+        if (activeStreamer != null) activeStreamer.stop();
     }
 
     private void initWebcam()
@@ -93,6 +93,7 @@ public class WCFXPanel extends BorderPane {
     public void setWebcam(Webcam w)
     {
         Main.guiManager.stopRecording();
+        stopStream();
         if (webcam != null) webcam.close();
         if (w != null) {
             w.close();
