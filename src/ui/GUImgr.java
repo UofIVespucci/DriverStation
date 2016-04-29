@@ -15,12 +15,12 @@ public class GUImgr extends GUIManager {
             switch(news){
                 case NORTH:     move((short) speed,(short) speed); break;
                 case SOUTH:     move((short)-speed,(short)-speed); break;
-                case EAST:      move((short)-speed,(short) speed); break;
-                case WEST:      move((short) speed,(short)-speed); break;
-                case NORTHEAST: move((short)     0,(short) speed); break;
-                case SOUTHEAST: move((short)-speed,(short)     0); break;
-                case SOUTHWEST: move((short)     0,(short)-speed); break;
-                case NORTHWEST: move((short) speed,(short)     0); break;
+                case WEST:      move((short)-speed,(short) speed); break;
+                case EAST:      move((short) speed,(short)-speed); break;
+                case NORTHWEST: move((short)     0,(short) speed); break;
+                case SOUTHWEST: move((short)-speed,(short)     0); break;
+                case SOUTHEAST: move((short)     0,(short)-speed); break;
+                case NORTHEAST: move((short) speed,(short)     0); break;
                 case STOPPED:   move((short)     0, (short)    0); break;
             }
         });
