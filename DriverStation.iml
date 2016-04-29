@@ -21,8 +21,6 @@
     </orderEntry>
     <orderEntry type="library" name="webcam-capture" level="project" />
     <orderEntry type="library" name="bridj" level="project" />
-    <orderEntry type="library" name="slf4j-api" level="project" />
-    <orderEntry type="library" name="humble-video-noarch" level="project" />
-    <orderEntry type="library" name="humble-video-all" level="project" />
+    <orderEntry type="library" name="jcodec-javase" level="project" />
   </component>
 </module>

@@ -19,7 +19,6 @@
         <ivy:retrieve conf="testing" pattern="${testLibDir}/[artifact].[ext]"/>
         <ivy:retrieve conf="application" pattern="${libDir}/[artifact].[ext]"/>
         <ivy:retrieve conf="scala" pattern="${scalaLibDir}/[artifact].[ext]"/>
-        <ivy:retrieve conf="external" pattern="${externLibDir}/[artifact].[ext]"/>
     </target>
 
     <target name="clean" depends="init">
@@ -31,53 +30,26 @@
     </target>
 
     <target name="compile" depends="init,generateMessages">
-        <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}"
+        <javac srcdir="${sourceDir}" destdir="${outputDir}" extdirs="${libDir}; ${extDir}"
                 includeantruntime="false" >
             <classpath path="${classpath}">
                 <file name="${java.home}\lib\ext\jfxrt.jar"/>
-                <file name="${externLibDir}\humble-video-noarch.jar"/>
             </classpath>
             <compilerarg value="-XDignore.symbol.file"/>
         </javac>
     </target>
 
-    <target name="extDeps" depends="compile">
-        <jar jarfile="${outputDir}/deps.jar">
-            <zipgroupfileset dir="${externLibDir}">
-                <include name="**/*.jar"/>
-            </zipgroupfileset>
-        </jar>
-    </target>
-
     <target name="jar" depends="compile">
         <jar destfile="${outputJar}" basedir="${outputDir}">
             <fileset dir="${resourceDir}" />
-
-
-            <!--<restrict>-->
-                <!--<name name="**/*.class"/>-->
-                <!--<archives>-->
-                    <!--<zips>-->
-                        <!--<fileset dir="${externLibDir}" >-->
-                            <!--<include name="**/*.jar"/>-->
-                            <!--<include name="**/*.dll"/>-->
-                            <!--<include name="**/*.so"/>-->
-                            <!--<include name="**/*.dylib"/>-->
-                        <!--</fileset>-->
-                    <!--</zips>-->
-                <!--</archives>-->
-            <!--</restrict>-->
-
-
-
             <zipgroupfileset dir="${libDir}">
+                <include name="*.jar" />
+            </zipgroupfileset>
+            <zipgroupfileset dir="${extDir}">
                 <include name="*.jar" />
             </zipgroupfileset>
             <manifest>
                 <attribute name="Main-Class" value="com.Main"/>
-                <attribute name="Class-Path" value="io/humble/video"/>
-                <!--Class-Path: jar1-name jar2-name directory-name/jar3-name-->
-                <!--<attribute name="Class-Path" value="extlib/humble-video-all.jar"/>-->
             </manifest>
         </jar>
         <delete dir="${outputDir}" />
@@ -85,12 +57,8 @@
 
     <target name="build" depends="jar">
         <java jar="${outputJar}" fork="true">
-            <!--<classpath path="${classpath}"/>-->
             <arg value="-h"/>
             <classpath>
-                <fileset dir="${externLibDir}">
-                    <include name="**/*.jar"/>
-                </fileset>
                 <pathelement path="${java.class.path}"/>
             </classpath>
         </java>
@@ -115,6 +83,9 @@
                     <include name="**/*.jar"/>
                 </fileset>
                 <fileset dir="${libDir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+                <fileset dir="${extDir}">
                     <include name="**/*.jar"/>
                 </fileset>
             </classpath>

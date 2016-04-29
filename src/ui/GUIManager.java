@@ -8,12 +8,15 @@ import com.github.sarxos.webcam.*;
 import input.KeyControl;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.*;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -26,6 +29,7 @@ import com.control.DirectionButtons;
 //import static org.mockito.Mockito.*;
 
 import java.awt.*;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.PipedOutputStream;
 import java.io.PipedInputStream;
@@ -37,8 +41,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-public class GUIManager
-{
+public class GUIManager {
     private ButtonSelector buttonSelector;
     private Toolbox toolbox;
     private VideoOverlay videoOverlay;
@@ -59,33 +62,7 @@ public class GUIManager
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
 
-    public Scene createScene()
-    {
-//        Webcam testw = Webcam.getDefault();
-//        testw.open(true);
-//        testw.addWebcamListener(new WebcamListener() {
-//            @Override
-//            public void webcamOpen(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamClosed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamDisposed(WebcamEvent webcamEvent) {
-//
-//            }
-//
-//            @Override
-//            public void webcamImageObtained(WebcamEvent webcamEvent) {
-////                System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
-//            }
-//        });
-
-
+    public Scene createScene() {
         toolbox = new Toolbox();
         buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();
@@ -132,6 +109,9 @@ public class GUIManager
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
+        wcStack.setMinWidth(0);
+        wcStack.setMinHeight(0);
+
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
@@ -146,20 +126,21 @@ public class GUIManager
         wcfxPanel.setWebcam(w);
     }
 
-    private void startRecording()
-    {
+    private void startRecording() {
         BufferedImage still = wcfxPanel.getStillImage();
         if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
-//            Current (for testing purposes) framerate of 30
-            rManager.record("test", "mp4", 30, still.getWidth(), still.getHeight());
+            videoOverlay.setRecording(true);
+            rManager.record("TestFile.mp4");
         }
         else System.err.println(
                 "Error in recording request, either already recording, not streaming, or still image is null");
     }
 
-    private void stopRecording()
-    {
-        if (rManager.getRecordingStatus()) rManager.stopRecording();
+    protected void stopRecording() {
+        if (rManager!=null &&  rManager.getRecordingStatus()) {
+            videoOverlay.setRecording(false);
+            rManager.stopRecording();
+        }
     }
 
     private void initKeyListener() {
@@ -171,8 +152,7 @@ public class GUIManager
 
     protected void initRobotCommandListener(DirectionButtons db){}
 
-    private void initSerial()
-    {
+    private void initSerial() {
         spel = new SerialPortEventListener(){
             public void serialEvent(SerialPortEvent serialEvent){
                 try{
@@ -191,9 +171,19 @@ public class GUIManager
         return videoOverlay.heightProperty();
     }
 
-    public boolean toggleRecording()
-    {
+    public boolean toggleRecording() {
         if (rManager.getRecordingStatus()) {stopRecording(); return false;}
         else {startRecording(); return true;}
+    }
+
+    public void resizeUI() {
+        if (toolbox!=null && wcStack!=null) {
+            toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
+            wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
+        }
+    }
+
+    public void setBatteryIndicator(BatteryStatus batteryStatus){
+        videoOverlay.setBatteryLbl(batteryStatus);
     }
 }

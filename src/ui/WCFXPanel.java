@@ -1,10 +1,7 @@
 package ui;
 
 import com.Main;
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamEvent;
-import com.github.sarxos.webcam.WebcamListener;
-import com.github.sarxos.webcam.WebcamResolution;
+import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -46,6 +43,11 @@ public class WCFXPanel extends BorderPane {
             }
         });
         initWebcam();
+    }
+
+    public double getFps(){
+        if (webcam!=null) return webcam.getFPS();
+        else return 0;
     }
 
     private void initView()
@@ -98,56 +100,29 @@ public class WCFXPanel extends BorderPane {
         for (Webcam wc : Webcam.getWebcams()) {
             System.out.println(wc.getName());
         }
-
         webcam = Webcam.getDefault();
-        if (webcam!=null) webcam.open();
-        setWebcam(webcam);
+
+        try {
+            if (webcam!=null && !webcam.isOpen()) webcam.open(true);
+            setWebcam(webcam);
+        } catch (com.github.sarxos.webcam.WebcamLockException e) {
+            System.err.println("Initial Webcam " + webcam.getName() + " in use!");
+        }
     }
 
     public void setWebcam(Webcam w)
     {
+        Main.guiManager.stopRecording();
         if (webcam != null) webcam.close();
         if (w != null) {
             isStreaming = false;
             w.close();
-            System.out.println("Webcam: " + w.getName());
             w.setViewSize(WebcamResolution.VGA.getSize());
             webcam = w;
-            w.open(true);
-            w.addWebcamListener(new WebcamListener() {
-                @Override
-                public void webcamOpen(WebcamEvent webcamEvent) {
-
-                }
-
-                @Override
-                public void webcamClosed(WebcamEvent webcamEvent) {
-
-                }
-
-                @Override
-                public void webcamDisposed(WebcamEvent webcamEvent) {
-
-                }
-                int count;
-                @Override
-                public void webcamImageObtained(WebcamEvent webcamEvent) {
-//                    getImage = w.getImage();
-                    //System.out.println(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss:SS").format(new Date()));
-                    count++;
-//                    System.out.println(count);
-//                    stillImage = addDate(getImage);
-//                    Image img = SwingFXUtils.toFXImage(stillImage, null);
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (getImage != null) {
-//                                imgProperty.set(img);
-//                            }
-//                        }
-//                    });
-                }
-            });
+            try { w.open(true); }
+            catch (WebcamLockException e) {
+                System.out.println("Webcam " + webcam.getName() + " in use!");
+            }
             startStream();
         } else {
             System.out.println("No webcam detected");
