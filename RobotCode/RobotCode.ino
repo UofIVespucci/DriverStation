@@ -35,7 +35,7 @@ Error ecmd([](uint8_t code){
     Error::build(vespuChat, code);
 });
 Headlight hcmd([](uint8_t brightness){
-    digitalWrite(HEADLIGHT_PIN, (brightness < 128));
+    digitalWrite(HEADLIGHT_PIN, (brightness != 0));
 });
 CameraSwitch vcmd([](uint8_t onoff){
     T2SlowPulse::pulseWidth((onoff)? 16 : 19, 255, false);

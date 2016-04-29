@@ -7,7 +7,7 @@ import javafx.scene.input.KeyCode;
 
 public class GUImgr extends GUIManager {
     //Will make adjustable via GUI later
-    private short speed = 255;
+    private short speed = 50;
 
     @Override protected void initRobotCommandListener(DirectionButtons db){
         db.stateProperty().addListener( (observable, olds, news) -> {
@@ -42,7 +42,7 @@ public class GUImgr extends GUIManager {
         System.out.println("Set camera to "+state);
         if(t==null) return;
         t.send(com.VespuChat.messages.CameraSwitch.build(
-            state ? (byte)255 : (byte)0)
+            state ? (byte)1 : (byte)0)
         );
         //Handle Switch
     }
