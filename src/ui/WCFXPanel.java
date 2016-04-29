@@ -29,8 +29,9 @@ public class WCFXPanel extends BorderPane {
     private Webcam webcam;
     private BufferedImage getImage;
     private BufferedImage stillImage;
-    private boolean isStreaming = false;
-    private ObjectProperty<Image> imgProperty = new SimpleObjectProperty<Image>();
+    public ObjectProperty<Image> imgProperty = new SimpleObjectProperty<Image>();
+    public ObjectProperty<BufferedImage> stillProp = new SimpleObjectProperty<>();
+    private Streamer activeStreamer;
 
     public WCFXPanel() {
         wcImg = new ImageView();
@@ -62,37 +63,16 @@ public class WCFXPanel extends BorderPane {
     }
 
     protected void startStream() {
-        isStreaming = true;
-        Task<Void> stream = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                while (isStreaming) {
-                    try {
-                        if ((getImage = webcam.getImage()) != null) {
-                            stillImage = addDate(getImage);
-                            Image img = SwingFXUtils.toFXImage(stillImage, null);
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (getImage != null) {
-                                        imgProperty.set(img);
-                                    }
-                                }
-                            });
-                            getImage.flush();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                return null;
-            }
-        };
+        if (activeStreamer == null || !activeStreamer.getIsStreaming()) {
+            activeStreamer = new Streamer(webcam, stillProp, imgProperty, 8);
+            activeStreamer.start();
+        }
 
-        Thread thread = new Thread(stream);
-        thread.setDaemon(true);
-        thread.start();
         wcImg.imageProperty().bind(imgProperty);
+    }
+
+    protected void stopStream() {
+        activeStreamer.stop();
     }
 
     private void initWebcam()
@@ -115,7 +95,6 @@ public class WCFXPanel extends BorderPane {
         Main.guiManager.stopRecording();
         if (webcam != null) webcam.close();
         if (w != null) {
-            isStreaming = false;
             w.close();
             w.setViewSize(WebcamResolution.VGA.getSize());
             webcam = w;
@@ -129,36 +108,11 @@ public class WCFXPanel extends BorderPane {
         }
     }
 
-    public BufferedImage addDate(BufferedImage image) {
-
-        int w = image.getWidth();
-        int h = image.getHeight();
-        String cameraText = (cameraFace) ? "FRONT CAMERA" : "REVERSE CAMERA";
-
-        BufferedImage modified = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-
-        Graphics2D g2 = modified.createGraphics();
-        g2.drawImage(image, null, 0, 0);
-
-        g2.drawString(new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(new Date()), 25, 25);
-        g2.drawString(cameraText, 25, image.getHeight()-25);
-        g2.dispose();
-
-        modified.flush();
-
-        return modified;
-    }
-
-    public void setCameraFace(boolean isFront)
-    {
-        cameraFace = isFront;
-    }
-
     public BufferedImage getStillImage()
     {
         if (stillImage!=null) return stillImage;
         else return null;
     }
 
-    public boolean getStreamingStatus(){ return isStreaming; }
+    public boolean getStreamingStatus(){ return activeStreamer.getIsStreaming(); }
 }

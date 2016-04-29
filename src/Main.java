@@ -57,4 +57,8 @@ public class Main extends Application{
         jtf.setText(jtf.getText() + newText);
     }
 
+    @Override
+    public void stop(){
+        guiManager.closeStream();
+    }
 }

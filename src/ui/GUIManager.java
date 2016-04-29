@@ -103,7 +103,7 @@ public class GUIManager {
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
-        buttonSelectorContainer.getChildren().addAll(buttonSelector, new VBoxDivider(), toolboxContainer);
+        buttonSelectorContainer.getChildren().addAll(toolboxContainer);
         buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
         buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
 
@@ -116,9 +116,9 @@ public class GUIManager {
 
     private void startRecording() {
         BufferedImage still = wcfxPanel.getStillImage();
-        if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus() && still != null) {
+        if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus()) {
             videoOverlay.setRecording(true);
-            rManager.record("TestFile.mp4");
+            rManager.record("TestFile.mp4", wcfxPanel.stillProp, 4);
         }
         else System.err.println(
                 "Error in recording request, either already recording, not streaming, or still image is null");
@@ -182,5 +182,9 @@ public class GUIManager {
 
     public void setBatteryIndicator(BatteryStatus batteryStatus){
         videoOverlay.setBatteryLbl(batteryStatus);
+    }
+
+    public void closeStream() {
+        wcfxPanel.stopStream();
     }
 }
