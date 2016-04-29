@@ -193,7 +193,7 @@
     -fx-padding: 10;
     -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
     -fx-text-fill: black;
-    -fx-border-color: black;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
 }
 
 .split-pane *.split-pane-divider {

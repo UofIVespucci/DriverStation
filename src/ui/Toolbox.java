@@ -23,7 +23,7 @@ public class Toolbox extends ScrollPane{
     private ToggleButton lightBlueTB;
     private ToggleButton cameraSwitchTB;
     private ToggleButton recordTB;
-    private Slider brightnessSlider;
+    private ToggleButton brightnessTB;
     private Image sunImg;
     private ImageView sunView;
     private Image moonImg;
@@ -62,7 +62,8 @@ public class Toolbox extends ScrollPane{
         brightnessGrid      = new GridPane();
         brightnessAnchor    = new AnchorPane();
         brightnessLbl       = new Label ("HEADLIGHT");
-        brightnessSlider    = new Slider();
+//        brightnessSlider    = new Slider();
+        brightnessTB        = new ToggleButton("LED ON");
         sunImg              = new Image("ui/toolbox/Sun-50i.png");
         moonImg             = new Image("ui/toolbox/Moon-50i.png");
         sunView             = new ImageView();
@@ -109,7 +110,7 @@ public class Toolbox extends ScrollPane{
         initWebcamDropDown();
         initRobotPane();
 
-        toolsVBox.getChildren().addAll(scpOver, wcOver, lightColorOver, brightnessOver, cameraSwitchOver, recordOver);
+        toolsVBox.getChildren().addAll(scpOver, wcOver, brightnessOver, cameraSwitchOver, recordOver);
         toolsVBox.getStyleClass().add("toolbox");
 
         toolsVBox.setVgrow(lightColorOver, Priority.ALWAYS);
@@ -149,6 +150,7 @@ public class Toolbox extends ScrollPane{
         wcOver.getStyleClass().add("tool-item-box");
         wcConnectTB.getStyleClass().add("tool-button");
         wcRefreshTB.getStyleClass().add("tool-button");
+        brightnessTB.getStyleClass().add("tool-button");
 
         wcComboBox.setPrefWidth(ALLWIDTH);
         wcConnectTB.setPrefWidth(ALLWIDTH);
@@ -215,40 +217,34 @@ public class Toolbox extends ScrollPane{
     }
 
     private void initBrightness(){
-        brightnessGrid.add(brightnessAnchor, 0, 1);
-        brightnessGrid.add(brightnessSlider, 0, 2);
+//        brightnessGrid.add(brightnessAnchor, 0, 1);
+        brightnessGrid.add(brightnessTB, 0, 2);
         brightnessGrid.setVgap(5);
         brightnessGrid.setPrefWidth(ALLWIDTH);
+        brightnessTB.prefWidthProperty().bind(brightnessGrid.widthProperty());
 
-        brightnessAnchor.getChildren().addAll(sunView, moonView);
-        brightnessAnchor.setRightAnchor(moonView, 0.0);
-        brightnessAnchor.setTopAnchor(sunView, 0.0);
-        brightnessAnchor.setLeftAnchor(sunView, 0.0);
-        brightnessAnchor.setTopAnchor(moonView, 0.0);
+//        brightnessAnchor.getChildren().addAll(sunView, moonView);
+//        brightnessAnchor.setRightAnchor(moonView, 0.0);
+//        brightnessAnchor.setTopAnchor(sunView, 0.0);
+//        brightnessAnchor.setLeftAnchor(sunView, 0.0);
+//        brightnessAnchor.setTopAnchor(moonView, 0.0);
 
         brightnessOver.add(brightnessLbl, 0, 0);
         brightnessOver.add(brightnessGrid, 0, 1);
 
-        sunView.setImage(sunImg);
-        moonView.setImage(moonImg);
+//        sunView.setImage(sunImg);
+//        moonView.setImage(moonImg);
 
         brightnessGrid.getStyleClass().add("tool-item");
         brightnessOver.getStyleClass().add("tool-item-box");
-        brightnessSlider.getStyleClass().add("tool-button");
 
         brightnessLbl.setPrefWidth(ALLWIDTH);
 
-        brightnessSlider.setMin(1);
-        brightnessSlider.setMax(100);
-        brightnessSlider.setValue(1);
-        brightnessSlider.setMajorTickUnit(50);
-        brightnessSlider.setMinorTickCount(5);
-        brightnessSlider.setBlockIncrement(10);
-
-        brightnessSlider.valueProperty().addListener(new ChangeListener<Number>() {
+        brightnessTB.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Main.guiManager.ledBrightness((double)newValue);
+            public void handle(ActionEvent event) {
+                Main.guiManager.ledBrightness(brightnessTB.isSelected() ? 1.0 : 0.0);
+                brightnessTB.setText(brightnessTB.isSelected() ? "LED ON" : "LED OFF");
             }
         });
     }
