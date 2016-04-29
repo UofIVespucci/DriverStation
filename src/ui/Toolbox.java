@@ -211,7 +211,7 @@ public class Toolbox extends ScrollPane{
         cameraSwitchTB.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Main.guiManager.cameraSwitch();
+                Main.guiManager.cameraSwitch(cameraSwitchTB.isSelected());
             }
         });
     }

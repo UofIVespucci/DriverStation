@@ -2,6 +2,7 @@
 #include "messages/Error.h"
 #include "messages/Headlight.h"
 #include "messages/PositionData.h"
+#include "messages/CameraSwitch.h"
 #include "serial/Decoder.h"
 #include "VespuChat.h"
 #include "Encoder.h"
@@ -34,15 +35,12 @@ Error ecmd([](uint8_t code){
     Error::build(vespuChat, code);
 });
 Headlight hcmd([](uint8_t brightness){
-    if(brightness < 128){
-        digitalWrite(HEADLIGHT_PIN, LOW);
-        T2SlowPulse::pulseWidth(16, 255, false);
-    } else {
-        digitalWrite(HEADLIGHT_PIN, HIGH);
-        T2SlowPulse::pulseWidth(19, 255, false);
-    }
+    digitalWrite(HEADLIGHT_PIN, (brightness < 128));
 });
-Receiver* receivers[] = { &mcmd, &ecmd, &hcmd };
+CameraSwitch vcmd([](uint8_t onoff){
+    T2SlowPulse::pulseWidth((onoff)? 16 : 19, 255, false);
+});
+Receiver* receivers[] = { &mcmd, &ecmd, &hcmd, &vcmd };
 VespuChat vespuChat(Serial, receivers, sizeof(receivers)/sizeof(receivers[0]));
 
 void setup(){

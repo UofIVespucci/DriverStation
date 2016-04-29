@@ -38,7 +38,12 @@ public class GUImgr extends GUIManager {
         System.out.println("Command " + l + " " + r);
     }
 
-    public void cameraSwitch() {
+    public void cameraSwitch(boolean state) {
+        System.out.println("Set camera to "+state);
+        if(t==null) return;
+        t.send(com.VespuChat.messages.CameraSwitch.build(
+            state ? (byte)255 : (byte)0)
+        );
         //Handle Switch
     }
 
