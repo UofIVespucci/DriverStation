@@ -24,6 +24,7 @@ import com.serial.SerialOutputStream;
 import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
+import com.control.DirectionButtons;
 
 //import static org.mockito.Mockito.*;
 
@@ -56,6 +57,7 @@ public class GUIManager {
     private WCFXPanel wcfxPanel;
     private RecordingManager rManager;
     private TextField jtf;
+    private DirectionButtons robotKeys;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
@@ -74,12 +76,22 @@ public class GUIManager {
         initKeyListener();
         readerList = new ArrayList<PacketReader>();
         readerList.add(new MotorCommand(){
-            protected void onReceive(byte left, byte right){
+            protected void onReceive(short left, short right){
                 System.out.println("Received "+left+", "+right);
             }
         });
-        connectListener = new SerialConnectListener() {
-            public void connectionEstablished(SerialPort newConnection) {
+        readerList.add(new com.VespuChat.messages.Error(){
+            protected void onReceive(byte num){
+                System.out.println("Error  "+num);
+            }
+        });
+        readerList.add(new com.VespuChat.messages.PositionData(){
+            protected void onReceive(short left, short right, short voltage){
+                System.out.println("Encoders at "+left+", "+right+" "+voltage);
+            }
+        });
+        connectListener = new SerialConnectListener(){
+            public void connectionEstablished(SerialPort newConnection){
                 t = new VespuChatTransmitter(new SerialOutputStream(newConnection));
                 r = new VespuChatReceiver(new SerialInputStream(newConnection), readerList);
             }
@@ -132,22 +144,13 @@ public class GUIManager {
     }
 
     private void initKeyListener() {
-        //Add keyboard listener for the scene
-        scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
-            Main.guiManager.handleInput(event.getCode());
-            event.consume();
-        });
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-            Main.guiManager.handleUpInput(event.getCode());
-            event.consume();
-        });
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                resizeUI();
-            }
-        });
+        robotKeys = new DirectionButtons();
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, robotKeys);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, robotKeys);
+        initRobotCommandListener(robotKeys);
     }
+
+    protected void initRobotCommandListener(DirectionButtons db){}
 
     private void initSerial() {
         spel = new SerialPortEventListener(){

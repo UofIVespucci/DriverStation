@@ -7,31 +7,31 @@
 
 typedef struct PositionDataconv {
     uint8_t sig;
-    float x;
-    float y;
-    float z;
+    int16_t leftTrack;
+    int16_t rightTrack;
+    int16_t voltage;
 } __attribute__((__packed__)) PositionDataconv;
-typedef void (*_handlePositionData) (float x, float y, float z);
+typedef void (*_handlePositionData) (int16_t leftTrack, int16_t rightTrack, int16_t voltage);
 class PositionData : public Receiver {
 private:
    _handlePositionData hF;
 public:
     PositionData(_handlePositionData hF): hF(hF) {}
     int claim(char data) {
-        return (data == 3)? 13 : -1;
+        return (data == 3)? 7 : -1;
     }
     void handle(const char* buf, int len){
         PositionDataconv *data = (PositionDataconv*) buf;
-        hF(data->x, data->y, data->z);
+        hF(data->leftTrack, data->rightTrack, data->voltage);
     }
-    static void build(VespuChat& vct, float x, float y, float z){
-        uint8_t buf[13];
+    static void build(VespuChat& vct, int16_t leftTrack, int16_t rightTrack, int16_t voltage){
+        uint8_t buf[7];
         PositionDataconv *data = (PositionDataconv*) buf;
         data->sig = 3;
-        data->x = x;
-        data->y = y;
-        data->z = z;
-        vct.deliver(buf, 13);
+        data->leftTrack = leftTrack;
+        data->rightTrack = rightTrack;
+        data->voltage = voltage;
+        vct.deliver(buf, 7);
     }
 };
 #endif

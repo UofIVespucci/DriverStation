@@ -2,8 +2,8 @@
 <messagespec>
     <message name="donusecommandzero"/>
     <message name="MotorCommand">
-        <value name="left" type="uint8"/>
-        <value name="right" type="uint8"/>
+        <value name="left" type="int16"/>
+        <value name="right" type="int16"/>
     </message>
     <message name="AccelData">
         <value name="xgs" type="float"/>
@@ -11,11 +11,17 @@
         <value name="zgs" type="float"/>
     </message>
     <message name="PositionData">
-        <value name="x" type="float"/>
-        <value name="y" type="float"/>
-        <value name="z" type="float"/>
+        <value name="leftTrack" type="int16"/>
+        <value name="rightTrack" type="int16"/>
+        <value name="voltage" type="int16"/>
     </message>
     <message name="Error">
         <value name="num" type="uint8"/>
+    </message>
+    <message name="Headlight">
+        <value name="brightness" type="uint8"/>
+    </message>
+    <message name="CameraSwitch">
+        <value name="toggle" type="uint8"/>
     </message>
 </messagespec>
