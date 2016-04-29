@@ -52,6 +52,7 @@ private:
             comms->read();
         }
     }
+public:
     /** polls the Qik's value for `param` */
     uint8_t getParameter(Parameter param){
         clearComms();

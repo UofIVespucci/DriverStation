@@ -49,10 +49,10 @@
         </jar>
     </target>
 
-    <target name="jar" depends="extDeps">
+    <target name="jar" depends="compile">
         <jar destfile="${outputJar}" basedir="${outputDir}">
             <fileset dir="${resourceDir}" />
-            <zipfileset src="${outputDir}/deps.jar" excludes="META-INF/*.SF" />
+
 
             <!--<restrict>-->
                 <!--<name name="**/*.class"/>-->

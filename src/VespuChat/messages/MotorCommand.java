@@ -6,23 +6,23 @@ import java.nio.ByteOrder;
 
 public abstract class MotorCommand implements PacketReader {
     public int claim(byte data){
-        return (data == 1)? 3 : -1;
+        return (data == 1)? 5 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
         buf.order(ByteOrder.LITTLE_ENDIAN);
         byte  sig = buf.get();
-        byte left = buf.get();
-        byte right = buf.get();
+        short left = buf.getShort();
+        short right = buf.getShort();
         onReceive(left, right);
     }
-    public static byte[] build(byte left, byte right){
-        ByteBuffer buf = ByteBuffer.allocate(3);
+    public static byte[] build(short left, short right){
+        ByteBuffer buf = ByteBuffer.allocate(5);
         buf.order(ByteOrder.LITTLE_ENDIAN);
         buf.put((byte)1);
-        buf.put(left);
-        buf.put(right);
+        buf.putShort(left);
+        buf.putShort(right);
         return buf.array();
     }
-    protected abstract void onReceive(byte left, byte right);
+    protected abstract void onReceive(short left, short right);
 }

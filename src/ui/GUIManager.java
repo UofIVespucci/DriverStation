@@ -99,7 +99,7 @@ public class GUIManager
         initKeyListener();
         readerList = new ArrayList<PacketReader>();
         readerList.add(new MotorCommand(){
-            protected void onReceive(byte left, byte right){
+            protected void onReceive(short left, short right){
                 System.out.println("Received "+left+", "+right);
             }
         });
@@ -109,8 +109,8 @@ public class GUIManager
             }
         });
         readerList.add(new com.VespuChat.messages.PositionData(){
-            protected void onReceive(short left, short right){
-                System.out.println("Encoders at "+left+", "+right);
+            protected void onReceive(short left, short right, short voltage){
+                System.out.println("Encoders at "+left+", "+right+" "+voltage);
             }
         });
         connectListener = new SerialConnectListener(){
