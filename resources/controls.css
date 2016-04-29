@@ -189,6 +189,13 @@
     -fx-text-fill: white;
 }
 
+.tool-button:selected {
+    -fx-padding: 10;
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-text-fill: black;
+    -fx-border-color: black;
+}
+
 .split-pane *.split-pane-divider {
    -fx-padding: 0 1 0 1;
    -fx-border-color:  transparent;

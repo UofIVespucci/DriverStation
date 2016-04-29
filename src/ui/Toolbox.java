@@ -205,6 +205,13 @@ public class Toolbox extends ScrollPane{
         cameraSwitchTB.getStyleClass().add("tool-button");
 
         cameraSwitchLbl.setPrefWidth(ALLWIDTH);
+
+        cameraSwitchTB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Main.guiManager.cameraSwitch();
+            }
+        });
     }
 
     private void initBrightness(){

@@ -32,6 +32,10 @@ public class GUImgr extends GUIManager {
         System.out.println("Sending " + l + " " + r);
     }
 
+    public void cameraSwitch() {
+        //Handle Switch
+    }
+
     public void ledBrightness(double d){
         System.out.println("LED Brightness changed to: " + (1-d));
     }
