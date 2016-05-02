@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -14,14 +15,13 @@ import ui.RecordingManager;
 import ui.WCFXPanel;
 import ui.WebcamDropDown;
 
-import java.awt.image.BufferedImage;
-
 public class Toolbox extends ScrollPane {
     ControlsCategory cameraControl;
     ControlsCategory connectControl;
     ControlsCategory cameraFaceControl;
     ControlsCategory lightControl;
     ControlsCategory recordControl;
+    ControlsCategory speedControl;
 
     public Toolbox(SerialConnectPanel scp, RecordingManager rManager, WCFXPanel wcfxPanel) {
         VBox toolsVBox      = new VBox();
@@ -31,14 +31,24 @@ public class Toolbox extends ScrollPane {
         cameraFaceControl  = new ControlsCategory("CAMERA FACE");
         lightControl       = new ControlsCategory("HEADLIGHT");
         recordControl      = new ControlsCategory("RECORD");
+        speedControl       = new ControlsCategory("MOTOR SPEED");
 
         initCameraControl();
         initCameraFaceControl();
         initLightControl();
         initRecordControl(rManager, wcfxPanel);
+        initSpeedControl();
         connectControl.addControl(scp, null);
 
-        toolsVBox.getChildren().addAll(cameraControl, connectControl, cameraFaceControl, lightControl, recordControl);
+        toolsVBox.getChildren().addAll(
+                cameraControl,
+                connectControl,
+                cameraFaceControl,
+                lightControl,
+                recordControl,
+                speedControl
+        );
+
         toolsVBox.getStyleClass().add("toolbox");
         for (Node n : toolsVBox.getChildren()) {
             VBox.setVgrow(n, Priority.ALWAYS);
@@ -107,5 +117,12 @@ public class Toolbox extends ScrollPane {
                 else System.err.println("Error in recording request, wcfxPanel probably isn't streaming");
             }
         });
+    }
+
+    //Will need to take a reference to robotComm object
+    private void initSpeedControl() {
+        Slider speedSlider = new Slider(0, 100, 0);
+
+        speedControl.addControl(speedSlider, null);
     }
 }

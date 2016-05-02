@@ -37,7 +37,7 @@ public class RecordingManager {
     }
 
     public void stopRecording() {
-        activeRecorder.stop();
+        if (activeRecorder != null) activeRecorder.stop();
         videoOverlay.setRecording(false);
     }
 

@@ -156,5 +156,6 @@ public class GUIManager {
 
     public void closeStream() {
         wcfxPanel.stopStream();
+        rManager.stopRecording();
     }
 }
