@@ -4,6 +4,7 @@ import com.VespuChat.VespuChatTransmitter;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import com.serial.SerialOutputStream;
 import com.serial.*;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import jssc.*;
 import javax.swing.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -43,6 +45,13 @@ public class Main extends Application{
         stage.setHeight(480);
         stage.show();
         scene.getStylesheets().add("controls.css");
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                guiManager.closeStream();
+            }
+        });
     }
 
     private Scene createScene(Stage stage) {
@@ -55,10 +64,5 @@ public class Main extends Application{
 
     private void updateText(String newText){
         jtf.setText(jtf.getText() + newText);
-    }
-
-    @Override
-    public void stop(){
-        guiManager.closeStream();
     }
 }
