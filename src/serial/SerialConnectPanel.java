@@ -3,24 +3,14 @@ package serial;
 import com.serial.SerialConnectListener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.*;
-import javafx.geometry.*;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import jssc.*;
-import ui.Toolbox;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.util.*;
+import ui.toolbox.ControlsCategory;
 
 public class SerialConnectPanel extends VBox {
     private static class BaudRate{
@@ -59,7 +49,7 @@ public class SerialConnectPanel extends VBox {
 
     public SerialConnectPanel(SerialConnectListener listener){
         this.listener = listener;
-        refreshButton = new Button();
+        refreshButton = new Button("REFRESH");
 //        refreshButton.setText("Refresh");
         refreshButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -69,8 +59,7 @@ public class SerialConnectPanel extends VBox {
                 addSerialList(dropDown);
             }
         });
-        connectButton = new Button();
-        connectButton.setText("CONNECT");
+        connectButton = new Button("CONNECT");
         connectButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(javafx.event.ActionEvent event) {
@@ -92,24 +81,13 @@ public class SerialConnectPanel extends VBox {
         }
         baudSelect.setVisible(false);
         baudSelect.managedProperty().bind(baudSelect.visibleProperty());
-        getChildren().add(dropDown);
-        getChildren().add(connectButton);
-        getChildren().add(refreshButton);
-        getChildren().add(baudSelect);
-        dropDown.setPrefWidth(Toolbox.ALLWIDTH);
-        connectButton.setPrefWidth(Toolbox.ALLWIDTH);
-        refreshButton.setPrefWidth(Toolbox.ALLWIDTH);
-        baudSelect.setPrefWidth(Toolbox.ALLWIDTH);
-        setPadding(new Insets(5, 5, 5, 5));
+        getChildren().addAll(dropDown, connectButton, refreshButton, baudSelect);
+        for (Node n : getChildren()) ((Control) n).setMinWidth(ControlsCategory.ALLWIDTH);
+
         setSpacing(5);
-//        setStyle("-fx-background-color: #336699;");
         setStyle("-fx-background-image: url('footer_lodyasS.png');");
         connectButton.getStyleClass().add("tool-button");
         refreshButton.getStyleClass().add("tool-button");
-//        refreshButton.getStyleClass().add("pane-record");
-//        refreshButton.setContentDisplay(ContentDisplay.TOP);
-        refreshButton.setText("REFRESH");
-
     }
 
     public void setBaudRate(int baudRate){

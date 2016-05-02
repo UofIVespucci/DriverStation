@@ -36,7 +36,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) {
-        Scene scene = createScene();
+        Scene scene = createScene(stage);
         stage.setTitle("Vespucci");
         stage.setScene(scene);
         stage.setWidth(640);
@@ -45,7 +45,7 @@ public class Main extends Application{
         scene.getStylesheets().add("controls.css");
     }
 
-    private Scene createScene() {
+    private Scene createScene(Stage stage) {
         return (guiManager.createScene());
     }
 

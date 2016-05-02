@@ -1,23 +1,17 @@
 package ui;
 
-import com.Main;
-import com.VespuChat.VespuChat;
 import com.VespuChat.VespuChatReceiver;
 import com.VespuChat.VespuChatTransmitter;
 import com.github.sarxos.webcam.*;
-import input.KeyControl;
 import javafx.application.Platform;
-import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.*;
+import javafx.stage.Stage;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -26,27 +20,19 @@ import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
 import com.control.DirectionButtons;
+import ui.toolbox.Toolbox;
 
 //import static org.mockito.Mockito.*;
 
 import java.awt.*;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.PipedOutputStream;
-import java.io.PipedInputStream;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.swing.*;
-
 public class GUIManager {
-    private ButtonSelector buttonSelector;
     private Toolbox toolbox;
     private VideoOverlay videoOverlay;
-    private VBox buttonSelectorContainer;
+//    private VBox buttonSelectorContainer;
     private HBox toolboxContainer;
     private StackPane wcStack;
     private Scene scene;
@@ -64,15 +50,13 @@ public class GUIManager {
     protected VespuChatReceiver r;
 
     public Scene createScene() {
-        toolbox = new Toolbox();
-        buttonSelector = new ButtonSelector();
         videoOverlay = new VideoOverlay();
-        buttonSelectorContainer = new VBox();
+//        buttonSelectorContainer = new VBox();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
         wcfxPanel = new WCFXPanel();
         rManager = new RecordingManager(wcfxPanel);
-        scene = new Scene(buttonSelectorContainer, Color.ALICEBLUE);
+        scene = new Scene(toolboxContainer, Color.ALICEBLUE);
 
         initKeyListener();
         readerList = new ArrayList<PacketReader>();
@@ -115,7 +99,8 @@ public class GUIManager {
             }
         };
         initSerial();
-        toolbox.setScp(scp);
+        Toolbox toolbox = new Toolbox(scp);
+//        toolbox.setScp(scp);
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
@@ -125,9 +110,18 @@ public class GUIManager {
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
-        buttonSelectorContainer.getChildren().addAll(toolboxContainer);
-        buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
-        buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
+//        buttonSelectorContainer.getChildren().addAll(toolboxContainer);
+//        buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
+//        buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
+
+        toolboxContainer.maxHeightProperty().bind(scene.heightProperty());
+
+//        scene.getWindow().heightProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                resizeUI();
+//            }
+//        });
 
         return scene;
     }
@@ -188,8 +182,8 @@ public class GUIManager {
 
     public void resizeUI() {
         if (toolbox!=null && wcStack!=null) {
-            toolbox.setMaxHeight((scene.getHeight() - buttonSelector.getHeight()));
-            wcStack.setMaxHeight((scene.getWindow().getHeight() - buttonSelector.getHeight()));
+            toolbox.setMaxHeight(scene.getHeight());
+            wcStack.setMaxHeight(scene.getWindow().getHeight());
         }
     }
 
