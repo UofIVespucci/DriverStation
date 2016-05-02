@@ -6,6 +6,7 @@ import com.VespuChat.VespuChatReceiver;
 import com.VespuChat.VespuChatTransmitter;
 import com.github.sarxos.webcam.*;
 import input.KeyControl;
+import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -87,6 +88,15 @@ public class GUIManager {
         });
         readerList.add(new com.VespuChat.messages.PositionData(){
             protected void onReceive(short left, short right, short voltage){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (voltage > 300) setBatteryIndicator(BatteryStatus.FULL);
+                        else if (voltage > 290) setBatteryIndicator(BatteryStatus.HALF);
+                        else if (voltage > 280) setBatteryIndicator(BatteryStatus.LOW);
+                        else setBatteryIndicator(BatteryStatus.CRITICAL);
+                    }
+                });
                 System.out.println("Encoders at "+left+", "+right+" "+voltage);
             }
         });
