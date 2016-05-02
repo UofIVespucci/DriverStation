@@ -27,8 +27,6 @@ public class WCFXPanel extends BorderPane {
     private boolean cameraFace = true;
     private ImageView wcImg;
     private Webcam webcam;
-    private BufferedImage getImage;
-    private BufferedImage stillImage;
     public ObjectProperty<Image> imgProperty = new SimpleObjectProperty<Image>();
     public ObjectProperty<BufferedImage> stillProp = new SimpleObjectProperty<>();
     private Streamer activeStreamer;
@@ -72,7 +70,8 @@ public class WCFXPanel extends BorderPane {
     }
 
     protected void stopStream() {
-        if (activeStreamer != null) activeStreamer.stop();
+        if (activeStreamer != null)
+            activeStreamer.stop();
     }
 
     private void initWebcam()
@@ -109,11 +108,11 @@ public class WCFXPanel extends BorderPane {
         }
     }
 
-    public BufferedImage getStillImage()
-    {
-        if (stillImage!=null) return stillImage;
-        else return null;
-    }
+//    public BufferedImage getStillImage()
+//    {
+//        if (stillImage!=null) return stillImage;
+//        else return null;
+//    }
 
     public boolean getStreamingStatus(){ return activeStreamer.getIsStreaming(); }
 }

@@ -1,8 +1,6 @@
 package ui.toolbox;
 
 import com.Main;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -11,41 +9,45 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 import serial.SerialConnectPanel;
+import ui.RecordingManager;
+import ui.WCFXPanel;
 import ui.WebcamDropDown;
+
+import java.awt.image.BufferedImage;
 
 public class Toolbox extends ScrollPane {
     ControlsCategory cameraControl;
     ControlsCategory connectControl;
     ControlsCategory cameraFaceControl;
     ControlsCategory lightControl;
+    ControlsCategory recordControl;
 
-    public Toolbox(SerialConnectPanel scp) {
+    public Toolbox(SerialConnectPanel scp, RecordingManager rManager, WCFXPanel wcfxPanel) {
         VBox toolsVBox      = new VBox();
 
         cameraControl      = new ControlsCategory("CAMERA");
         connectControl     = new ControlsCategory("COMMUNICATION");
         cameraFaceControl  = new ControlsCategory("CAMERA FACE");
         lightControl       = new ControlsCategory("HEADLIGHT");
+        recordControl      = new ControlsCategory("RECORD");
 
         initCameraControl();
         initCameraFaceControl();
         initLightControl();
+        initRecordControl(rManager, wcfxPanel);
         connectControl.addControl(scp, null);
 
-        toolsVBox.getChildren().addAll(cameraControl, connectControl, cameraFaceControl, lightControl);
+        toolsVBox.getChildren().addAll(cameraControl, connectControl, cameraFaceControl, lightControl, recordControl);
         toolsVBox.getStyleClass().add("toolbox");
         for (Node n : toolsVBox.getChildren()) {
-            toolsVBox.setVgrow(n, Priority.ALWAYS);
+            VBox.setVgrow(n, Priority.ALWAYS);
             ((ControlsCategory) n).initStructure();
         }
         toolsVBox.setSpacing(5);
         toolsVBox.setMinHeight(0);
         toolsVBox.maxHeightProperty().bind(heightProperty());
         setMinHeight(0);
-//        maxHeightProperty().bind(windowHeightProp);
 
         getStyleClass().add("tool-scrollpane");
         setContent(toolsVBox);
@@ -84,11 +86,27 @@ public class Toolbox extends ScrollPane {
 
     private void initLightControl() {
         ToggleButton brightnessTB = new ToggleButton("LED OFF");
+
         lightControl.addControl(brightnessTB, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Main.guiManager.ledBrightness(brightnessTB.isSelected() ? 0.0 : 1.0);
                 brightnessTB.setText(brightnessTB.isSelected() ? "LED ON" : "LED OFF");
+            }
+        });
+    }
+
+    private void initRecordControl(RecordingManager rManager, WCFXPanel wcfxPanel) {
+        ToggleButton recordTB = new ToggleButton("RECORD");
+
+        recordControl.addControl(recordTB, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus()) {
+                    rManager.record("TestFile.mp4", wcfxPanel.stillProp, 4);
+                }
+                else if (rManager.getRecordingStatus()) rManager.stopRecording();
+                else System.err.println("Error in recording request, wcfxPanel probably isn't streaming");
             }
         });
     }

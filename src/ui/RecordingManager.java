@@ -11,6 +11,7 @@ import java.io.File;
 public class RecordingManager {
     Recorder activeRecorder;
     WCFXPanel wcfxPanel;
+    VideoOverlay videoOverlay;
     File outFile;
 
     private ChangeListener<Image> imageChangeListener = new ChangeListener<Image>() {
@@ -20,8 +21,9 @@ public class RecordingManager {
         }
     };
 
-    public RecordingManager(WCFXPanel w) {
+    public RecordingManager(WCFXPanel w, VideoOverlay getVideoOverlay) {
         wcfxPanel = w;
+        videoOverlay = getVideoOverlay;
     }
 
     public void record(String filename, ObjectProperty<BufferedImage> imageObjectProperty, int fps) {
@@ -30,11 +32,13 @@ public class RecordingManager {
             activeRecorder.start();
         }
 
+        videoOverlay.setRecording(true);
         System.out.println("START RECORDING");
     }
 
     public void stopRecording() {
         activeRecorder.stop();
+        videoOverlay.setRecording(false);
     }
 
     public boolean getRecordingStatus(){

@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GUIManager {
-    private Toolbox toolbox;
     private VideoOverlay videoOverlay;
-//    private VBox buttonSelectorContainer;
     private HBox toolboxContainer;
     private StackPane wcStack;
     private Scene scene;
@@ -51,11 +49,10 @@ public class GUIManager {
 
     public Scene createScene() {
         videoOverlay = new VideoOverlay();
-//        buttonSelectorContainer = new VBox();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
         wcfxPanel = new WCFXPanel();
-        rManager = new RecordingManager(wcfxPanel);
+        rManager = new RecordingManager(wcfxPanel, videoOverlay);
         scene = new Scene(toolboxContainer, Color.ALICEBLUE);
 
         initKeyListener();
@@ -99,8 +96,7 @@ public class GUIManager {
             }
         };
         initSerial();
-        Toolbox toolbox = new Toolbox(scp);
-//        toolbox.setScp(scp);
+        Toolbox toolbox = new Toolbox(scp, rManager, wcfxPanel);
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
@@ -110,34 +106,13 @@ public class GUIManager {
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
 
-//        buttonSelectorContainer.getChildren().addAll(toolboxContainer);
-//        buttonSelectorContainer.setVgrow(toolboxContainer, Priority.ALWAYS);
-//        buttonSelectorContainer.maxHeightProperty().bind(scene.heightProperty());
-
         toolboxContainer.maxHeightProperty().bind(scene.heightProperty());
-
-//        scene.getWindow().heightProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                resizeUI();
-//            }
-//        });
 
         return scene;
     }
 
     public void setWebcam(Webcam w) {
         wcfxPanel.setWebcam(w);
-    }
-
-    private void startRecording() {
-        BufferedImage still = wcfxPanel.getStillImage();
-        if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus()) {
-            videoOverlay.setRecording(true);
-            rManager.record("TestFile.mp4", wcfxPanel.stillProp, 4);
-        }
-        else System.err.println(
-                "Error in recording request, either already recording, not streaming, or still image is null");
     }
 
     protected void stopRecording() {
@@ -173,18 +148,6 @@ public class GUIManager {
 
     public ReadOnlyDoubleProperty getVOHProperty() {
         return videoOverlay.heightProperty();
-    }
-
-    public boolean toggleRecording() {
-        if (rManager.getRecordingStatus()) {stopRecording(); return false;}
-        else {startRecording(); return true;}
-    }
-
-    public void resizeUI() {
-        if (toolbox!=null && wcStack!=null) {
-            toolbox.setMaxHeight(scene.getHeight());
-            wcStack.setMaxHeight(scene.getWindow().getHeight());
-        }
     }
 
     public void setBatteryIndicator(BatteryStatus batteryStatus){
