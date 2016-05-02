@@ -45,8 +45,6 @@ public class Toolbox extends ScrollPane {
             ((ControlsCategory) n).initStructure();
         }
         toolsVBox.setSpacing(5);
-        toolsVBox.setMinHeight(0);
-        toolsVBox.maxHeightProperty().bind(heightProperty());
         setMinHeight(0);
 
         getStyleClass().add("tool-scrollpane");
