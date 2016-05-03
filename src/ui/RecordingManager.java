@@ -10,7 +10,6 @@ import java.io.File;
 
 public class RecordingManager {
     Recorder activeRecorder;
-    WCFXPanel wcfxPanel;
     VideoOverlay videoOverlay;
     File outFile;
 
@@ -21,8 +20,7 @@ public class RecordingManager {
         }
     };
 
-    public RecordingManager(WCFXPanel w, VideoOverlay getVideoOverlay) {
-        wcfxPanel = w;
+    public RecordingManager(VideoOverlay getVideoOverlay) {
         videoOverlay = getVideoOverlay;
     }
 
@@ -37,7 +35,7 @@ public class RecordingManager {
     }
 
     public void stopRecording() {
-        if (activeRecorder != null) activeRecorder.stop();
+        if (activeRecorder != null && activeRecorder.getIsRecording()) activeRecorder.stop();
         videoOverlay.setRecording(false);
     }
 

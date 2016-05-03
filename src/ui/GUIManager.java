@@ -49,8 +49,8 @@ public class GUIManager {
         videoOverlay = new VideoOverlay();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
-        wcfxPanel = new WCFXPanel();
-        rManager = new RecordingManager(wcfxPanel, videoOverlay);
+        rManager = new RecordingManager(videoOverlay);
+        wcfxPanel = new WCFXPanel(rManager);
         scene = new Scene(toolboxContainer, Color.ALICEBLUE);
 
         initKeyListener();
@@ -107,17 +107,6 @@ public class GUIManager {
         toolboxContainer.maxHeightProperty().bind(scene.heightProperty());
 
         return scene;
-    }
-
-    public void setWebcam(Webcam w) {
-        wcfxPanel.setWebcam(w);
-    }
-
-    protected void stopRecording() {
-        if (rManager!=null &&  rManager.getRecordingStatus()) {
-            videoOverlay.setRecording(false);
-            rManager.stopRecording();
-        }
     }
 
     private void initKeyListener() {

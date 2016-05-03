@@ -30,8 +30,10 @@ public class WCFXPanel extends BorderPane {
     public ObjectProperty<Image> imgProperty = new SimpleObjectProperty<Image>();
     public ObjectProperty<BufferedImage> stillProp = new SimpleObjectProperty<>();
     private Streamer activeStreamer;
+    private RecordingManager rManager;
 
-    public WCFXPanel() {
+    public WCFXPanel(RecordingManager r) {
+        rManager = r;
         wcImg = new ImageView();
         setCenter(wcImg);
 
@@ -91,7 +93,7 @@ public class WCFXPanel extends BorderPane {
 
     public void setWebcam(Webcam w)
     {
-        Main.guiManager.stopRecording();
+        rManager.stopRecording();
         stopStream();
         if (webcam != null) webcam.close();
         if (w != null) {
@@ -107,12 +109,6 @@ public class WCFXPanel extends BorderPane {
             System.out.println("No webcam detected");
         }
     }
-
-//    public BufferedImage getStillImage()
-//    {
-//        if (stillImage!=null) return stillImage;
-//        else return null;
-//    }
 
     public boolean getStreamingStatus(){ return activeStreamer.getIsStreaming(); }
 }

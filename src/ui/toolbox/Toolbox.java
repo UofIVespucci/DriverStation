@@ -25,12 +25,14 @@ public class Toolbox extends ScrollPane {
     ControlsCategory lightControl;
     ControlsCategory recordControl;
     ControlsCategory speedControl;
+    WCFXPanel wcfxPanel;
 
     public Toolbox(SerialConnectPanel scp,
                    RecordingManager rManager,
-                   WCFXPanel wcfxPanel,
+                   WCFXPanel getwcfxPanel,
                    RobotSpeed robotSpeed) {
         VBox toolsVBox      = new VBox();
+        wcfxPanel = getwcfxPanel;
 
         cameraControl      = new ControlsCategory("CAMERA");
         connectControl     = new ControlsCategory("COMMUNICATION");
@@ -76,7 +78,7 @@ public class Toolbox extends ScrollPane {
         cameraControl.addControl(new Button("CONNECT"), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Main.guiManager.setWebcam(wcDropDown.getSelected());
+                wcfxPanel.setWebcam(wcDropDown.getSelected());
             }
         });
         cameraControl.addControl(new Button("REFRESH"), new EventHandler<ActionEvent>() {
