@@ -1,4 +1,4 @@
-package ui;
+package ui.organization;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

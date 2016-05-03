@@ -1,8 +1,9 @@
-package ui;
+package ui.streaming;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import ui.streaming.BatteryStatus;
 
 public class VideoOverlay extends AnchorPane{
     private static int SPACING = 10;
@@ -30,7 +31,7 @@ public class VideoOverlay extends AnchorPane{
         else {recordLbl.getStyleClass().clear();}
     }
 
-    protected void setBatteryLbl(BatteryStatus batteryStatus){
+    public void setBatteryLbl(BatteryStatus batteryStatus){
         batteryLbl.getStyleClass().clear();
         switch (batteryStatus){
         case FULL:

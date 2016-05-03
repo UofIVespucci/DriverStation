@@ -1,4 +1,4 @@
-package ui;
+package ui.streaming;
 
 /**
  * Created by Lance on 4/28/2016.

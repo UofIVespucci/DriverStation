@@ -13,10 +13,10 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import serial.SerialConnectPanel;
-import ui.RecordingManager;
+import ui.streaming.RecordingManager;
 import ui.RobotSpeed;
-import ui.WCFXPanel;
-import ui.WebcamDropDown;
+import ui.streaming.WCFXPanel;
+import ui.streaming.WebcamDropDown;
 
 public class Toolbox extends ScrollPane {
     ControlsCategory cameraControl;

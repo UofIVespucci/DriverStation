@@ -2,9 +2,7 @@ package ui;
 
 import com.VespuChat.VespuChatReceiver;
 import com.VespuChat.VespuChatTransmitter;
-import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -17,6 +15,11 @@ import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
 import com.control.DirectionButtons;
+import ui.organization.VBoxDivider;
+import ui.streaming.BatteryStatus;
+import ui.streaming.RecordingManager;
+import ui.streaming.VideoOverlay;
+import ui.streaming.WCFXPanel;
 import ui.toolbox.Toolbox;
 
 //import static org.mockito.Mockito.*;

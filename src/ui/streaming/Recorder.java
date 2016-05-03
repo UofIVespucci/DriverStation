@@ -1,4 +1,4 @@
-package ui;
+package ui.streaming;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

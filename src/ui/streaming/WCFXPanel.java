@@ -1,4 +1,4 @@
-package ui;
+package ui.streaming;
 
 import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
@@ -64,7 +64,7 @@ public class WCFXPanel extends BorderPane {
         wcImg.imageProperty().bind(imgProperty);
     }
 
-    protected void stopStream() {
+    public void stopStream() {
         if (activeStreamer != null)
             activeStreamer.stop();
     }

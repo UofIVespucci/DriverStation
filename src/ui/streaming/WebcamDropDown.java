@@ -1,4 +1,4 @@
-package ui;
+package ui.streaming;
 
 import com.github.sarxos.webcam.Webcam;
 import javafx.scene.control.ComboBox;
