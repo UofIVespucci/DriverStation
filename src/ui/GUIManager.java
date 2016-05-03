@@ -128,7 +128,7 @@ public class GUIManager {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                 case CONTROL:
-                    screenMessage.setMessage("BATTERY IS LOW,\nBLA BLA BLA,\nBE MORE CAREFUL NEXT TIME");
+                    screenMessage.setMessage("BATTERY IS LOW, BLA BLA BLA, PLEASE BE MORE CAREFUL NEXT TIME");
                     screenMessage.show();
                     break;
                 }
