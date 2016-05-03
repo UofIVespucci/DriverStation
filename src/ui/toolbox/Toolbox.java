@@ -21,7 +21,6 @@ import ui.streaming.WebcamDropDown;
 public class Toolbox extends ScrollPane {
     ControlsCategory cameraControl;
     ControlsCategory connectControl;
-    ControlsCategory cameraFaceControl;
     ControlsCategory lightControl;
     ControlsCategory recordControl;
     ControlsCategory speedControl;
@@ -36,13 +35,11 @@ public class Toolbox extends ScrollPane {
 
         cameraControl      = new ControlsCategory("CAMERA");
         connectControl     = new ControlsCategory("COMMUNICATION");
-        cameraFaceControl  = new ControlsCategory("CAMERA FACE");
         lightControl       = new ControlsCategory("HEADLIGHT");
         recordControl      = new ControlsCategory("RECORD");
         speedControl       = new ControlsCategory("MOTOR SPEED");
 
         initCameraControl();
-        initCameraFaceControl();
         initLightControl();
         initRecordControl(rManager, wcfxPanel);
         initSpeedControl(robotSpeed);
@@ -51,7 +48,6 @@ public class Toolbox extends ScrollPane {
         toolsVBox.getChildren().addAll(
                 cameraControl,
                 connectControl,
-                cameraFaceControl,
                 lightControl,
                 recordControl,
                 speedControl
@@ -89,17 +85,6 @@ public class Toolbox extends ScrollPane {
         });
     }
 
-    private void initCameraFaceControl() {
-        ToggleButton cameraSwitchTB = new ToggleButton("SWITCH CAMERA");
-
-        cameraFaceControl.addControl(cameraSwitchTB, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Main.guiManager.cameraSwitch(cameraSwitchTB.isSelected());
-            }
-        });
-    }
-
     private void initLightControl() {
         ToggleButton brightnessTB = new ToggleButton("LED OFF");
 
@@ -128,12 +113,13 @@ public class Toolbox extends ScrollPane {
     }
 
     private void initSpeedControl(RobotSpeed robotSpeed) {
-        Slider speedSlider = new Slider(25, 75, 50);
+        Slider speedSlider = new Slider(0.0, 1.0, 0.35);
+        robotSpeed.setSpeed(speedSlider.getValue());
 
         speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                robotSpeed.setSpeed(newValue.shortValue());
+                robotSpeed.setSpeed(newValue.doubleValue());
             }
         });
 

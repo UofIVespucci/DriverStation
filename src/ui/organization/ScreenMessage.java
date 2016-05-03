@@ -12,22 +12,20 @@ import java.util.ArrayList;
  * Created by Lance on 5/3/2016.
  */
 public class ScreenMessage extends GridPane {
-    private VBox messageContainer;
     private Label message;
-    private Label dismissMessage;
 
     public ScreenMessage() {
-        messageContainer = new VBox();
+        VBox messageContainer = new VBox();
+        Label dismissMessage = new Label("CLICK TO DISMISS");
+
         message = new Label("");
-        dismissMessage = new Label("CLICK TO DISMISS");
 
         message.getStyleClass().add("screen-label-textB");
         dismissMessage.getStyleClass().add("screen-label-textI");
 
         messageContainer.setAlignment(Pos.CENTER);
 
-        messageContainer.getChildren().add(message);
-        messageContainer.getChildren().add(dismissMessage);
+        messageContainer.getChildren().addAll(message, dismissMessage);
 
         messageContainer.getStyleClass().add("screen-label");
         getStyleClass().add("screen-message");

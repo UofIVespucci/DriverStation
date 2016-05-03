@@ -5,10 +5,12 @@ import static com.control.DirectionButtons.*;
 
 public class GUImgr extends GUIManager {
     private short speed;
+    private static final double alpha = 0.1;
 
     @Override protected void initRobotCommandListener(DirectionButtons db){
         db.stateProperty().addListener( (observable, olds, news) -> {
-            speed = getSpeed();
+            double s = getSpeed();
+            speed = (short)(((1.0-alpha)*s*s + alpha)*255);
             System.out.println("In state "+news + " at speed " + speed);
             switch(news){
                 case NORTH:     move((short) speed,(short) speed); break;

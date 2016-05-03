@@ -153,9 +153,14 @@ public class GUIManager {
     public void closeStream() {
         wcfxPanel.stopStream();
         rManager.stopRecording();
+        try {
+            if (r!=null) r.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public short getSpeed() {
+    public double getSpeed() {
         return robotSpeed.getSpeed();
     }
 }
