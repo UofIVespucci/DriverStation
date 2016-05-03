@@ -123,7 +123,7 @@ public class SerialConnectPanel extends VBox {
     private void connectDone(){
         refreshButton.setDisable(true);
         dropDown.setDisable(true);
-        connectButton.setDisable(true);
+        connectButton.setDisable(false);
         connectButton.setText(BUTTON_CONNECTED);
         inProgress = false;
     }
@@ -188,9 +188,8 @@ public class SerialConnectPanel extends VBox {
             listener.disconnectRequest();
 
             try{
-                connectedPort.closePort();
+                if(connectedPort.isOpened()) connectedPort.closePort();
             } catch (Exception e) {
-                e.printStackTrace();
             }
 
             connectedPort = null;

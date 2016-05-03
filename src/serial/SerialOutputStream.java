@@ -19,7 +19,6 @@ public class SerialOutputStream extends OutputStream{
         try{
             port.closePort();
         } catch (Exception e) {
-            throw new IOException(e);
         }
     }
     public void write(int b) throws IOException {

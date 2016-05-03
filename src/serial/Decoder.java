@@ -129,7 +129,6 @@ public class Decoder{
         try{
             input.close();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
