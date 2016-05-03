@@ -7,11 +7,13 @@ import javafx.scene.input.KeyCode;
 
 public class GUImgr extends GUIManager {
     //Will make adjustable via GUI later
-    private short speed = 50;
+//    private short speed = 50;
+    private short speed;
 
     @Override protected void initRobotCommandListener(DirectionButtons db){
         db.stateProperty().addListener( (observable, olds, news) -> {
-            System.out.println("In state "+news);
+            speed = getSpeed();
+            System.out.println("In state "+news + " at speed " + speed);
             switch(news){
                 case NORTH:     move((short) speed,(short) speed); break;
                 case SOUTH:     move((short)-speed,(short)-speed); break;

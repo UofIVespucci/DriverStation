@@ -1,6 +1,8 @@
 package ui.toolbox;
 
 import com.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -12,6 +14,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import serial.SerialConnectPanel;
 import ui.RecordingManager;
+import ui.RobotSpeed;
 import ui.WCFXPanel;
 import ui.WebcamDropDown;
 
@@ -23,7 +26,10 @@ public class Toolbox extends ScrollPane {
     ControlsCategory recordControl;
     ControlsCategory speedControl;
 
-    public Toolbox(SerialConnectPanel scp, RecordingManager rManager, WCFXPanel wcfxPanel) {
+    public Toolbox(SerialConnectPanel scp,
+                   RecordingManager rManager,
+                   WCFXPanel wcfxPanel,
+                   RobotSpeed robotSpeed) {
         VBox toolsVBox      = new VBox();
 
         cameraControl      = new ControlsCategory("CAMERA");
@@ -37,7 +43,7 @@ public class Toolbox extends ScrollPane {
         initCameraFaceControl();
         initLightControl();
         initRecordControl(rManager, wcfxPanel);
-        initSpeedControl();
+        initSpeedControl(robotSpeed);
         connectControl.addControl(scp, null);
 
         toolsVBox.getChildren().addAll(
@@ -119,9 +125,15 @@ public class Toolbox extends ScrollPane {
         });
     }
 
-    //Will need to take a reference to robotComm object
-    private void initSpeedControl() {
-        Slider speedSlider = new Slider(0, 100, 0);
+    private void initSpeedControl(RobotSpeed robotSpeed) {
+        Slider speedSlider = new Slider(25, 75, 50);
+
+        speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                robotSpeed.setSpeed(newValue.shortValue());
+            }
+        });
 
         speedControl.addControl(speedSlider, null);
     }

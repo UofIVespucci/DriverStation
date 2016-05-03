@@ -5,13 +5,10 @@ import com.VespuChat.VespuChatTransmitter;
 import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -25,7 +22,6 @@ import ui.toolbox.Toolbox;
 //import static org.mockito.Mockito.*;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +39,13 @@ public class GUIManager {
     private RecordingManager rManager;
     private TextField jtf;
     private DirectionButtons robotKeys;
+    private RobotSpeed robotSpeed;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
 
     public Scene createScene() {
+        robotSpeed = new RobotSpeed();
         videoOverlay = new VideoOverlay();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
@@ -96,7 +94,7 @@ public class GUIManager {
             }
         };
         initSerial();
-        Toolbox toolbox = new Toolbox(scp, rManager, wcfxPanel);
+        Toolbox toolbox = new Toolbox(scp, rManager, wcfxPanel, robotSpeed);
 
         wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
         wcStack.getStyleClass().add("tool-scrollpane");
@@ -104,7 +102,7 @@ public class GUIManager {
         wcStack.setMinHeight(0);
 
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
-        toolboxContainer.setHgrow(wcStack, Priority.ALWAYS);
+        HBox.setHgrow(wcStack, Priority.ALWAYS);
 
         toolboxContainer.maxHeightProperty().bind(scene.heightProperty());
 
@@ -157,5 +155,9 @@ public class GUIManager {
     public void closeStream() {
         wcfxPanel.stopStream();
         rManager.stopRecording();
+    }
+
+    public short getSpeed() {
+        return robotSpeed.getSpeed();
     }
 }
