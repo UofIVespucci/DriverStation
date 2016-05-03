@@ -4,6 +4,7 @@ import com.Main;
 import com.github.sarxos.webcam.*;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -32,7 +33,7 @@ public class WCFXPanel extends BorderPane {
     private Streamer activeStreamer;
     private RecordingManager rManager;
 
-    public WCFXPanel(RecordingManager r) {
+    public WCFXPanel(RecordingManager r, ReadOnlyDoubleProperty heightProp, ReadOnlyDoubleProperty widthProp) {
         rManager = r;
         wcImg = new ImageView();
         setCenter(wcImg);
@@ -40,7 +41,7 @@ public class WCFXPanel extends BorderPane {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                initView();
+                initView(heightProp, widthProp);
             }
         });
         initWebcam();
@@ -51,10 +52,10 @@ public class WCFXPanel extends BorderPane {
         else return 0;
     }
 
-    private void initView()
+    private void initView(ReadOnlyDoubleProperty heightProp, ReadOnlyDoubleProperty widthProp)
     {
-        wcImg.fitWidthProperty().bind(Main.guiManager.getVOWProperty());
-        wcImg.fitHeightProperty().bind(Main.guiManager.getVOHProperty());
+        wcImg.fitWidthProperty().bind(widthProp);
+        wcImg.fitHeightProperty().bind(heightProp);
         wcImg.setPreserveRatio(true);
         wcImg.minWidth(0);
         wcImg.minHeight(0);

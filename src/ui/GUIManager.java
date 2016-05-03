@@ -50,7 +50,7 @@ public class GUIManager {
         toolboxContainer = new HBox();
         wcStack = new StackPane();
         rManager = new RecordingManager(videoOverlay);
-        wcfxPanel = new WCFXPanel(rManager);
+        wcfxPanel = new WCFXPanel(rManager, videoOverlay.heightProperty(), videoOverlay.widthProperty());
         scene = new Scene(toolboxContainer, Color.ALICEBLUE);
 
         initKeyListener();
@@ -127,14 +127,6 @@ public class GUIManager {
             }
         };
         scp = new serial.SerialConnectPanel(connectListener);
-    }
-
-    public ReadOnlyDoubleProperty getVOWProperty() {
-        return videoOverlay.widthProperty();
-    }
-
-    public ReadOnlyDoubleProperty getVOHProperty() {
-        return videoOverlay.heightProperty();
     }
 
     public void setBatteryIndicator(BatteryStatus batteryStatus){
