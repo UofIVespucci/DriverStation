@@ -70,10 +70,10 @@ public class GUIManager {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (voltage > 300) setBatteryIndicator(BatteryStatus.FULL);
-                        else if (voltage > 290) setBatteryIndicator(BatteryStatus.HALF);
-                        else if (voltage > 280) setBatteryIndicator(BatteryStatus.LOW);
-                        else setBatteryIndicator(BatteryStatus.CRITICAL);
+                        if      (voltage > 300) videoOverlay.setBatteryLbl(BatteryStatus.FULL);
+                        else if (voltage > 290) videoOverlay.setBatteryLbl(BatteryStatus.HALF);
+                        else if (voltage > 280) videoOverlay.setBatteryLbl(BatteryStatus.LOW);
+                        else                    videoOverlay.setBatteryLbl(BatteryStatus.CRITICAL);
                     }
                 });
                 System.out.println("Encoders at "+left+", "+right+" "+voltage);
@@ -127,10 +127,6 @@ public class GUIManager {
             }
         };
         scp = new serial.SerialConnectPanel(connectListener);
-    }
-
-    public void setBatteryIndicator(BatteryStatus batteryStatus){
-        videoOverlay.setBatteryLbl(batteryStatus);
     }
 
     public void closeStream() {
