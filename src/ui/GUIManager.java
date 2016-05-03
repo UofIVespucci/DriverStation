@@ -3,7 +3,9 @@ package ui;
 import com.VespuChat.VespuChatReceiver;
 import com.VespuChat.VespuChatTransmitter;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,6 +17,7 @@ import com.serial.*;
 import com.VespuChat.*;
 import com.VespuChat.messages.*;
 import com.control.DirectionButtons;
+import ui.organization.ScreenMessage;
 import ui.organization.VBoxDivider;
 import ui.streaming.BatteryStatus;
 import ui.streaming.RecordingManager;
@@ -43,12 +46,14 @@ public class GUIManager {
     private TextField jtf;
     private DirectionButtons robotKeys;
     private RobotSpeed robotSpeed;
+    private ScreenMessage screenMessage;
 
     protected VespuChatTransmitter t;
     protected VespuChatReceiver r;
 
     public Scene createScene() {
         robotSpeed = new RobotSpeed();
+        screenMessage = new ScreenMessage();
         videoOverlay = new VideoOverlay();
         toolboxContainer = new HBox();
         wcStack = new StackPane();
@@ -100,7 +105,7 @@ public class GUIManager {
         initSerial();
         Toolbox toolbox = new Toolbox(scp, rManager, wcfxPanel, robotSpeed);
 
-        wcStack.getChildren().addAll(wcfxPanel, videoOverlay);
+        wcStack.getChildren().addAll(wcfxPanel, videoOverlay, screenMessage);
         wcStack.getStyleClass().add("tool-scrollpane");
         wcStack.setMinWidth(0);
         wcStack.setMinHeight(0);
@@ -117,6 +122,18 @@ public class GUIManager {
         robotKeys = new DirectionButtons();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, robotKeys);
         scene.addEventFilter(KeyEvent.KEY_RELEASED, robotKeys);
+
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                case CONTROL:
+                    screenMessage.setMessage("BATTERY IS LOW,\nBLA BLA BLA,\nBE MORE CAREFUL NEXT TIME");
+                    screenMessage.show();
+                    break;
+                }
+            }
+        });
         initRobotCommandListener(robotKeys);
     }
 

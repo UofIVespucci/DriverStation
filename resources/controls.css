@@ -218,3 +218,30 @@
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
+
+.screen-message {
+    -fx-background-color: rgba(0, 0, 0, 0.85);
+}
+
+.screen-label {
+    -fx-background-color: white;
+    -fx-padding: 5;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-border-color: black;
+}
+
+.screen-label-textB {
+    -fx-label-padding: 1;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+.screen-label-textI {
+    -fx-label-padding: 1;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-size: 11;
+}
