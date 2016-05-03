@@ -5,6 +5,7 @@ package ui;
  */
 public enum BatteryStatus {
     FULL,
+    QUARTER,
     HALF,
     LOW,
     CRITICAL

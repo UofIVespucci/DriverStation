@@ -36,6 +36,9 @@ public class VideoOverlay extends AnchorPane{
         case FULL:
             batteryLbl.getStyleClass().addAll("video-battery-full");
             break;
+        case QUARTER:
+            batteryLbl.getStyleClass().addAll("video-battery-quarter");
+            break;
         case HALF:
             batteryLbl.getStyleClass().addAll("video-battery-half");
             break;

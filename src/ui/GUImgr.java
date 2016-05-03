@@ -3,11 +3,7 @@ package ui;
 import com.control.DirectionButtons;
 import static com.control.DirectionButtons.*;
 
-import javafx.scene.input.KeyCode;
-
 public class GUImgr extends GUIManager {
-    //Will make adjustable via GUI later
-//    private short speed = 50;
     private short speed;
 
     @Override protected void initRobotCommandListener(DirectionButtons db){
