@@ -119,7 +119,7 @@ public class Toolbox extends ScrollPane {
             @Override
             public void handle(ActionEvent event) {
                 if (!rManager.getRecordingStatus() && wcfxPanel.getStreamingStatus()) {
-                    rManager.record("TestFile.mp4", wcfxPanel.stillProp, 4);
+                    rManager.record(wcfxPanel.stillProp, 4);
                 }
                 else if (rManager.getRecordingStatus()) rManager.stopRecording();
                 else System.err.println("Error in recording request, wcfxPanel probably isn't streaming");

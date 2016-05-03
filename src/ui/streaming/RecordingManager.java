@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RecordingManager {
     Recorder activeRecorder;
@@ -32,6 +34,23 @@ public class RecordingManager {
 
         videoOverlay.setRecording(true);
         System.out.println("START RECORDING");
+    }
+
+    public void record(ObjectProperty<BufferedImage> imageObjectProperty, int fps) {
+        record(getDateStamp(), imageObjectProperty, fps);
+    }
+
+    private String getDateStamp() {
+        String s =  new SimpleDateFormat("MM-dd-yyyy (HH.MM)").format(new Date());
+        int version = 0;
+        File f = new File(s + "-" +  Integer.toString(version) + ".mp4");
+
+        while (f.exists()) {
+            version++;
+            f = new File(s + "-" +  Integer.toString(version) + ".mp4");
+        }
+
+        return f.getName();
     }
 
     public void stopRecording() {
