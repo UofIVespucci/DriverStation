@@ -16,7 +16,7 @@ public class RobotController implements RobotControllerInterface {
     public void setHeadlightBrightness(byte l) {
 
     }
-    public void move(short l, short r) {
+    private void move(short l, short r) {
 
     }
     public void cameraSwitch(boolean state) {

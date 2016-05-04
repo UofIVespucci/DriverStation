@@ -8,7 +8,6 @@ import com.control.DirectionButtons;
 interface RobotControllerInterface {
     void initRobotCommandListener(DirectionButtons db);
     void setHeadlightBrightness(byte l);
-    void move(short l, short r);
     void cameraSwitch(boolean state);
     void ledBrightness(double d);
 }

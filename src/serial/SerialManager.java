@@ -92,6 +92,8 @@ public class SerialManager {
                 } catch (Exception e) { e.printStackTrace(); }
             }
         };
+        //This will need an additional method to set a connectListener and initialize without creating a new object
+        //This way both GUI and serial managers can access the same serialConnectPanel
         scp = new serial.SerialConnectPanel(connectListener);
     }
 }
