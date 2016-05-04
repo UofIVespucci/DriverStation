@@ -87,5 +87,5 @@ public class WCFXPanel extends BorderPane {
         }
     }
 
-    public boolean getStreamingStatus(){ return activeStreamer.getIsStreaming(); }
+    public boolean getStreamingStatus(){ return (activeStreamer!=null && activeStreamer.getIsStreaming()); }
 }
