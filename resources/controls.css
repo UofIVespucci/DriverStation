@@ -196,6 +196,20 @@
     -fx-text-fill: white;
 }
 
+.tool-button:hover {
+    -fx-padding: 10;
+    -fx-background-image: url("ui/texture/footer_lodyasSDark.png");
+    -fx-text-fill: white;
+    -fx-effect: innershadow( three-pass-box , rgba(255,255,255,0.6) , 5, 0.0 , 0 , 0 );
+}
+
+.tool-button:pressed, .tool-button:default:hover:pressed {
+    -fx-padding: 10;
+    -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
+    -fx-text-fill: black;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 0 );
+}
+
 .tool-button:selected {
     -fx-padding: 10;
     -fx-background-image: url("ui/texture/footer_lodyasSLight.png");
