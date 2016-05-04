@@ -4,10 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -60,6 +57,8 @@ public class ControlsCategory extends GridPane {
         } else if (control instanceof Button) {
             ((Button) control).setOnAction(keyEvent);
             control.getStyleClass().add("tool-button");
+        } else if (control instanceof Slider) {
+            control.getStyleClass().add("tool-slider");
         }
         return 1; //Unknown control, could not add proper eventHandler
     }

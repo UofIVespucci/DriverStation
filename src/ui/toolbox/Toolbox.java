@@ -6,10 +6,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import serial.SerialConnectPanel;
@@ -114,6 +114,13 @@ public class Toolbox extends ScrollPane {
 
     private void initSpeedControl(RobotSpeed robotSpeed) {
         Slider speedSlider = new Slider(0.0, 1.0, 0.35);
+        AnchorPane imageAnchor = new AnchorPane();
+        ImageView slowImg = new ImageView(new Image("ui/toolbox/Snail-16.png"));
+        ImageView fastImg = new ImageView(new Image("ui/toolbox/Rabbit-16.png"));
+        imageAnchor.getChildren().addAll(slowImg, fastImg);
+        AnchorPane.setLeftAnchor(slowImg, 10.0);
+        AnchorPane.setRightAnchor(fastImg, 10.0);
+
         robotSpeed.setSpeed(speedSlider.getValue());
 
         speedSlider.valueProperty().addListener(new ChangeListener<Number>() {
@@ -124,5 +131,6 @@ public class Toolbox extends ScrollPane {
         });
 
         speedControl.addControl(speedSlider, null);
+        speedControl.addControl(imageAnchor, null);
     }
 }
