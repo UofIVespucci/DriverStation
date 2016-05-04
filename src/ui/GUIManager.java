@@ -130,7 +130,7 @@ public class GUIManager {
                 switch (event.getCode()) {
                 case CONTROL:
                     screenMessage.setMessage("BATTERY IS LOW, BLA BLA BLA, PLEASE BE MORE CAREFUL NEXT TIME");
-                    screenMessage.show();
+//                    screenMessage.show();
                     break;
                 }
             }
