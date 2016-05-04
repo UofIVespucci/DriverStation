@@ -114,12 +114,8 @@ public class Toolbox extends ScrollPane {
 
     private void initSpeedControl(RobotSpeed robotSpeed) {
         Slider speedSlider = new Slider(0.0, 1.0, 0.35);
-        AnchorPane imageAnchor = new AnchorPane();
-        ImageView slowImg = new ImageView(new Image("ui/toolbox/Snail-16.png"));
-        ImageView fastImg = new ImageView(new Image("ui/toolbox/Rabbit-16.png"));
-        imageAnchor.getChildren().addAll(slowImg, fastImg);
-        AnchorPane.setLeftAnchor(slowImg, 10.0);
-        AnchorPane.setRightAnchor(fastImg, 10.0);
+        Image slowImg = new Image("ui/toolbox/Snail-16.png");
+        Image fastImg = new Image("ui/toolbox/Rabbit-16.png");
 
         robotSpeed.setSpeed(speedSlider.getValue());
 
@@ -131,6 +127,6 @@ public class Toolbox extends ScrollPane {
         });
 
         speedControl.addControl(speedSlider, null);
-        speedControl.addControl(imageAnchor, null);
+        speedControl.addControl(new SliderImageView(slowImg, fastImg, 10.0), null);
     }
 }
