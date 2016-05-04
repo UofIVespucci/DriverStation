@@ -109,6 +109,7 @@ public class GUIManager {
         wcStack.getStyleClass().add("tool-scrollpane");
         wcStack.setMinWidth(0);
         wcStack.setMinHeight(0);
+        wcStack.setMouseTransparent(true);
 
         toolboxContainer.getChildren().addAll(toolbox, new VBoxDivider(), wcStack);
         HBox.setHgrow(wcStack, Priority.ALWAYS);

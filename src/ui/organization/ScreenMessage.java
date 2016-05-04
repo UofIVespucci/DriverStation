@@ -48,7 +48,10 @@ public class ScreenMessage extends GridPane {
         setVisible(false);
     }
 
-    public void show() {
+    public void show() { setVisible(true); }
+
+    public void show(String s) {
+        setMessage(s);
         setVisible(true);
     }
 
