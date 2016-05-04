@@ -41,7 +41,7 @@ public class RecordingManager {
     }
 
     private String getDateStamp() {
-        String s =  new SimpleDateFormat("MM-dd-yyyy (HH.MM)").format(new Date());
+        String s =  new SimpleDateFormat("MM-dd-yyyy (hh.mm aa)").format(new Date());
         int version = 0;
         File f = new File(s + "-" +  Integer.toString(version) + ".mp4");
 
