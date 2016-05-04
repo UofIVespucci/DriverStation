@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import jssc.SerialPort;
@@ -124,6 +125,12 @@ public class GUIManager {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, robotKeys);
         scene.addEventFilter(KeyEvent.KEY_RELEASED, robotKeys);
 
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                screenMessage.dismiss();
+            }
+        });
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
