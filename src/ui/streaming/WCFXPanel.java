@@ -36,7 +36,6 @@ public class WCFXPanel extends BorderPane {
                 initView(heightProp, widthProp);
             }
         });
-        initWebcam();
     }
 
     public double getFps(){
@@ -67,21 +66,6 @@ public class WCFXPanel extends BorderPane {
     public void stopStream() {
         if (activeStreamer != null)
             activeStreamer.stop();
-    }
-
-    private void initWebcam()
-    {
-        for (Webcam wc : Webcam.getWebcams()) {
-            System.out.println(wc.getName());
-        }
-        webcam = Webcam.getDefault();
-
-        try {
-            if (webcam!=null && !webcam.isOpen()) webcam.open(true);
-            setWebcam(webcam);
-        } catch (com.github.sarxos.webcam.WebcamLockException e) {
-            System.err.println("Initial Webcam " + webcam.getName() + " in use!");
-        }
     }
 
     public void setWebcam(Webcam w)

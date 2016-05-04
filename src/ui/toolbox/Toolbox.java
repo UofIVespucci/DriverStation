@@ -70,7 +70,7 @@ public class Toolbox extends ScrollPane {
     private void initCameraControl(){
         WebcamDropDown wcDropDown = new WebcamDropDown();
 
-        cameraControl.addControl(new WebcamDropDown(), null);
+        cameraControl.addControl(wcDropDown, null);
         cameraControl.addControl(new Button("CONNECT"), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
