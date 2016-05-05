@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 public abstract class CameraSwitch implements PacketReader {
     public int claim(byte data){
-        return (data == 6)? 2 : -1;
+        return (data == 5)? 2 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
@@ -18,7 +18,7 @@ public abstract class CameraSwitch implements PacketReader {
     public static byte[] build(byte toggle){
         ByteBuffer buf = ByteBuffer.allocate(2);
         buf.order(ByteOrder.LITTLE_ENDIAN);
-        buf.put((byte)6);
+        buf.put((byte)5);
         buf.put(toggle);
         return buf.array();
     }

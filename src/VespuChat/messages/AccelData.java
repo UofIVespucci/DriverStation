@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 public abstract class AccelData implements PacketReader {
     public int claim(byte data){
-        return (data == 2)? 13 : -1;
+        return (data == 1)? 13 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
@@ -20,7 +20,7 @@ public abstract class AccelData implements PacketReader {
     public static byte[] build(float xgs, float ygs, float zgs){
         ByteBuffer buf = ByteBuffer.allocate(13);
         buf.order(ByteOrder.LITTLE_ENDIAN);
-        buf.put((byte)2);
+        buf.put((byte)1);
         buf.putFloat(xgs);
         buf.putFloat(ygs);
         buf.putFloat(zgs);

@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 public abstract class PositionData implements PacketReader {
     public int claim(byte data){
-        return (data == 3)? 7 : -1;
+        return (data == 2)? 7 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
@@ -20,7 +20,7 @@ public abstract class PositionData implements PacketReader {
     public static byte[] build(short leftTrack, short rightTrack, short voltage){
         ByteBuffer buf = ByteBuffer.allocate(7);
         buf.order(ByteOrder.LITTLE_ENDIAN);
-        buf.put((byte)3);
+        buf.put((byte)2);
         buf.putShort(leftTrack);
         buf.putShort(rightTrack);
         buf.putShort(voltage);

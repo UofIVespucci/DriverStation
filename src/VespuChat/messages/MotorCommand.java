@@ -6,7 +6,7 @@ import java.nio.ByteOrder;
 
 public abstract class MotorCommand implements PacketReader {
     public int claim(byte data){
-        return (data == 1)? 5 : -1;
+        return (data == 0)? 5 : -1;
     }
     public void handle(byte[] data){
         ByteBuffer buf = ByteBuffer.wrap(data);
@@ -19,7 +19,7 @@ public abstract class MotorCommand implements PacketReader {
     public static byte[] build(short left, short right){
         ByteBuffer buf = ByteBuffer.allocate(5);
         buf.order(ByteOrder.LITTLE_ENDIAN);
-        buf.put((byte)1);
+        buf.put((byte)0);
         buf.putShort(left);
         buf.putShort(right);
         return buf.array();

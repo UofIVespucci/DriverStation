@@ -16,7 +16,7 @@ private:
 public:
     Error(_handleError hF): hF(hF) {}
     int claim(char data) {
-        return (data == 4)? 2 : -1;
+        return (data == 3)? 2 : -1;
     }
     void handle(const char* buf, int len){
         Errorconv *data = (Errorconv*) buf;
@@ -25,7 +25,7 @@ public:
     static void build(VespuChat& vct, uint8_t num){
         uint8_t buf[2];
         Errorconv *data = (Errorconv*) buf;
-        data->sig = 4;
+        data->sig = 3;
         data->num = num;
         vct.deliver(buf, 2);
     }

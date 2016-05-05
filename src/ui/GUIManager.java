@@ -79,10 +79,10 @@ public class GUIManager {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if      (voltage > 300) videoOverlay.setBatteryLbl(BatteryStatus.FULL);
-                        else if (voltage > 290) videoOverlay.setBatteryLbl(BatteryStatus.QUARTER);
-                        else if (voltage > 280) videoOverlay.setBatteryLbl(BatteryStatus.HALF);
-                        else if (voltage > 270) videoOverlay.setBatteryLbl(BatteryStatus.LOW);
+                        if      (voltage > 220) videoOverlay.setBatteryLbl(BatteryStatus.FULL);
+                        else if (voltage > 203) videoOverlay.setBatteryLbl(BatteryStatus.QUARTER);
+                        else if (voltage > 184) videoOverlay.setBatteryLbl(BatteryStatus.HALF);
+                        else if (voltage > 174) videoOverlay.setBatteryLbl(BatteryStatus.LOW);
                         else                    videoOverlay.setBatteryLbl(BatteryStatus.CRITICAL);
                     }
                 });

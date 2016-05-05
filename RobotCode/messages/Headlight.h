@@ -16,7 +16,7 @@ private:
 public:
     Headlight(_handleHeadlight hF): hF(hF) {}
     int claim(char data) {
-        return (data == 5)? 2 : -1;
+        return (data == 4)? 2 : -1;
     }
     void handle(const char* buf, int len){
         Headlightconv *data = (Headlightconv*) buf;
@@ -25,7 +25,7 @@ public:
     static void build(VespuChat& vct, uint8_t brightness){
         uint8_t buf[2];
         Headlightconv *data = (Headlightconv*) buf;
-        data->sig = 5;
+        data->sig = 4;
         data->brightness = brightness;
         vct.deliver(buf, 2);
     }

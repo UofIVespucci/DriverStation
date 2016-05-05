@@ -16,7 +16,7 @@ private:
 public:
     CameraSwitch(_handleCameraSwitch hF): hF(hF) {}
     int claim(char data) {
-        return (data == 6)? 2 : -1;
+        return (data == 5)? 2 : -1;
     }
     void handle(const char* buf, int len){
         CameraSwitchconv *data = (CameraSwitchconv*) buf;
@@ -25,7 +25,7 @@ public:
     static void build(VespuChat& vct, uint8_t toggle){
         uint8_t buf[2];
         CameraSwitchconv *data = (CameraSwitchconv*) buf;
-        data->sig = 6;
+        data->sig = 5;
         data->toggle = toggle;
         vct.deliver(buf, 2);
     }
