@@ -48,6 +48,10 @@ public class SerialConnectPanel extends VBox {
     private ComboBox<BaudRate> baudSelect;
 
     public SerialConnectPanel(SerialConnectListener listener){
+        initSCP(listener);
+    }
+
+    private void initSCP(SerialConnectListener listener) {
         this.listener = listener;
         refreshButton = new Button("REFRESH");
 //        refreshButton.setText("Refresh");
