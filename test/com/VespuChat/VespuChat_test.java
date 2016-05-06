@@ -18,8 +18,8 @@ public class VespuChat_test {
         //the array is for getting around the final reference inner-class problem
         boolean[] pass = new boolean[]{false};
         PacketReader reader = new MotorCommand(){
-            protected void onReceive(byte left, byte right){
-                if(left == (byte)0xaa && right == (byte)0xbb) pass[0] = true;
+            protected void onReceive(short left, short right){
+                if(left == (short)0xaa && right == (short)0xbb) pass[0] = true;
             }
         };
         List<PacketReader> rl = new ArrayList<PacketReader>();
@@ -29,7 +29,7 @@ public class VespuChat_test {
         VespuChatTransmitter t = new VespuChatTransmitter(os);
         VespuChatReceiver r = new VespuChatReceiver(is, rl);
 
-        t.send(MotorCommand.build((byte)0xaa, (byte)0xbb));
+        t.send(MotorCommand.build((short)0xaa, (short)0xbb));
 
         try{
             //Receiver is asynchronous, so we need to sleep at least one READ_PERIOD

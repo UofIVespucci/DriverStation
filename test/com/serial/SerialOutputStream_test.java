@@ -39,13 +39,4 @@ public class SerialOutputStream_test {
 
         so.write(1);
     }
-    @Test(expected=IOException.class)
-    public void testCloseException() throws Exception {
-        SerialPort sp = mock(SerialPort.class);
-        SerialOutputStream so = new SerialOutputStream(sp);
-
-        when(sp.closePort()).thenThrow(new SerialPortException("","",""));
-
-        so.close();
-    }
 }
